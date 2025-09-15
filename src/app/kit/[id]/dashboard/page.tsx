@@ -59,24 +59,36 @@ interface OutputData {
   };
 }
 
-export default function KitDashboardPage({ params }: { params: { id: string } }) {
+export default function KitDashboardPage({ params }: { params: Promise<{ id: string }> }) {
   const [kit, setKit] = useState<KitData | null>(null);
   const [outputs, setOutputs] = useState<OutputData>({});
   const [isLoading, setIsLoading] = useState(true);
   const [generating, setGenerating] = useState<string | null>(null);
+  const [kitId, setKitId] = useState<string>('');
 
   useEffect(() => {
+    const resolveParams = async () => {
+      const resolvedParams = await params;
+      setKitId(resolvedParams.id);
+    };
+    
+    resolveParams();
+  }, [params]);
+
+  useEffect(() => {
+    if (!kitId) return;
+    
     const fetchData = async () => {
       try {
         // Fetch kit data
-        const kitResponse = await fetch(`/api/kits/${params.id}`);
+        const kitResponse = await fetch(`/api/kits/${kitId}`);
         if (kitResponse.ok) {
           const kitData = await kitResponse.json();
           setKit(kitData);
 
           // If user has access, fetch outputs
           if (kitData.has_access) {
-            const outputsResponse = await fetch(`/api/kits/${params.id}/outputs`);
+            const outputsResponse = await fetch(`/api/kits/${kitId}/outputs`);
             if (outputsResponse.ok) {
               const outputsData = await outputsResponse.json();
               setOutputs(outputsData);
@@ -91,12 +103,12 @@ export default function KitDashboardPage({ params }: { params: { id: string } })
     };
 
     fetchData();
-  }, [params.id]);
+  }, [kitId]);
 
   const handleGenerate = async (type: 'business_case' | 'content_strategy', regenerate = false) => {
     setGenerating(type);
     try {
-      const response = await fetch(`/api/kits/${params.id}/generate`, {
+      const response = await fetch(`/api/kits/${kitId}/generate`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -222,7 +234,7 @@ export default function KitDashboardPage({ params }: { params: { id: string } })
         <div className="text-center">
           <h1 className="text-2xl font-bold text-gray-900">Access Required</h1>
           <p className="text-gray-600 mt-2 mb-4">Please complete payment to access your launch kit.</p>
-          <Button onClick={() => window.location.href = `/kit/${params.id}/preview`}>
+          <Button onClick={() => window.location.href = `/kit/${kitId}/preview`}>
             Go to Payment
           </Button>
         </div>

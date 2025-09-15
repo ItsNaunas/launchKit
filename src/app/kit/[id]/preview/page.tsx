@@ -11,26 +11,37 @@ interface KitData {
   has_access: boolean;
 }
 
-export default function KitPreviewPage({ params }: { params: { id: string } }) {
+export default function KitPreviewPage({ params }: { params: Promise<{ id: string }> }) {
   const [kit, setKit] = useState<KitData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedPlan, setSelectedPlan] = useState<'oneoff' | 'subscription'>('oneoff');
+  const [kitId, setKitId] = useState<string>('');
 
-  // Check for payment success in URL params
+  // Resolve params and handle payment success
   useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.get('success') === 'true') {
-      // Redirect to dashboard after successful payment
-      setTimeout(() => {
-        window.location.href = `/kit/${params.id}/dashboard`;
-      }, 2000);
-    }
-  }, [params.id]);
+    const resolveParams = async () => {
+      const resolvedParams = await params;
+      setKitId(resolvedParams.id);
+      
+      // Check for payment success in URL params
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get('success') === 'true') {
+        // Redirect to dashboard after successful payment
+        setTimeout(() => {
+          window.location.href = `/kit/${resolvedParams.id}/dashboard`;
+        }, 2000);
+      }
+    };
+    
+    resolveParams();
+  }, [params]);
 
   useEffect(() => {
+    if (!kitId) return;
+    
     const fetchKit = async () => {
       try {
-        const response = await fetch(`/api/kits/${params.id}`);
+        const response = await fetch(`/api/kits/${kitId}`);
         if (response.ok) {
           const kitData = await response.json();
           setKit(kitData);
@@ -43,7 +54,7 @@ export default function KitPreviewPage({ params }: { params: { id: string } }) {
     };
 
     fetchKit();
-  }, [params.id]);
+  }, [kitId]);
 
   const handlePayment = async () => {
     try {
@@ -52,7 +63,7 @@ export default function KitPreviewPage({ params }: { params: { id: string } }) {
       
       if (testMode) {
         // Test mode: directly grant access and redirect
-        const response = await fetch(`/api/kits/${params.id}`, {
+        const response = await fetch(`/api/kits/${kitId}`, {
           method: 'PATCH',
           headers: {
             'Content-Type': 'application/json',
@@ -61,7 +72,7 @@ export default function KitPreviewPage({ params }: { params: { id: string } }) {
         });
         
         if (response.ok) {
-          window.location.href = `/kit/${params.id}/preview?success=true`;
+          window.location.href = `/kit/${kitId}/preview?success=true`;
         } else {
           throw new Error('Failed to grant test access');
         }
@@ -75,7 +86,7 @@ export default function KitPreviewPage({ params }: { params: { id: string } }) {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          kitId: params.id,
+          kitId: kitId,
           planType: selectedPlan,
           // TODO: Add actual userId when auth is implemented
           userId: undefined,
@@ -142,7 +153,7 @@ export default function KitPreviewPage({ params }: { params: { id: string } }) {
         <div className="text-center">
           <h1 className="text-2xl font-bold text-gray-900 mb-2">You already have access!</h1>
           <p className="text-gray-600 mb-4">Redirecting you to your dashboard...</p>
-          <Button onClick={() => window.location.href = `/kit/${params.id}/dashboard`}>
+          <Button onClick={() => window.location.href = `/kit/${kitId}/dashboard`}>
             Go to Dashboard
           </Button>
         </div>

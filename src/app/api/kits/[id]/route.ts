@@ -3,13 +3,14 @@ import { supabase } from '@/lib/supabase';
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const resolvedParams = await params;
     const { data: kit, error } = await supabase
       .from('kits')
       .select('id, title, one_liner, has_access')
-      .eq('id', params.id)
+      .eq('id', resolvedParams.id)
       .single();
 
     if (error || !kit) {
@@ -31,15 +32,16 @@ export async function GET(
 
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const body = await request.json();
+    const resolvedParams = await params;
     
     const { data: kit, error } = await supabase
       .from('kits')
       .update(body)
-      .eq('id', params.id)
+      .eq('id', resolvedParams.id)
       .select('id, title, one_liner, has_access')
       .single();
 

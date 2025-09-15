@@ -14,12 +14,13 @@ const GenerateSchema = z.object({
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const body = await request.json();
     const { type, regenerate } = GenerateSchema.parse(body);
-    const kitId = params.id;
+    const resolvedParams = await params;
+    const kitId = resolvedParams.id;
 
     // Get kit data with all intake information
     const { data: kit, error: kitError } = await supabase

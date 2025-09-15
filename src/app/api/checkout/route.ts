@@ -4,7 +4,7 @@ import { z } from 'zod';
 import { supabase } from '@/lib/supabase';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '', {
-  apiVersion: '2024-12-18.acacia',
+  apiVersion: '2025-08-27.basil',
 });
 
 const CheckoutSchema = z.object({
@@ -31,6 +31,9 @@ export async function POST(request: NextRequest) {
         { status: 404 }
       );
     }
+
+    // Type assertion for kit after null check
+    const kitData = kit as { id: string; title: string; user_id: string };
 
     // Create Stripe customer (in production, check if customer already exists)
     const customer = await stripe.customers.create({
@@ -61,7 +64,7 @@ export async function POST(request: NextRequest) {
           price_data: {
             currency: 'gbp',
             product_data: {
-              name: `LaunchKit AI: ${kit.title}`,
+              name: `LaunchKit AI: ${kitData.title}`,
               description: 'Complete business launch strategy with AI-generated content',
             },
             unit_amount: 3700, // £37.00 in pence
@@ -77,7 +80,7 @@ export async function POST(request: NextRequest) {
           price_data: {
             currency: 'gbp',
             product_data: {
-              name: `LaunchKit AI Daily Plan: ${kit.title}`,
+              name: `LaunchKit AI Daily Plan: ${kitData.title}`,
               description: 'Pay £1/day for 37 days - complete business launch strategy',
             },
             unit_amount: 100, // £1.00 in pence
@@ -94,18 +97,20 @@ export async function POST(request: NextRequest) {
     const session = await stripe.checkout.sessions.create(sessionConfig);
 
     // Create order record
-    const { error: orderError } = await supabase
-      .from('orders')
-      .insert({
-        user_id: userId || 'temp-user',
-        kit_id: kitId,
-        stripe_session_id: session.id,
-        amount: planType === 'oneoff' ? 3700 : 100,
-        currency: 'gbp',
-        status: 'pending',
-        price_id: null, // Will be updated via webhook
-        subscription_id: null, // Will be updated via webhook if subscription
-      });
+    const orderData = {
+      user_id: userId || 'temp-user',
+      kit_id: kitId,
+      stripe_session_id: session.id,
+      amount: planType === 'oneoff' ? 3700 : 100,
+      currency: 'gbp',
+      status: 'pending' as const,
+      price_id: null,
+      subscription_id: null,
+    };
+    
+    const { error: orderError } = await (supabase
+      .from('orders') as any)
+      .insert(orderData);
 
     if (orderError) {
       console.error('Failed to create order:', orderError);

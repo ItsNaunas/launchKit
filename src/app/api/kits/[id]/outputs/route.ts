@@ -3,10 +3,11 @@ import { supabase } from '@/lib/supabase';
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const kitId = params.id;
+    const resolvedParams = await params;
+    const kitId = resolvedParams.id;
 
     // Get kit to verify access
     const { data: kit, error: kitError } = await supabase
