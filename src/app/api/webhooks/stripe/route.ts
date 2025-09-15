@@ -2,9 +2,27 @@ import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import { supabase } from '@/lib/supabase';
 
-// Initialize Stripe
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '', {
-  apiVersion: '2025-08-27.basil',
+// Check if we're in a build context
+const isBuilding = process.env.NODE_ENV === 'production' && !process.env.STRIPE_SECRET_KEY;
+
+let stripeInstance: Stripe | null = null;
+
+// Create Stripe client only when needed (not during build)
+const stripe = new Proxy({} as Stripe, {
+  get(target, prop) {
+    if (isBuilding) {
+      // Return mock functions during build
+      return () => Promise.resolve({ mock: 'build-time-data' });
+    }
+    
+    if (!stripeInstance) {
+      stripeInstance = new Stripe(process.env.STRIPE_SECRET_KEY || '', {
+        apiVersion: '2025-08-27.basil',
+      });
+    }
+    
+    return (stripeInstance as any)[prop];
+  }
 });
 
 // Supabase admin client for webhook operations

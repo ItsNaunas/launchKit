@@ -3,8 +3,36 @@ import { z } from 'zod';
 import { supabase } from '@/lib/supabase';
 import OpenAI from 'openai';
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY || '',
+// Check if we're in a build context
+const isBuilding = process.env.NODE_ENV === 'production' && !process.env.OPENAI_API_KEY;
+
+let openaiInstance: OpenAI | null = null;
+
+// Create OpenAI client only when needed (not during build)
+const openai = new Proxy({} as OpenAI, {
+  get(target, prop) {
+    if (isBuilding) {
+      // Return mock functions during build
+      if (prop === 'chat') {
+        return {
+          completions: {
+            create: () => Promise.resolve({
+              choices: [{ message: { content: JSON.stringify({ mock: 'build-time-data' }) } }]
+            })
+          }
+        };
+      }
+      return () => Promise.resolve({ mock: 'build-time-data' });
+    }
+    
+    if (!openaiInstance) {
+      openaiInstance = new OpenAI({
+        apiKey: process.env.OPENAI_API_KEY || '',
+      });
+    }
+    
+    return (openaiInstance as any)[prop];
+  }
 });
 
 const GenerateSchema = z.object({
