@@ -26,7 +26,7 @@ export default function HomePage() {
 
       {/* Hero Section */}
       <section className="relative py-20 overflow-hidden">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
           <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6">
             Launch Your Business Idea
             <span className="block text-blue-600">in 30 Days with AI</span>
@@ -57,7 +57,7 @@ export default function HomePage() {
         </div>
 
         {/* Background decoration */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full max-w-6xl opacity-10">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full max-w-6xl opacity-10 pointer-events-none">
           <div className="absolute top-20 left-10 w-20 h-20 bg-blue-500 rounded-full blur-xl"></div>
           <div className="absolute top-40 right-10 w-32 h-32 bg-indigo-500 rounded-full blur-xl"></div>
           <div className="absolute bottom-20 left-1/3 w-24 h-24 bg-purple-500 rounded-full blur-xl"></div>
