@@ -108,9 +108,9 @@ export async function POST(request: NextRequest) {
       subscription_id: null,
     };
     
-    const { error: orderError } = await (supabase
-      .from('orders') as any)
-      .insert(orderData);
+    const { error: orderError } = await supabase
+      .from('orders')
+      .insert(orderData as never);
 
     if (orderError) {
       console.error('Failed to create order:', orderError);

@@ -41,7 +41,7 @@ export async function POST(request: NextRequest) {
     // Insert into database
     const { data: kit, error } = await supabase
       .from('kits')
-      .insert(kitData)
+      .insert(kitData as never)
       .select('id')
       .single();
 
@@ -53,7 +53,9 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    return NextResponse.json({ kitId: kit.id });
+    // Type assertion for kit after null check
+    const kitResult = kit as any;
+    return NextResponse.json({ kitId: kitResult.id });
   } catch (error) {
     console.error('API error:', error);
     

@@ -159,9 +159,9 @@ export default function KitDashboardPage({ params }: { params: Promise<{ id: str
       
       // Format content for PDF
       if (type === 'business_case') {
-        container.innerHTML = formatBusinessCasePDF(output.content, kit?.title || '');
+        container.innerHTML = formatBusinessCasePDF(output.content as BusinessCaseContent, kit?.title || '');
       } else {
-        container.innerHTML = formatContentStrategyPDF(output.content, kit?.title || '');
+        container.innerHTML = formatContentStrategyPDF(output.content as ContentStrategyContent, kit?.title || '');
       }
 
       // Temporarily add to DOM

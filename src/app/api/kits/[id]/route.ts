@@ -20,7 +20,9 @@ export async function GET(
       );
     }
 
-    return NextResponse.json(kit);
+    // Type assertion for proper JSON response
+    const kitData = kit as any;
+    return NextResponse.json(kitData);
   } catch (error) {
     console.error('API error:', error);
     return NextResponse.json(
@@ -40,7 +42,7 @@ export async function PATCH(
     
     const { data: kit, error } = await supabase
       .from('kits')
-      .update(body)
+      .update(body as never)
       .eq('id', resolvedParams.id)
       .select('id, title, one_liner, has_access')
       .single();
@@ -52,7 +54,9 @@ export async function PATCH(
       );
     }
 
-    return NextResponse.json(kit);
+    // Type assertion for proper JSON response
+    const kitData = kit as any;
+    return NextResponse.json(kitData);
   } catch (error) {
     console.error('API error:', error);
     return NextResponse.json(

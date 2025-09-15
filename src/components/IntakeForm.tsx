@@ -23,7 +23,7 @@ export function IntakeForm({ onSubmit, isLoading = false }: IntakeFormProps) {
     watch,
     setValue,
   } = useForm<IntakeFormData>({
-    resolver: zodResolver(IntakeSchema),
+    resolver: zodResolver(IntakeSchema) as any,
     defaultValues: {
       competitor_links: [],
       inspiration_links: [],

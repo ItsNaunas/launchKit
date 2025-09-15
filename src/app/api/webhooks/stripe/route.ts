@@ -41,7 +41,7 @@ export async function POST(request: NextRequest) {
           .update({ 
             status: 'completed',
             subscription_id: session.subscription as string || null
-          })
+          } as never)
           .eq('stripe_session_id', session.id);
 
         if (orderError) {
@@ -53,7 +53,7 @@ export async function POST(request: NextRequest) {
         if (kitId) {
           const { error: kitError } = await supabaseAdmin
             .from('kits')
-            .update({ has_access: true })
+            .update({ has_access: true } as never)
             .eq('id', kitId);
 
           if (kitError) {
@@ -67,7 +67,7 @@ export async function POST(request: NextRequest) {
           const planType = session.metadata?.plan_type === 'subscription' ? 'paid_subscription' : 'paid_oneoff';
           const { error: profileError } = await supabaseAdmin
             .from('profiles')
-            .update({ plan_status: planType })
+            .update({ plan_status: planType } as never)
             .eq('id', userId);
 
           if (profileError) {
@@ -77,7 +77,7 @@ export async function POST(request: NextRequest) {
         break;
         
       case 'invoice.payment_succeeded':
-        const invoice = event.data.object as Stripe.Invoice;
+        const invoice = event.data.object as any;
         
         // Track subscription payments and check if we've reached 37 payments
         if (invoice.subscription) {
@@ -97,7 +97,7 @@ export async function POST(request: NextRequest) {
         break;
         
       case 'customer.subscription.deleted':
-        const subscription = event.data.object as Stripe.Subscription;
+        const subscription = event.data.object as any;
         
         // Update user plan status when subscription is cancelled
         const { data: order } = await supabaseAdmin
@@ -106,17 +106,18 @@ export async function POST(request: NextRequest) {
           .eq('subscription_id', subscription.id)
           .single();
 
-        if (order?.user_id && order.user_id !== 'temp-user') {
+        const orderData = order as any;
+        if (orderData?.user_id && orderData.user_id !== 'temp-user') {
           await supabaseAdmin
             .from('profiles')
-            .update({ plan_status: 'free' })
-            .eq('id', order.user_id);
+            .update({ plan_status: 'free' } as never)
+            .eq('id', orderData.user_id);
         }
         break;
 
       case 'invoice.payment_failed':
         // Handle failed subscription payments
-        const failedInvoice = event.data.object as Stripe.Invoice;
+        const failedInvoice = event.data.object as any;
         console.log('Payment failed for subscription:', failedInvoice.subscription);
         break;
 

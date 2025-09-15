@@ -36,8 +36,11 @@ export async function POST(
       );
     }
 
+    // Type assertion for kit after null check
+    const kitData = kit as any;
+
     // Check if user has access to the kit
-    if (!kit.has_access) {
+    if (!kitData.has_access) {
       return NextResponse.json(
         { error: 'Access denied. Please complete payment to generate content.' },
         { status: 403 }
@@ -52,21 +55,24 @@ export async function POST(
       .eq('type', type)
       .single();
 
+    // Type assertion for existingOutput
+    const outputData = existingOutput as any;
+
     if (regenerate) {
-      if (!existingOutput) {
+      if (!outputData) {
         return NextResponse.json(
           { error: 'No existing content to regenerate' },
           { status: 400 }
         );
       }
 
-      if (existingOutput.regen_count >= 3) {
+      if (outputData.regen_count >= 3) {
         return NextResponse.json(
           { error: 'Regeneration limit reached (3 maximum). Contact us for additional regenerations.' },
           { status: 429 }
         );
       }
-    } else if (existingOutput) {
+    } else if (outputData) {
       return NextResponse.json(
         { error: 'Content already exists. Use regenerate=true to create new version.' },
         { status: 409 }
@@ -75,25 +81,25 @@ export async function POST(
 
     // Prepare intake data for OpenAI
     const intakeData = {
-      idea_title: kit.title,
-      one_liner: kit.one_liner,
-      category: kit.category,
-      target_audience: kit.target_audience,
-      primary_goal: kit.primary_goal,
-      budget_band: kit.budget_band,
-      time_horizon: kit.time_horizon,
-      top_3_challenges: kit.challenges ? JSON.parse(kit.challenges) : [],
-      geography: kit.geography,
-      brand_vibe: kit.brand_vibe,
-      sales_channel_focus: kit.sales_channel_focus,
-      business_model: kit.business_model,
-      fulfilment: kit.fulfilment,
-      pricing_idea: kit.pricing_idea,
-      competitor_links: kit.competitor_links ? JSON.parse(kit.competitor_links) : [],
-      inspiration_links: kit.inspiration_links ? JSON.parse(kit.inspiration_links) : [],
-      content_strengths: kit.content_strengths ? JSON.parse(kit.content_strengths) : [],
-      constraints: kit.constraints,
-      revenue_target_30d: kit.revenue_target_30d,
+      idea_title: kitData.title,
+      one_liner: kitData.one_liner,
+      category: kitData.category,
+      target_audience: kitData.target_audience,
+      primary_goal: kitData.primary_goal,
+      budget_band: kitData.budget_band,
+      time_horizon: kitData.time_horizon,
+      top_3_challenges: kitData.challenges ? JSON.parse(kitData.challenges) : [],
+      geography: kitData.geography,
+      brand_vibe: kitData.brand_vibe,
+      sales_channel_focus: kitData.sales_channel_focus,
+      business_model: kitData.business_model,
+      fulfilment: kitData.fulfilment,
+      pricing_idea: kitData.pricing_idea,
+      competitor_links: kitData.competitor_links ? JSON.parse(kitData.competitor_links) : [],
+      inspiration_links: kitData.inspiration_links ? JSON.parse(kitData.inspiration_links) : [],
+      content_strengths: kitData.content_strengths ? JSON.parse(kitData.content_strengths) : [],
+      constraints: kitData.constraints,
+      revenue_target_30d: kitData.revenue_target_30d,
     };
 
     // Generate content based on type
@@ -106,15 +112,15 @@ export async function POST(
     }
 
     // Save or update the output
-    if (regenerate && existingOutput) {
+    if (regenerate && outputData) {
       const { error: updateError } = await supabase
         .from('outputs')
         .update({
           content: JSON.stringify(generatedContent),
-          regen_count: existingOutput.regen_count + 1,
+          regen_count: outputData.regen_count + 1,
           updated_at: new Date().toISOString(),
-        })
-        .eq('id', existingOutput.id)
+        } as never)
+        .eq('id', outputData.id)
         .select('regen_count')
         .single();
 
@@ -128,7 +134,7 @@ export async function POST(
 
       return NextResponse.json({
         content: generatedContent,
-        regens_remaining: 3 - (existingOutput.regen_count + 1),
+        regens_remaining: 3 - (outputData.regen_count + 1),
       });
     } else {
       const { error: insertError } = await supabase
@@ -138,7 +144,7 @@ export async function POST(
           type,
           content: JSON.stringify(generatedContent),
           regen_count: 0,
-        })
+        } as never)
         .select('regen_count')
         .single();
 

@@ -23,7 +23,10 @@ export async function GET(
       );
     }
 
-    if (!kit.has_access) {
+    // Type assertion for kit after null check
+    const kitData = kit as any;
+
+    if (!kitData.has_access) {
       return NextResponse.json(
         { error: 'Access denied. Please complete payment to view content.' },
         { status: 403 }
@@ -46,7 +49,7 @@ export async function GET(
     }
 
     // Transform outputs for easier frontend consumption
-    const transformedOutputs = outputs.reduce((acc, output) => {
+    const transformedOutputs = (outputs as any[]).reduce((acc, output) => {
       acc[output.type] = {
         id: output.id,
         content: JSON.parse(output.content),
