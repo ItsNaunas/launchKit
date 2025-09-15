@@ -39,15 +39,13 @@ export default function HomePage() {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
-            <Link href="/start" className="inline-block">
-              <Button 
-                size="lg" 
-                className="px-8 py-4 text-lg w-full"
-                onClick={() => window.location.href = '/start'}
-              >
-                Create My Launch Kit
-              </Button>
-            </Link>
+            <Button 
+              size="lg" 
+              className="px-8 py-4 text-lg"
+              onClick={() => window.location.href = '/start'}
+            >
+              Create My Launch Kit
+            </Button>
             <Button variant="outline" size="lg" className="px-8 py-4 text-lg">
               See Example Kit
             </Button>
@@ -160,15 +158,13 @@ export default function HomePage() {
                   <span className="text-gray-700">3 regenerations per section</span>
                 </li>
               </ul>
-              <Link href="/start" className="inline-block w-full">
-                <Button 
-                  className="w-full" 
-                  size="lg"
-                  onClick={() => window.location.href = '/start'}
-                >
-                  Get Started
-                </Button>
-              </Link>
+              <Button 
+                className="w-full" 
+                size="lg"
+                onClick={() => window.location.href = '/start'}
+              >
+                Get Started
+              </Button>
             </div>
 
             <div className="bg-white rounded-xl shadow-sm border-2 border-blue-200 p-8 relative">
@@ -210,16 +206,14 @@ export default function HomePage() {
                   <span className="text-gray-700">Same £37 total</span>
                 </li>
               </ul>
-              <Link href="/start" className="inline-block w-full">
-                <Button 
-                  variant="outline" 
-                  className="w-full" 
-                  size="lg"
-                  onClick={() => window.location.href = '/start'}
-                >
-                  Get Started
-                </Button>
-              </Link>
+              <Button 
+                variant="outline" 
+                className="w-full" 
+                size="lg"
+                onClick={() => window.location.href = '/start'}
+              >
+                Get Started
+              </Button>
             </div>
           </div>
         </div>
@@ -234,16 +228,14 @@ export default function HomePage() {
           <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
             Join hundreds of entrepreneurs who&apos;ve turned their ideas into reality with AI-powered launch strategies.
           </p>
-          <Link href="/start" className="inline-block">
-            <Button 
-              variant="secondary" 
-              size="lg" 
-              className="px-8 py-4 text-lg"
-              onClick={() => window.location.href = '/start'}
-            >
-              Create My Launch Kit Now
-            </Button>
-          </Link>
+          <Button 
+            variant="secondary" 
+            size="lg" 
+            className="px-8 py-4 text-lg"
+            onClick={() => window.location.href = '/start'}
+          >
+            Create My Launch Kit Now
+          </Button>
         </div>
       </section>
 
