@@ -1,102 +1,248 @@
-import Image from "next/image";
+'use client';
 
-export default function Home() {
+import Link from 'next/link';
+import { Button } from '@/components/ui/Button';
+import { Sparkles, Target, Zap, Download } from 'lucide-react';
+
+export default function HomePage() {
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50">
+      {/* Header */}
+      <header className="border-b bg-white/80 backdrop-blur-sm">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <Sparkles className="h-8 w-8 text-blue-600" />
+              <h1 className="text-2xl font-bold text-gray-900">LaunchKit AI</h1>
+            </div>
+            <nav className="hidden md:flex items-center gap-6">
+              <Link href="#features" className="text-gray-600 hover:text-gray-900">Features</Link>
+              <Link href="#pricing" className="text-gray-600 hover:text-gray-900">Pricing</Link>
+              <Button variant="outline" size="sm">Sign In</Button>
+            </nav>
+          </div>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
+      </header>
+
+      {/* Hero Section */}
+      <section className="relative py-20 overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6">
+            Launch Your Business Idea
+            <span className="block text-blue-600">in 30 Days with AI</span>
+          </h1>
+          
+          <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
+            Get a complete launch strategy, content plan, and business roadmap 
+            tailored specifically for your idea. No generic templates—just AI-powered 
+            insights that actually work.
+          </p>
+
+          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
+            <Link href="/start">
+              <Button size="lg" className="px-8 py-4 text-lg">
+                Create My Launch Kit
+              </Button>
+            </Link>
+            <Button variant="outline" size="lg" className="px-8 py-4 text-lg">
+              See Example Kit
+            </Button>
+          </div>
+
+          <p className="text-sm text-gray-500">
+            ✨ £37 one-time or £1/day for 37 days • No subscriptions • Instant access
+          </p>
+        </div>
+
+        {/* Background decoration */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full max-w-6xl opacity-10">
+          <div className="absolute top-20 left-10 w-20 h-20 bg-blue-500 rounded-full blur-xl"></div>
+          <div className="absolute top-40 right-10 w-32 h-32 bg-indigo-500 rounded-full blur-xl"></div>
+          <div className="absolute bottom-20 left-1/3 w-24 h-24 bg-purple-500 rounded-full blur-xl"></div>
+        </div>
+      </section>
+
+      {/* Features Section */}
+      <section id="features" className="py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+              Everything You Need to Launch
+            </h2>
+            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+              Skip months of planning. Get your complete launch strategy in minutes.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div className="text-center p-6 rounded-lg bg-gradient-to-br from-blue-50 to-indigo-50">
+              <Target className="h-12 w-12 text-blue-600 mx-auto mb-4" />
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">Business Case</h3>
+              <p className="text-gray-600 text-sm">
+                Market positioning, pricing strategy, and competitive analysis tailored to your idea.
+              </p>
+            </div>
+
+            <div className="text-center p-6 rounded-lg bg-gradient-to-br from-green-50 to-emerald-50">
+              <Zap className="h-12 w-12 text-green-600 mx-auto mb-4" />
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">Content Strategy</h3>
+              <p className="text-gray-600 text-sm">
+                30-day content calendar with viral hooks and channel-specific optimization.
+              </p>
+            </div>
+
+            <div className="text-center p-6 rounded-lg bg-gradient-to-br from-purple-50 to-pink-50">
+              <Download className="h-12 w-12 text-purple-600 mx-auto mb-4" />
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">Ready-to-Use Assets</h3>
+              <p className="text-gray-600 text-sm">
+                Download PDFs, templates, and resources you can use immediately.
+              </p>
+            </div>
+
+            <div className="text-center p-6 rounded-lg bg-gradient-to-br from-orange-50 to-red-50">
+              <Sparkles className="h-12 w-12 text-orange-600 mx-auto mb-4" />
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">AI Refinement</h3>
+              <p className="text-gray-600 text-sm">
+                Regenerate any section up to 3 times to get exactly what you need.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Pricing Section */}
+      <section id="pricing" className="py-20 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+              Simple, Fair Pricing
+            </h2>
+            <p className="text-xl text-gray-600">
+              Choose the payment option that works for you
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+            <div className="bg-white rounded-xl shadow-sm border-2 border-gray-200 p-8">
+              <h3 className="text-2xl font-bold text-gray-900 mb-2">Pay Once</h3>
+              <div className="text-4xl font-bold text-gray-900 mb-4">
+                £37
+                <span className="text-lg font-normal text-gray-600">/one-time</span>
+              </div>
+              <p className="text-gray-600 mb-6">Perfect for immediate access to your complete launch kit</p>
+              <ul className="space-y-3 mb-8">
+                <li className="flex items-center gap-3">
+                  <div className="w-5 h-5 bg-green-100 rounded-full flex items-center justify-center">
+                    <div className="w-2 h-2 bg-green-600 rounded-full"></div>
+                  </div>
+                  <span className="text-gray-700">Complete business case & strategy</span>
+                </li>
+                <li className="flex items-center gap-3">
+                  <div className="w-5 h-5 bg-green-100 rounded-full flex items-center justify-center">
+                    <div className="w-2 h-2 bg-green-600 rounded-full"></div>
+                  </div>
+                  <span className="text-gray-700">30-day content strategy</span>
+                </li>
+                <li className="flex items-center gap-3">
+                  <div className="w-5 h-5 bg-green-100 rounded-full flex items-center justify-center">
+                    <div className="w-2 h-2 bg-green-600 rounded-full"></div>
+                  </div>
+                  <span className="text-gray-700">Downloadable PDFs</span>
+                </li>
+                <li className="flex items-center gap-3">
+                  <div className="w-5 h-5 bg-green-100 rounded-full flex items-center justify-center">
+                    <div className="w-2 h-2 bg-green-600 rounded-full"></div>
+                  </div>
+                  <span className="text-gray-700">3 regenerations per section</span>
+                </li>
+              </ul>
+              <Link href="/start">
+                <Button className="w-full" size="lg">Get Started</Button>
+              </Link>
+            </div>
+
+            <div className="bg-white rounded-xl shadow-sm border-2 border-blue-200 p-8 relative">
+              <div className="absolute -top-4 left-1/2 -translate-x-1/2">
+                <span className="bg-blue-600 text-white px-4 py-1 rounded-full text-sm font-medium">
+                  Flexible
+                </span>
+              </div>
+              
+              <h3 className="text-2xl font-bold text-gray-900 mb-2">Daily Plan</h3>
+              <div className="text-4xl font-bold text-gray-900 mb-4">
+                £1
+                <span className="text-lg font-normal text-gray-600">/day × 37</span>
+              </div>
+              <p className="text-gray-600 mb-6">Spread the cost over time, same great value</p>
+              <ul className="space-y-3 mb-8">
+                <li className="flex items-center gap-3">
+                  <div className="w-5 h-5 bg-blue-100 rounded-full flex items-center justify-center">
+                    <div className="w-2 h-2 bg-blue-600 rounded-full"></div>
+                  </div>
+                  <span className="text-gray-700">Everything in Pay Once</span>
+                </li>
+                <li className="flex items-center gap-3">
+                  <div className="w-5 h-5 bg-blue-100 rounded-full flex items-center justify-center">
+                    <div className="w-2 h-2 bg-blue-600 rounded-full"></div>
+                  </div>
+                  <span className="text-gray-700">Cancel anytime</span>
+                </li>
+                <li className="flex items-center gap-3">
+                  <div className="w-5 h-5 bg-blue-100 rounded-full flex items-center justify-center">
+                    <div className="w-2 h-2 bg-blue-600 rounded-full"></div>
+                  </div>
+                  <span className="text-gray-700">Auto-ends after 37 days</span>
+                </li>
+                <li className="flex items-center gap-3">
+                  <div className="w-5 h-5 bg-blue-100 rounded-full flex items-center justify-center">
+                    <div className="w-2 h-2 bg-blue-600 rounded-full"></div>
+                  </div>
+                  <span className="text-gray-700">Same £37 total</span>
+                </li>
+              </ul>
+              <Link href="/start">
+                <Button variant="outline" className="w-full" size="lg">Get Started</Button>
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="py-20 bg-blue-600">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+            Ready to Launch Your Idea?
+          </h2>
+          <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
+            Join hundreds of entrepreneurs who've turned their ideas into reality with AI-powered launch strategies.
+          </p>
+          <Link href="/start">
+            <Button variant="secondary" size="lg" className="px-8 py-4 text-lg">
+              Create My Launch Kit Now
+            </Button>
+          </Link>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="bg-gray-900 text-white py-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col md:flex-row justify-between items-center">
+            <div className="flex items-center gap-2 mb-4 md:mb-0">
+              <Sparkles className="h-6 w-6 text-blue-400" />
+              <span className="text-xl font-bold">LaunchKit AI</span>
+            </div>
+            <div className="flex gap-6 text-sm text-gray-400">
+              <a href="#" className="hover:text-white">Privacy Policy</a>
+              <a href="#" className="hover:text-white">Terms of Service</a>
+              <a href="#" className="hover:text-white">Contact</a>
+            </div>
+          </div>
+          <div className="border-t border-gray-800 mt-8 pt-8 text-center text-sm text-gray-400">
+            © 2024 LaunchKit AI. All rights reserved.
+          </div>
+        </div>
       </footer>
     </div>
   );
