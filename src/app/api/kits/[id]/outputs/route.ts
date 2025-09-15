@@ -55,7 +55,14 @@ export async function GET(
         updated_at: output.updated_at,
       };
       return acc;
-    }, {} as Record<string, any>);
+    }, {} as Record<string, {
+      id: string;
+      content: unknown;
+      regen_count: number;
+      regens_remaining: number;
+      created_at: string;
+      updated_at: string;
+    }>);
 
     return NextResponse.json(transformedOutputs);
 

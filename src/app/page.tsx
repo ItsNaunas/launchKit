@@ -215,7 +215,7 @@ export default function HomePage() {
             Ready to Launch Your Idea?
           </h2>
           <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
-            Join hundreds of entrepreneurs who've turned their ideas into reality with AI-powered launch strategies.
+            Join hundreds of entrepreneurs who&apos;ve turned their ideas into reality with AI-powered launch strategies.
           </p>
           <Link href="/start">
             <Button variant="secondary" size="lg" className="px-8 py-4 text-lg">

@@ -114,7 +114,7 @@ export default function KitPreviewPage({ params }: { params: { id: string } }) {
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <h1 className="text-2xl font-bold text-gray-900">Kit not found</h1>
-          <p className="text-gray-600 mt-2">The kit you're looking for doesn't exist.</p>
+          <p className="text-gray-600 mt-2">The kit you&apos;re looking for doesn&apos;t exist.</p>
         </div>
       </div>
     );

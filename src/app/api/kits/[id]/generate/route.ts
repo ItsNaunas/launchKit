@@ -44,7 +44,7 @@ export async function POST(
     }
 
     // Check existing output and regeneration limit
-    const { data: existingOutput, error: outputError } = await supabase
+    const { data: existingOutput } = await supabase
       .from('outputs')
       .select('*')
       .eq('kit_id', kitId)
@@ -106,7 +106,7 @@ export async function POST(
 
     // Save or update the output
     if (regenerate && existingOutput) {
-      const { data: updatedOutput, error: updateError } = await supabase
+      const { error: updateError } = await supabase
         .from('outputs')
         .update({
           content: JSON.stringify(generatedContent),
@@ -114,7 +114,7 @@ export async function POST(
           updated_at: new Date().toISOString(),
         })
         .eq('id', existingOutput.id)
-        .select()
+        .select('regen_count')
         .single();
 
       if (updateError) {
@@ -127,10 +127,10 @@ export async function POST(
 
       return NextResponse.json({
         content: generatedContent,
-        regens_remaining: 3 - updatedOutput.regen_count,
+        regens_remaining: 3 - (existingOutput.regen_count + 1),
       });
     } else {
-      const { data: newOutput, error: insertError } = await supabase
+      const { error: insertError } = await supabase
         .from('outputs')
         .insert({
           kit_id: kitId,
@@ -138,7 +138,7 @@ export async function POST(
           content: JSON.stringify(generatedContent),
           regen_count: 0,
         })
-        .select()
+        .select('regen_count')
         .single();
 
       if (insertError) {
@@ -172,7 +172,29 @@ export async function POST(
   }
 }
 
-async function generateBusinessCase(intakeData: any) {
+interface IntakeData {
+  idea_title: string;
+  one_liner: string;
+  category: string;
+  target_audience: string;
+  primary_goal: string;
+  budget_band: string;
+  time_horizon: string;
+  top_3_challenges: string[];
+  geography: string;
+  brand_vibe: string;
+  sales_channel_focus: string;
+  business_model?: string;
+  fulfilment?: string;
+  pricing_idea?: string;
+  competitor_links?: string[];
+  inspiration_links?: string[];
+  content_strengths?: string[];
+  constraints?: string;
+  revenue_target_30d?: number;
+}
+
+async function generateBusinessCase(intakeData: IntakeData) {
   const prompt = `You are a business strategy expert. Based on the following business idea details, create a comprehensive business case analysis.
 
 Business Idea Details:
@@ -214,7 +236,7 @@ Focus on being specific to their industry, target audience, and goals. Make all 
   return JSON.parse(content);
 }
 
-async function generateContentStrategy(intakeData: any) {
+async function generateContentStrategy(intakeData: IntakeData) {
   const prompt = `You are a content marketing expert. Based on the following business idea details, create a comprehensive 30-day content strategy.
 
 Business Idea Details:

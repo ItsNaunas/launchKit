@@ -13,10 +13,37 @@ interface KitData {
   has_access: boolean;
 }
 
+interface BusinessCaseContent {
+  positioning: string;
+  value_prop: string;
+  audience_summary: string;
+  offer_bullets: string[];
+  brand_identity: {
+    vibe: string;
+    keywords: string[];
+  };
+  pricing: {
+    idea: string;
+    alternatives: string[];
+  };
+  name_ideas: string[];
+  taglines: string[];
+  risks: string[];
+  first_3_steps: string[];
+}
+
+interface ContentStrategyContent {
+  channels: string[];
+  cadence: Record<string, string>;
+  tone: string;
+  hooks_7: string[];
+  thirty_day_themes: string[];
+}
+
 interface OutputData {
   business_case?: {
     id: string;
-    content: any;
+    content: BusinessCaseContent;
     regen_count: number;
     regens_remaining: number;
     created_at: string;
@@ -24,7 +51,7 @@ interface OutputData {
   };
   content_strategy?: {
     id: string;
-    content: any;
+    content: ContentStrategyContent;
     regen_count: number;
     regens_remaining: number;
     created_at: string;
@@ -158,7 +185,7 @@ export default function KitDashboardPage({ params }: { params: { id: string } })
       document.body.removeChild(container);
 
       // Download
-      const filename = `${kit?.title}-${type.replace('_', '-')}.pdf`;
+      const filename = `${kit?.title}-${type.replace(/_/g, '-')}.pdf`;
       pdf.save(filename);
 
     } catch (error) {
@@ -348,7 +375,7 @@ export default function KitDashboardPage({ params }: { params: { id: string } })
 }
 
 // Component to display business case content
-function BusinessCaseDisplay({ content }: { content: any }) {
+function BusinessCaseDisplay({ content }: { content: BusinessCaseContent }) {
   return (
     <div className="space-y-6">
       <div>
@@ -388,7 +415,7 @@ function BusinessCaseDisplay({ content }: { content: any }) {
 }
 
 // Component to display content strategy
-function ContentStrategyDisplay({ content }: { content: any }) {
+function ContentStrategyDisplay({ content }: { content: ContentStrategyContent }) {
   return (
     <div className="space-y-6">
       <div>
@@ -447,7 +474,7 @@ function ContentStrategyDisplay({ content }: { content: any }) {
 }
 
 // Helper functions for PDF formatting
-function formatBusinessCasePDF(content: any, title: string): string {
+function formatBusinessCasePDF(content: BusinessCaseContent, title: string): string {
   return `
     <h1 style="color: #1f2937; border-bottom: 2px solid #3b82f6; padding-bottom: 10px; margin-bottom: 20px;">
       ${title} - Business Case
@@ -500,7 +527,7 @@ function formatBusinessCasePDF(content: any, title: string): string {
   `;
 }
 
-function formatContentStrategyPDF(content: any, title: string): string {
+function formatContentStrategyPDF(content: ContentStrategyContent, title: string): string {
   return `
     <h1 style="color: #1f2937; border-bottom: 2px solid #10b981; padding-bottom: 10px; margin-bottom: 20px;">
       ${title} - Content Strategy

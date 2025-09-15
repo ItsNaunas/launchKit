@@ -46,7 +46,7 @@ export function IntakeForm({ onSubmit, isLoading = false }: IntakeFormProps) {
           Launch Your Idea with AI
         </h1>
         <p className="text-gray-600">
-          Tell us about your business idea and we'll create a complete launch kit tailored for you.
+          Tell us about your business idea and we&apos;ll create a complete launch kit tailored for you.
         </p>
       </div>
 
