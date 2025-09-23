@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/Button';
 import { MiniIntakeForm } from '@/components/MiniIntakeForm';
 import { useAuth } from '@/contexts/AuthContext';
-import { Sparkles, Target, Zap, Download, User, LogOut } from 'lucide-react';
+import { Sparkles, Target, Zap, Download, LogOut } from 'lucide-react';
 
 interface MiniIntakeData {
   business_idea: string;
@@ -116,7 +116,7 @@ export default function HomePage() {
                   className="px-8 py-4 text-lg"
                   onClick={() => setShowMiniIntake(true)}
                 >
-                  What's your dream business?
+                  What&apos;s your dream business?
                 </Button>
                 <Button variant="outline" size="lg" className="px-8 py-4 text-lg">
                   See Example Kit

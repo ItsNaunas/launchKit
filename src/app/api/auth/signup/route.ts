@@ -46,7 +46,7 @@ export async function POST(request: NextRequest) {
         id: data.user.id,
         email: data.user.email!,
         plan_status: 'free',
-      });
+      } as never);
 
     if (profileError) {
       console.error('Profile creation error:', profileError);

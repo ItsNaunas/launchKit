@@ -16,7 +16,7 @@ export default function PaywallPage({ params }: { params: Promise<{ id: string }
   const [selectedPlan, setSelectedPlan] = useState<'oneoff' | 'subscription'>('oneoff');
   const [isLoading, setIsLoading] = useState(true);
   const [dailyCount, setDailyCount] = useState(0);
-  const [isAtCapacity, setIsAtCapacity] = useState(false);
+  const [isAtCapacity] = useState(false);
 
   useEffect(() => {
     const resolveParams = async () => {
@@ -42,7 +42,6 @@ export default function PaywallPage({ params }: { params: Promise<{ id: string }
         // Show fake scarcity for conversion optimization
         const fakeCount = Math.floor(Math.random() * 15) + 35; // Random between 35-49
         setDailyCount(fakeCount);
-        setIsAtCapacity(false); // Never actually restrict
       } catch (error) {
         console.error('Error fetching data:', error);
       } finally {
@@ -97,7 +96,7 @@ export default function PaywallPage({ params }: { params: Promise<{ id: string }
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <h1 className="text-2xl font-bold text-gray-900">Kit not found</h1>
-          <p className="text-gray-600 mt-2">The kit you're looking for doesn't exist.</p>
+          <p className="text-gray-600 mt-2">The kit you&apos;re looking for doesn&apos;t exist.</p>
         </div>
       </div>
     );
@@ -141,7 +140,7 @@ export default function PaywallPage({ params }: { params: Promise<{ id: string }
 
         {/* What You'll Get */}
         <div className="bg-white rounded-lg shadow-sm p-6 mb-8">
-          <h3 className="text-xl font-semibold text-gray-900 mb-4">What You'll Receive</h3>
+          <h3 className="text-xl font-semibold text-gray-900 mb-4">What You&apos;ll Receive</h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="text-center">
               <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mx-auto mb-3">

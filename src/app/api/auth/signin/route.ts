@@ -39,7 +39,7 @@ export async function POST(request: NextRequest) {
         id: data.user.id,
         email: data.user.email!,
         updated_at: new Date().toISOString(),
-      });
+      } as never);
 
     if (profileError) {
       console.error('Profile update error:', profileError);

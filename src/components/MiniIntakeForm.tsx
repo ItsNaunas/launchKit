@@ -13,6 +13,11 @@ interface MiniIntakeData {
   challenges: string[];
 }
 
+interface FormErrors {
+  business_idea?: string;
+  challenges?: string;
+}
+
 const CHALLENGE_OPTIONS = [
   'Finding my target audience',
   'Creating compelling content',
@@ -37,7 +42,7 @@ export function MiniIntakeForm({ onSubmit, isLoading }: {
     challenges: []
   });
 
-  const [errors, setErrors] = useState<Partial<MiniIntakeData>>({});
+  const [errors, setErrors] = useState<FormErrors>({});
 
   const handleChallengeToggle = (challenge: string) => {
     setFormData(prev => ({
@@ -52,7 +57,7 @@ export function MiniIntakeForm({ onSubmit, isLoading }: {
     e.preventDefault();
     
     // Validation
-    const newErrors: Partial<MiniIntakeData> = {};
+    const newErrors: FormErrors = {};
     if (!formData.business_idea.trim()) {
       newErrors.business_idea = 'Please describe your business idea';
     }
@@ -76,10 +81,10 @@ export function MiniIntakeForm({ onSubmit, isLoading }: {
       <div className="text-center mb-8">
         <div className="flex items-center justify-center gap-2 mb-4">
           <Sparkles className="h-8 w-8 text-blue-600" />
-          <h1 className="text-3xl font-bold text-gray-900">What's your dream business?</h1>
+          <h1 className="text-3xl font-bold text-gray-900">What&apos;s your dream business?</h1>
         </div>
         <p className="text-lg text-gray-600">
-          Tell us about your idea and we'll create a personalized launch strategy
+          Tell us about your idea and we&apos;ll create a personalized launch strategy
         </p>
       </div>
 
@@ -104,7 +109,7 @@ export function MiniIntakeForm({ onSubmit, isLoading }: {
         {/* Budget */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
-            What's your budget for getting started?
+            What&apos;s your budget for getting started?
           </label>
           <Select
             value={formData.budget}
