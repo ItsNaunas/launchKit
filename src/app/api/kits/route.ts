@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { IntakeSchema } from '@/lib/schemas';
 import { supabase } from '@/lib/supabase';
+import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs';
+import { cookies } from 'next/headers';
 
 export async function POST(request: NextRequest) {
   try {
@@ -9,13 +11,20 @@ export async function POST(request: NextRequest) {
     // Validate the input data
     const validatedData = IntakeSchema.parse(body);
 
-    // For now, create kit without authentication (we'll add auth later)
-    // In production, get user_id from authentication
-    const tempUserId = 'temp-user-' + Date.now(); // Placeholder
+    // Get authenticated user
+    const supabaseAuth = createRouteHandlerClient({ cookies });
+    const { data: { user }, error: authError } = await supabaseAuth.auth.getUser();
+
+    if (authError || !user) {
+      return NextResponse.json(
+        { error: 'Authentication required' },
+        { status: 401 }
+      );
+    }
 
     // Serialize arrays to JSON strings for storage
     const kitData = {
-      user_id: tempUserId,
+      user_id: user.id,
       title: validatedData.idea_title,
       has_access: false, // Will be set to true after payment
       one_liner: validatedData.one_liner,

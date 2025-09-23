@@ -24,8 +24,8 @@ export default function StartPage() {
 
       const { kitId } = await response.json();
       
-      // Redirect to payment/preview page
-      window.location.href = `/kit/${kitId}/preview`;
+      // Redirect to teaser flow
+      window.location.href = `/kit/${kitId}/teaser`;
     } catch (error) {
       console.error('Error creating kit:', error);
       alert('Something went wrong. Please try again.');
