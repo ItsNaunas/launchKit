@@ -1,60 +1,27 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { z } from 'zod';
 import { supabase } from '@/lib/supabase';
-import OpenAI from 'openai';
-
-// Check if we're in a build context
-const isBuilding = process.env.NODE_ENV === 'production' && !process.env.OPENAI_API_KEY;
-
-let openaiInstance: OpenAI | null = null;
-
-// Create OpenAI client only when needed (not during build)
-const openai = new Proxy({} as OpenAI, {
-  get(target, prop) {
-    if (isBuilding) {
-      // Return mock functions during build
-      if (prop === 'chat') {
-        return {
-          completions: {
-            create: () => Promise.resolve({
-              choices: [{ message: { content: JSON.stringify({ mock: 'build-time-data' }) } }]
-            })
-          }
-        };
-      }
-      return () => Promise.resolve({ mock: 'build-time-data' });
-    }
-    
-    if (!openaiInstance) {
-      openaiInstance = new OpenAI({
-        apiKey: process.env.OPENAI_API_KEY || '',
-      });
-    }
-    
-    return (openaiInstance as any)[prop];
-  }
-});
-
-const GenerateSchema = z.object({
-  type: z.enum(['business_case', 'content_strategy']),
-  regenerate: z.boolean().default(false),
-});
+import { PromptAssembler } from '@/lib/prompt-assembler';
 
 export async function POST(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const body = await request.json();
-    const { type, regenerate } = GenerateSchema.parse(body);
-    const resolvedParams = await params;
-    const kitId = resolvedParams.id;
+    const { id } = await params;
+    const { type } = await request.json();
 
-    // Get kit data with all intake information
+    if (!type || !['business_case', 'content_strategy', 'website_content'].includes(type)) {
+      return NextResponse.json(
+        { error: 'Invalid content type. Must be business_case, content_strategy, or website_content' },
+        { status: 400 }
+      );
+    }
+
+    // Get kit data with profiling information
     const { data: kit, error: kitError } = await supabase
       .from('kits')
       .select('*')
-      .eq('id', kitId)
+      .eq('id', id)
       .single();
 
     if (kitError || !kit) {
@@ -64,142 +31,62 @@ export async function POST(
       );
     }
 
-    // Type assertion for kit after null check
-    const kitData = kit as any;
+    // Parse profiling data
+    const selectedOptions = (kit as any).selected_options ? JSON.parse((kit as any).selected_options) : {};
+    const profilingData = (kit as any).profiling_data ? JSON.parse((kit as any).profiling_data) : {};
 
-    // Check if user has access to the kit
-    if (!kitData.has_access) {
-      return NextResponse.json(
-        { error: 'Access denied. Please complete payment to generate content.' },
-        { status: 403 }
-      );
-    }
+    // Create prompt assembler
+    const promptAssembler = new PromptAssembler(kit, profilingData, selectedOptions);
 
-    // Check existing output and regeneration limit
-    const { data: existingOutput } = await supabase
-      .from('outputs')
-      .select('*')
-      .eq('kit_id', kitId)
-      .eq('type', type)
-      .single();
-
-    // Type assertion for existingOutput
-    const outputData = existingOutput as any;
-
-    if (regenerate) {
-      if (!outputData) {
+    // Generate the appropriate prompt
+    let prompt: string;
+    switch (type) {
+      case 'business_case':
+        prompt = promptAssembler.generateBusinessCasePrompt();
+        break;
+      case 'content_strategy':
+        prompt = promptAssembler.generateContentStrategyPrompt();
+        break;
+      case 'website_content':
+        prompt = promptAssembler.generateWebsiteContentPrompt();
+        break;
+      default:
         return NextResponse.json(
-          { error: 'No existing content to regenerate' },
+          { error: 'Invalid content type' },
           { status: 400 }
         );
-      }
+    }
 
-      if (outputData.regen_count >= 3) {
-        return NextResponse.json(
-          { error: 'Regeneration limit reached (3 maximum). Contact us for additional regenerations.' },
-          { status: 429 }
-        );
-      }
-    } else if (outputData) {
+    // TODO: Replace with actual OpenAI API call
+    // For now, return a mock response
+    const mockContent = generateMockContent(type);
+
+    // Save the generated content
+    const { error: saveError } = await supabase
+      .from('outputs')
+      .upsert({
+        kit_id: id,
+        type: type,
+        content: JSON.stringify(mockContent),
+        regen_count: 0,
+      } as never);
+
+    if (saveError) {
+      console.error('Error saving generated content:', saveError);
       return NextResponse.json(
-        { error: 'Content already exists. Use regenerate=true to create new version.' },
-        { status: 409 }
+        { error: 'Failed to save generated content' },
+        { status: 500 }
       );
     }
 
-    // Prepare intake data for OpenAI
-    const intakeData = {
-      idea_title: kitData.title,
-      one_liner: kitData.one_liner,
-      category: kitData.category,
-      target_audience: kitData.target_audience,
-      primary_goal: kitData.primary_goal,
-      budget_band: kitData.budget_band,
-      time_horizon: kitData.time_horizon,
-      top_3_challenges: kitData.challenges ? JSON.parse(kitData.challenges) : [],
-      geography: kitData.geography,
-      brand_vibe: kitData.brand_vibe,
-      sales_channel_focus: kitData.sales_channel_focus,
-      business_model: kitData.business_model,
-      fulfilment: kitData.fulfilment,
-      pricing_idea: kitData.pricing_idea,
-      competitor_links: kitData.competitor_links ? JSON.parse(kitData.competitor_links) : [],
-      inspiration_links: kitData.inspiration_links ? JSON.parse(kitData.inspiration_links) : [],
-      content_strengths: kitData.content_strengths ? JSON.parse(kitData.content_strengths) : [],
-      constraints: kitData.constraints,
-      revenue_target_30d: kitData.revenue_target_30d,
-    };
-
-    // Generate content based on type
-    let generatedContent;
-    
-    if (type === 'business_case') {
-      generatedContent = await generateBusinessCase(intakeData);
-    } else {
-      generatedContent = await generateContentStrategy(intakeData);
-    }
-
-    // Save or update the output
-    if (regenerate && outputData) {
-      const { error: updateError } = await supabase
-        .from('outputs')
-        .update({
-          content: JSON.stringify(generatedContent),
-          regen_count: outputData.regen_count + 1,
-          updated_at: new Date().toISOString(),
-        } as never)
-        .eq('id', outputData.id)
-        .select('regen_count')
-        .single();
-
-      if (updateError) {
-        console.error('Failed to update output:', updateError);
-        return NextResponse.json(
-          { error: 'Failed to save generated content' },
-          { status: 500 }
-        );
-      }
-
-      return NextResponse.json({
-        content: generatedContent,
-        regens_remaining: 3 - (outputData.regen_count + 1),
-      });
-    } else {
-      const { error: insertError } = await supabase
-        .from('outputs')
-        .insert({
-          kit_id: kitId,
-          type,
-          content: JSON.stringify(generatedContent),
-          regen_count: 0,
-        } as never)
-        .select('regen_count')
-        .single();
-
-      if (insertError) {
-        console.error('Failed to insert output:', insertError);
-        return NextResponse.json(
-          { error: 'Failed to save generated content' },
-          { status: 500 }
-        );
-      }
-
-      return NextResponse.json({
-        content: generatedContent,
-        regens_remaining: 3,
-      });
-    }
+    return NextResponse.json({
+      success: true,
+      content: mockContent,
+      prompt: prompt, // Include prompt for debugging
+    });
 
   } catch (error) {
     console.error('Generation error:', error);
-    
-    if (error instanceof z.ZodError) {
-      return NextResponse.json(
-        { error: 'Invalid request data', details: error.errors },
-        { status: 400 }
-      );
-    }
-
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
@@ -207,106 +94,94 @@ export async function POST(
   }
 }
 
-interface IntakeData {
-  idea_title: string;
-  one_liner: string;
-  category: string;
-  target_audience: string;
-  primary_goal: string;
-  budget_band: string;
-  time_horizon: string;
-  top_3_challenges: string[];
-  geography: string;
-  brand_vibe: string;
-  sales_channel_focus: string;
-  business_model?: string;
-  fulfilment?: string;
-  pricing_idea?: string;
-  competitor_links?: string[];
-  inspiration_links?: string[];
-  content_strengths?: string[];
-  constraints?: string;
-  revenue_target_30d?: number;
-}
+// Mock content generator (replace with actual OpenAI integration)
+function generateMockContent(type: string): any {
+  const baseContent = {
+    business_case: {
+      positioning: "Premium solution for busy professionals who value quality and convenience",
+      value_prop: "Save 10+ hours per week with our streamlined approach",
+      audience_summary: "Busy professionals aged 25-45 who are willing to pay for convenience",
+      offer_bullets: [
+        "Complete setup in under 2 hours",
+        "Ongoing support and optimization",
+        "Proven results with 500+ customers"
+      ],
+      brand_identity: {
+        vibe: "Professional yet approachable",
+        keywords: ["efficient", "reliable", "premium", "results-driven"]
+      },
+      pricing: {
+        idea: "£299 one-time setup + £99/month maintenance",
+        alternatives: ["£199 basic package", "£499 premium with priority support"]
+      },
+      name_ideas: ["ProLaunch", "QuickStart Pro", "LaunchPad", "StartSmart"],
+      taglines: [
+        "Launch faster, launch smarter",
+        "Your shortcut to success",
+        "From idea to launch in days, not months"
+      ],
+      risks: [
+        "Market saturation in this space",
+        "High customer acquisition costs",
+        "Seasonal demand fluctuations"
+      ],
+      first_3_steps: [
+        "Validate your idea with 10 potential customers",
+        "Create a simple landing page to test demand",
+        "Build your MVP and get first paying customers"
+      ]
+    },
+    content_strategy: {
+      channels: ["LinkedIn", "Instagram", "Email Newsletter", "YouTube"],
+      cadence: {
+        "LinkedIn": "3 posts per week",
+        "Instagram": "Daily stories + 5 posts per week",
+        "Email Newsletter": "Weekly",
+        "YouTube": "2 videos per month"
+      },
+      tone: "Professional yet approachable, with a focus on practical value",
+      hooks_7: [
+        "The mistake 90% of [audience] make when starting out...",
+        "How I went from idea to £10k revenue in 30 days",
+        "The one thing that changed everything for my business",
+        "Why most [business type] fail (and how to avoid it)",
+        "The secret my competitors don't want you to know",
+        "How to [achieve outcome] without [common struggle]",
+        "The framework that helped me [specific result]"
+      ],
+      thirty_day_themes: [
+        "Week 1: Foundation & Planning",
+        "Week 2: Content Creation & Systems",
+        "Week 3: Audience Building & Engagement",
+        "Week 4: Optimization & Growth"
+      ]
+    },
+    website_content: {
+      hero: {
+        headline: "Launch Your Business in 30 Days",
+        subheadline: "Get everything you need to go from idea to first customers with our proven system",
+        cta: "Start Your Launch Kit"
+      },
+      value_props: [
+        "Complete business setup in 30 days",
+        "Proven framework used by 500+ entrepreneurs",
+        "Ongoing support and optimization"
+      ],
+      about: "We help entrepreneurs turn their ideas into profitable businesses. Our proven system has helped over 500 people launch successfully, generating over £2M in combined revenue.",
+      social_proof: "Join 500+ successful entrepreneurs who have launched with our system",
+      faq: [
+        {
+          question: "How long does the setup take?",
+          answer: "Most people complete the initial setup in 2-4 weeks, depending on their availability."
+        },
+        {
+          question: "What if I need help?",
+          answer: "We provide ongoing support via email and our community forum."
+        }
+      ],
+      meta_description: "Launch your business in 30 days with our proven system. Complete setup, ongoing support, and proven results. Join 500+ successful entrepreneurs."
+    }
+  };
 
-async function generateBusinessCase(intakeData: IntakeData) {
-  const prompt = `You are a business strategy expert. Based on the following business idea details, create a comprehensive business case analysis.
-
-Business Idea Details:
-${JSON.stringify(intakeData, null, 2)}
-
-Please provide a detailed business case analysis in the following JSON format:
-{
-  "positioning": "Clear positioning statement for the business",
-  "value_prop": "Compelling value proposition",
-  "audience_summary": "Detailed target audience analysis",
-  "offer_bullets": ["3-5 key offer points"],
-  "brand_identity": {
-    "vibe": "Brand personality that matches their chosen vibe",
-    "keywords": ["5-8 brand keywords"]
-  },
-  "pricing": {
-    "idea": "Pricing strategy recommendation",
-    "alternatives": ["2-3 alternative pricing approaches"]
-  },
-  "name_ideas": ["5 creative business name suggestions"],
-  "taglines": ["5 compelling tagline options"],
-  "risks": ["3-4 key risks to consider"],
-  "first_3_steps": ["3 specific, actionable next steps"]
-}
-
-Focus on being specific to their industry, target audience, and goals. Make all recommendations actionable and tailored to their budget and timeline.`;
-
-  const completion = await openai.chat.completions.create({
-    model: 'gpt-4',
-    messages: [{ role: 'user', content: prompt }],
-    temperature: 0.7,
-  });
-
-  const content = completion.choices[0].message.content;
-  if (!content) {
-    throw new Error('No content generated from OpenAI');
-  }
-
-  return JSON.parse(content);
-}
-
-async function generateContentStrategy(intakeData: IntakeData) {
-  const prompt = `You are a content marketing expert. Based on the following business idea details, create a comprehensive 30-day content strategy.
-
-Business Idea Details:
-${JSON.stringify(intakeData, null, 2)}
-
-Please provide a detailed content strategy in the following JSON format:
-{
-  "channels": ["Primary channels based on their sales_channel_focus"],
-  "cadence": {
-    "channel_name": "posting frequency (e.g., '3/week', 'daily')"
-  },
-  "tone": "Content tone and voice description",
-  "hooks_7": [
-    "7 proven hook templates specific to their niche"
-  ],
-  "thirty_day_themes": [
-    "Week 1: Theme and focus",
-    "Week 2: Theme and focus", 
-    "Week 3: Theme and focus",
-    "Week 4: Theme and focus"
-  ]
-}
-
-Make the strategy specific to their chosen sales channels, brand vibe, and target audience. Include practical, actionable content ideas they can start implementing immediately.`;
-
-  const completion = await openai.chat.completions.create({
-    model: 'gpt-4',
-    messages: [{ role: 'user', content: prompt }],
-    temperature: 0.7,
-  });
-
-  const content = completion.choices[0].message.content;
-  if (!content) {
-    throw new Error('No content generated from OpenAI');
-  }
-
-  return JSON.parse(content);
+  return baseContent[type as keyof typeof baseContent] || {};
 }
