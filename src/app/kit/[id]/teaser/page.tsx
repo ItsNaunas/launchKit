@@ -30,6 +30,15 @@ export default function TeaserPage({ params }: { params: Promise<{ id: string }>
   const [kitId, setKitId] = useState<string>('');
   const [currentStep, setCurrentStep] = useState(1);
   const [selectedOptions, setSelectedOptions] = useState<{[key: number]: string}>({});
+  const [profilingData, setProfilingData] = useState<{
+    audienceDetail: string;
+    outcomePreference: string;
+    tonePreference: string;
+  }>({
+    audienceDetail: '',
+    outcomePreference: '',
+    tonePreference: ''
+  });
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -136,6 +145,12 @@ export default function TeaserPage({ params }: { params: Promise<{ id: string }>
           fullContent: 'Social proof and case study focused. Hero: "Join 500+ customers who have [achieved result]". Social proof: Testimonials, logos, numbers. CTA: "Get the same results"'
         }
       ]
+    },
+    {
+      step: 4,
+      title: "Progressive Profiling",
+      description: "Help us personalize your kit",
+      options: []
     }
   ];
 
@@ -146,10 +161,26 @@ export default function TeaserPage({ params }: { params: Promise<{ id: string }>
     }));
   };
 
-  const handleNext = () => {
-    if (currentStep < 3) {
+  const handleNext = async () => {
+    if (currentStep < 4) {
       setCurrentStep(prev => prev + 1);
     } else {
+      // Save profiling data to the kit
+      try {
+        await fetch(`/api/kits/${kitId}/profiling`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            selectedOptions,
+            profilingData
+          }),
+        });
+      } catch (error) {
+        console.error('Error saving profiling data:', error);
+      }
+      
       // Redirect to paywall
       window.location.href = `/kit/${kitId}/paywall`;
     }
@@ -162,7 +193,11 @@ export default function TeaserPage({ params }: { params: Promise<{ id: string }>
   };
 
   const currentStepData = steps[currentStep - 1];
-  const isStepComplete = selectedOptions[currentStep] !== undefined;
+  const isStepComplete = currentStep === 4 
+    ? profilingData.audienceDetail.trim() !== '' && 
+      profilingData.outcomePreference !== '' && 
+      profilingData.tonePreference !== ''
+    : selectedOptions[currentStep] !== undefined;
   const canProceed = isStepComplete;
 
   if (isLoading) {
@@ -198,7 +233,7 @@ export default function TeaserPage({ params }: { params: Promise<{ id: string }>
               <p className="text-gray-600">{kit.one_liner}</p>
             </div>
             <div className="text-sm text-gray-500">
-              Step {currentStep} of 3
+              Step {currentStep} of 4
             </div>
           </div>
         </div>
@@ -239,43 +274,106 @@ export default function TeaserPage({ params }: { params: Promise<{ id: string }>
           <p className="text-lg text-gray-600">{currentStepData.description}</p>
         </div>
 
-        {/* Options */}
-        <div className="space-y-4 mb-8">
-          {currentStepData.options.map((option) => (
-            <div
-              key={option.id}
-              className={`border-2 rounded-lg p-6 cursor-pointer transition-all ${
-                selectedOptions[currentStep] === option.id
-                  ? 'border-blue-500 bg-blue-50'
-                  : 'border-gray-200 hover:border-gray-300'
-              }`}
-              onClick={() => handleOptionSelect(option.id)}
-            >
-              <div className="flex items-start justify-between">
-                <div className="flex-1">
-                  <h3 className="text-lg font-semibold text-gray-900 mb-2">{option.title}</h3>
-                  <div className="relative">
-                    <p className="text-gray-600 mb-2">{option.preview}</p>
-                    <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-transparent pointer-events-none"></div>
-                    <div className="flex items-center gap-2 text-sm text-gray-500">
-                      <Eye className="h-4 w-4" />
-                      <span>Click to see more</span>
-                    </div>
-                  </div>
-                </div>
-                <div className="ml-4">
-                  {selectedOptions[currentStep] === option.id ? (
-                    <div className="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center">
-                      <Check className="h-4 w-4 text-white" />
-                    </div>
-                  ) : (
-                    <div className="w-6 h-6 border-2 border-gray-300 rounded-full"></div>
-                  )}
-                </div>
+        {/* Options or Profiling Questions */}
+        {currentStep === 4 ? (
+          <div className="max-w-2xl mx-auto space-y-6 mb-8">
+            <div className="bg-white rounded-lg shadow-sm p-6">
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">Tell us about your audience</h3>
+              <textarea
+                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                rows={3}
+                placeholder="Describe your ideal customer in detail (age, profession, pain points, goals)..."
+                value={profilingData.audienceDetail}
+                onChange={(e) => setProfilingData(prev => ({ ...prev, audienceDetail: e.target.value }))}
+              />
+            </div>
+
+            <div className="bg-white rounded-lg shadow-sm p-6">
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">What outcome matters most?</h3>
+              <div className="space-y-3">
+                {[
+                  { value: 'revenue', label: 'Generate revenue quickly' },
+                  { value: 'validation', label: 'Validate my idea with real customers' },
+                  { value: 'brand', label: 'Build a strong brand presence' },
+                  { value: 'community', label: 'Create a loyal community' }
+                ].map((option) => (
+                  <label key={option.value} className="flex items-center">
+                    <input
+                      type="radio"
+                      name="outcome"
+                      value={option.value}
+                      checked={profilingData.outcomePreference === option.value}
+                      onChange={(e) => setProfilingData(prev => ({ ...prev, outcomePreference: e.target.value }))}
+                      className="mr-3"
+                    />
+                    <span className="text-gray-700">{option.label}</span>
+                  </label>
+                ))}
               </div>
             </div>
-          ))}
-        </div>
+
+            <div className="bg-white rounded-lg shadow-sm p-6">
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">What tone resonates with you?</h3>
+              <div className="space-y-3">
+                {[
+                  { value: 'professional', label: 'Professional & authoritative' },
+                  { value: 'friendly', label: 'Friendly & approachable' },
+                  { value: 'edgy', label: 'Bold & edgy' },
+                  { value: 'minimal', label: 'Clean & minimal' }
+                ].map((option) => (
+                  <label key={option.value} className="flex items-center">
+                    <input
+                      type="radio"
+                      name="tone"
+                      value={option.value}
+                      checked={profilingData.tonePreference === option.value}
+                      onChange={(e) => setProfilingData(prev => ({ ...prev, tonePreference: e.target.value }))}
+                      className="mr-3"
+                    />
+                    <span className="text-gray-700">{option.label}</span>
+                  </label>
+                ))}
+              </div>
+            </div>
+          </div>
+        ) : (
+          <div className="space-y-4 mb-8">
+            {currentStepData.options.map((option) => (
+              <div
+                key={option.id}
+                className={`border-2 rounded-lg p-6 cursor-pointer transition-all ${
+                  selectedOptions[currentStep] === option.id
+                    ? 'border-blue-500 bg-blue-50'
+                    : 'border-gray-200 hover:border-gray-300'
+                }`}
+                onClick={() => handleOptionSelect(option.id)}
+              >
+                <div className="flex items-start justify-between">
+                  <div className="flex-1">
+                    <h3 className="text-lg font-semibold text-gray-900 mb-2">{option.title}</h3>
+                    <div className="relative">
+                      <p className="text-gray-600 mb-2">{option.preview}</p>
+                      <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-transparent pointer-events-none"></div>
+                      <div className="flex items-center gap-2 text-sm text-gray-500">
+                        <Eye className="h-4 w-4" />
+                        <span>Click to see more</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="ml-4">
+                    {selectedOptions[currentStep] === option.id ? (
+                      <div className="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center">
+                        <Check className="h-4 w-4 text-white" />
+                      </div>
+                    ) : (
+                      <div className="w-6 h-6 border-2 border-gray-300 rounded-full"></div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
 
         {/* Navigation */}
         <div className="flex items-center justify-between">
@@ -294,7 +392,7 @@ export default function TeaserPage({ params }: { params: Promise<{ id: string }>
             disabled={!canProceed}
             className="flex items-center gap-2"
           >
-            {currentStep === 3 ? 'Continue to Payment' : 'Next'}
+            {currentStep === 4 ? 'Continue to Payment' : 'Next'}
             <ArrowRight className="h-4 w-4" />
           </Button>
         </div>
@@ -305,6 +403,7 @@ export default function TeaserPage({ params }: { params: Promise<{ id: string }>
             {currentStep === 1 && "Choose the business approach that feels right for your idea"}
             {currentStep === 2 && "Pick the content strategy that matches your style"}
             {currentStep === 3 && "Select the website angle that will convert best"}
+            {currentStep === 4 && "Help us personalize your kit with these final details"}
           </p>
         </div>
       </div>
