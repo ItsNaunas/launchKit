@@ -36,6 +36,15 @@ export const IntakeSchema = z.object({
 
 export type IntakeFormData = z.infer<typeof IntakeSchema>;
 
+// Mini intake form schema for the landing page
+export const MiniIntakeSchema = z.object({
+  business_idea: z.string().min(3, "Please describe your business idea").max(200, "Description too long").trim(),
+  budget: z.enum(["shoestring", "moderate", "premium"]),
+  challenges: z.array(z.string().min(3).max(120).trim()).min(1, "Please select at least one challenge").max(2, "Please select maximum 2 challenges")
+});
+
+export type MiniIntakeData = z.infer<typeof MiniIntakeSchema>;
+
 // Business case output schema
 export const BusinessCaseSchema = z.object({
   positioning: z.string(),

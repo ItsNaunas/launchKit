@@ -8,8 +8,8 @@ export default function SignUpPage() {
   const [mode, setMode] = useState<'signin' | 'signup'>('signup');
 
   const handleSuccess = () => {
-    // Redirect to dashboard or onboarding
-    window.location.href = '/dashboard';
+    // Redirect to homepage after successful signup
+    window.location.href = '/';
   };
 
   const handleSwitchMode = () => {

@@ -52,6 +52,9 @@ export function AuthForm({ mode, onSuccess, onSwitchMode }: AuthFormProps) {
         throw new Error(data.error || 'Authentication failed');
       }
 
+      // Store user in localStorage
+      localStorage.setItem('launchkit-user', JSON.stringify(data.user));
+      
       onSuccess();
     } catch (error) {
       setError(error instanceof Error ? error.message : 'Something went wrong');
