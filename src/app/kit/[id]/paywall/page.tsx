@@ -84,7 +84,7 @@ export default function PaywallPage({ params }: { params: Promise<{ id: string }
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-orange-600 mx-auto"></div>
           <p className="mt-2 text-gray-600">Loading...</p>
         </div>
       </div>
@@ -143,8 +143,8 @@ export default function PaywallPage({ params }: { params: Promise<{ id: string }
           <h3 className="text-xl font-semibold text-gray-900 mb-4">What You&apos;ll Receive</h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="text-center">
-              <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mx-auto mb-3">
-                <Check className="h-6 w-6 text-blue-600" />
+              <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center mx-auto mb-3">
+                <Check className="h-6 w-6 text-orange-600" />
               </div>
               <h4 className="font-semibold text-gray-900 mb-2">Business Case PDF</h4>
               <p className="text-sm text-gray-600">
@@ -178,7 +178,7 @@ export default function PaywallPage({ params }: { params: Promise<{ id: string }
           <div 
             className={`border-2 rounded-lg p-6 cursor-pointer transition-colors ${
               selectedPlan === 'oneoff' 
-                ? 'border-blue-500 bg-blue-50' 
+                ? 'border-orange-500 bg-orange-50' 
                 : 'border-gray-200 hover:border-gray-300'
             }`}
             onClick={() => setSelectedPlan('oneoff')}
@@ -212,7 +212,7 @@ export default function PaywallPage({ params }: { params: Promise<{ id: string }
           <div 
             className={`border-2 rounded-lg p-6 cursor-pointer transition-colors ${
               selectedPlan === 'subscription' 
-                ? 'border-blue-500 bg-blue-50' 
+                ? 'border-orange-500 bg-orange-50' 
                 : 'border-gray-200 hover:border-gray-300'
             }`}
             onClick={() => setSelectedPlan('subscription')}
@@ -252,7 +252,7 @@ export default function PaywallPage({ params }: { params: Promise<{ id: string }
               <p className="text-sm text-gray-600">30-day refund if not satisfied</p>
             </div>
             <div>
-              <Users className="h-8 w-8 text-blue-600 mx-auto mb-2" />
+              <Users className="h-8 w-8 text-orange-600 mx-auto mb-2" />
               <h4 className="font-semibold text-gray-900 mb-1">500+ Kits Delivered</h4>
               <p className="text-sm text-gray-600">Join successful entrepreneurs</p>
             </div>

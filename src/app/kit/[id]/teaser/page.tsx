@@ -204,7 +204,7 @@ export default function TeaserPage({ params }: { params: Promise<{ id: string }>
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-orange-600 mx-auto"></div>
           <p className="mt-2 text-gray-600">Loading your options...</p>
         </div>
       </div>
@@ -249,7 +249,7 @@ export default function TeaserPage({ params }: { params: Promise<{ id: string }>
                   currentStep > step.step 
                     ? 'bg-green-500 text-white' 
                     : currentStep === step.step 
-                    ? 'bg-blue-500 text-white' 
+                    ? 'bg-orange-500 text-white' 
                     : 'bg-gray-200 text-gray-600'
                 }`}>
                   {currentStep > step.step ? <Check className="h-4 w-4" /> : step.step}
@@ -280,7 +280,7 @@ export default function TeaserPage({ params }: { params: Promise<{ id: string }>
             <div className="bg-white rounded-lg shadow-sm p-6">
               <h3 className="text-lg font-semibold text-gray-900 mb-4">Tell us about your audience</h3>
               <textarea
-                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
                 rows={3}
                 placeholder="Describe your ideal customer in detail (age, profession, pain points, goals)..."
                 value={profilingData.audienceDetail}
@@ -343,7 +343,7 @@ export default function TeaserPage({ params }: { params: Promise<{ id: string }>
                 key={option.id}
                 className={`border-2 rounded-lg p-6 cursor-pointer transition-all ${
                   selectedOptions[currentStep] === option.id
-                    ? 'border-blue-500 bg-blue-50'
+                    ? 'border-orange-500 bg-orange-50'
                     : 'border-gray-200 hover:border-gray-300'
                 }`}
                 onClick={() => handleOptionSelect(option.id)}
@@ -362,7 +362,7 @@ export default function TeaserPage({ params }: { params: Promise<{ id: string }>
                   </div>
                   <div className="ml-4">
                     {selectedOptions[currentStep] === option.id ? (
-                      <div className="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center">
+                      <div className="w-6 h-6 bg-orange-500 rounded-full flex items-center justify-center">
                         <Check className="h-4 w-4 text-white" />
                       </div>
                     ) : (

@@ -80,7 +80,7 @@ export function MiniIntakeForm({ onSubmit, isLoading }: {
     <div className="max-w-2xl mx-auto">
       <div className="text-center mb-8">
         <div className="flex items-center justify-center gap-2 mb-4">
-          <Sparkles className="h-8 w-8 text-blue-600" />
+          <Sparkles className="h-8 w-8 text-orange-600" />
           <h1 className="text-3xl font-bold text-gray-900">What&apos;s your dream business?</h1>
         </div>
         <p className="text-lg text-gray-600">

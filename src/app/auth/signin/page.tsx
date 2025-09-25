@@ -20,7 +20,7 @@ export default function SignInPage() {
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <div className="flex items-center justify-center gap-2 mb-6">
-          <Sparkles className="h-8 w-8 text-blue-600" />
+          <Sparkles className="h-8 w-8 text-orange-600" />
           <h1 className="text-2xl font-bold text-gray-900">LaunchKit AI</h1>
         </div>
       </div>

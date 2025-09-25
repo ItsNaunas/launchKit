@@ -59,13 +59,13 @@ export default function HomePage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50">
+    <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-amber-50">
       {/* Header */}
       <header className="border-b bg-white/80 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <Sparkles className="h-8 w-8 text-blue-600" />
+              <Sparkles className="h-8 w-8 text-orange-600" />
               <h1 className="text-2xl font-bold text-gray-900">LaunchKit AI</h1>
             </div>
             <nav className="hidden md:flex items-center gap-6">
@@ -101,7 +101,7 @@ export default function HomePage() {
             <>
               <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6">
                 Launch Your Business Idea
-                <span className="block text-blue-600">in 30 Days with AI</span>
+                <span className="block text-orange-600">in 30 Days with AI</span>
               </h1>
               
               <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
@@ -139,7 +139,7 @@ export default function HomePage() {
 
         {/* Background decoration */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full max-w-6xl opacity-10 pointer-events-none">
-          <div className="absolute top-20 left-10 w-20 h-20 bg-blue-500 rounded-full blur-xl"></div>
+          <div className="absolute top-20 left-10 w-20 h-20 bg-orange-500 rounded-full blur-xl"></div>
           <div className="absolute top-40 right-10 w-32 h-32 bg-indigo-500 rounded-full blur-xl"></div>
           <div className="absolute bottom-20 left-1/3 w-24 h-24 bg-purple-500 rounded-full blur-xl"></div>
         </div>
@@ -158,8 +158,8 @@ export default function HomePage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            <div className="text-center p-6 rounded-lg bg-gradient-to-br from-blue-50 to-indigo-50">
-              <Target className="h-12 w-12 text-blue-600 mx-auto mb-4" />
+            <div className="text-center p-6 rounded-lg bg-gradient-to-br from-orange-50 to-amber-50">
+              <Target className="h-12 w-12 text-orange-600 mx-auto mb-4" />
               <h3 className="text-lg font-semibold text-gray-900 mb-2">Business Case</h3>
               <p className="text-gray-600 text-sm">
                 Market positioning, pricing strategy, and competitive analysis tailored to your idea.
@@ -248,9 +248,9 @@ export default function HomePage() {
               </Button>
             </div>
 
-            <div className="bg-white rounded-xl shadow-sm border-2 border-blue-200 p-8 relative">
+            <div className="bg-white rounded-xl shadow-sm border-2 border-orange-200 p-8 relative">
               <div className="absolute -top-4 left-1/2 -translate-x-1/2">
-                <span className="bg-blue-600 text-white px-4 py-1 rounded-full text-sm font-medium">
+                <span className="bg-orange-600 text-white px-4 py-1 rounded-full text-sm font-medium">
                   Flexible
                 </span>
               </div>
@@ -263,26 +263,26 @@ export default function HomePage() {
               <p className="text-gray-600 mb-6">Spread the cost over time, same great value</p>
               <ul className="space-y-3 mb-8">
                 <li className="flex items-center gap-3">
-                  <div className="w-5 h-5 bg-blue-100 rounded-full flex items-center justify-center">
-                    <div className="w-2 h-2 bg-blue-600 rounded-full"></div>
+                  <div className="w-5 h-5 bg-orange-100 rounded-full flex items-center justify-center">
+                    <div className="w-2 h-2 bg-orange-600 rounded-full"></div>
                   </div>
                   <span className="text-gray-700">Everything in Pay Once</span>
                 </li>
                 <li className="flex items-center gap-3">
-                  <div className="w-5 h-5 bg-blue-100 rounded-full flex items-center justify-center">
-                    <div className="w-2 h-2 bg-blue-600 rounded-full"></div>
+                  <div className="w-5 h-5 bg-orange-100 rounded-full flex items-center justify-center">
+                    <div className="w-2 h-2 bg-orange-600 rounded-full"></div>
                   </div>
                   <span className="text-gray-700">Cancel anytime</span>
                 </li>
                 <li className="flex items-center gap-3">
-                  <div className="w-5 h-5 bg-blue-100 rounded-full flex items-center justify-center">
-                    <div className="w-2 h-2 bg-blue-600 rounded-full"></div>
+                  <div className="w-5 h-5 bg-orange-100 rounded-full flex items-center justify-center">
+                    <div className="w-2 h-2 bg-orange-600 rounded-full"></div>
                   </div>
                   <span className="text-gray-700">Auto-ends after 37 days</span>
                 </li>
                 <li className="flex items-center gap-3">
-                  <div className="w-5 h-5 bg-blue-100 rounded-full flex items-center justify-center">
-                    <div className="w-2 h-2 bg-blue-600 rounded-full"></div>
+                  <div className="w-5 h-5 bg-orange-100 rounded-full flex items-center justify-center">
+                    <div className="w-2 h-2 bg-orange-600 rounded-full"></div>
                   </div>
                   <span className="text-gray-700">Same £37 total</span>
                 </li>
@@ -301,12 +301,12 @@ export default function HomePage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-blue-600">
+      <section className="py-20 bg-orange-600">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
             Ready to Launch Your Idea?
           </h2>
-          <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
+          <p className="text-xl text-orange-100 mb-8 max-w-2xl mx-auto">
             Join hundreds of entrepreneurs who&apos;ve turned their ideas into reality with AI-powered launch strategies.
           </p>
           <Button 
@@ -325,7 +325,7 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="flex items-center gap-2 mb-4 md:mb-0">
-              <Sparkles className="h-6 w-6 text-blue-400" />
+              <Sparkles className="h-6 w-6 text-orange-400" />
               <span className="text-xl font-bold">LaunchKit AI</span>
             </div>
             <div className="flex gap-6 text-sm text-gray-400">
