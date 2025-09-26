@@ -166,7 +166,10 @@ export default function KitPreviewPage({ params }: { params: Promise<{ id: strin
               ) : (
                 <div className="text-center py-8">
                   <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
-                  <p className="text-gray-600">Generating your business case...</p>
+                  <p className="text-gray-600">🤖 AI is analyzing your business idea...</p>
+                  <div className="mt-4 w-full bg-gray-200 rounded-full h-2">
+                    <div className="bg-blue-600 h-2 rounded-full animate-pulse" style={{width: '60%'}}></div>
+                  </div>
                 </div>
               )}
                       </div>
@@ -187,7 +190,10 @@ export default function KitPreviewPage({ params }: { params: Promise<{ id: strin
               ) : (
                 <div className="text-center py-8">
                   <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600 mx-auto mb-4"></div>
-                  <p className="text-gray-600">Generating your content strategy...</p>
+                  <p className="text-gray-600">🤖 AI is creating your content strategy...</p>
+                  <div className="mt-4 w-full bg-gray-200 rounded-full h-2">
+                    <div className="bg-green-600 h-2 rounded-full animate-pulse" style={{width: '75%'}}></div>
+                  </div>
                 </div>
               )}
             </div>

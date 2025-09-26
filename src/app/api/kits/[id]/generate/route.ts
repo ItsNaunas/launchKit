@@ -26,14 +26,31 @@ export async function POST(
       );
     }
 
-    // Create prompt assembler with simplified data
+    // Create prompt assembler with kit data converted to expected format
+    const kitData = {
+      idea_title: (kit as any).title || 'Business Idea',
+      one_liner: (kit as any).one_liner || (kit as any).title || 'Business description',
+      category: (kit as any).category || 'service',
+      target_audience: (kit as any).target_audience || '',
+      primary_goal: (kit as any).primary_goal || 'launch',
+      budget_band: (kit as any).budget_band || 'none',
+      time_horizon: (kit as any).time_horizon || '30d',
+      top_3_challenges: (kit as any).challenges ? JSON.parse((kit as any).challenges) : ['Finding customers', 'Pricing strategy', 'Time management'],
+      geography: (kit as any).geography || 'UK',
+      brand_vibe: (kit as any).brand_vibe || 'accessible',
+      sales_channel_focus: (kit as any).sales_channel_focus || 'Mixed',
+      competitor_links: (kit as any).competitor_links ? JSON.parse((kit as any).competitor_links) : [],
+      inspiration_links: (kit as any).inspiration_links ? JSON.parse((kit as any).inspiration_links) : [],
+      content_strengths: (kit as any).content_strengths ? JSON.parse((kit as any).content_strengths) : []
+    };
+    
     const profilingData = {
-      audienceDetail: '',
+      audienceDetail: (kit as any).target_audience || '',
       outcomePreference: '',
       tonePreference: ''
     };
     const selectedOptions = {};
-    const promptAssembler = new PromptAssembler(kit, profilingData, selectedOptions);
+    const promptAssembler = new PromptAssembler(kitData, profilingData, selectedOptions);
 
     // Generate the appropriate prompt
     let prompt: string;
