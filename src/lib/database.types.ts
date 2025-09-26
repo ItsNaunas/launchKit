@@ -145,7 +145,7 @@ export interface Database {
       orders: {
         Row: {
           id: string;
-          user_id: string;
+          user_id: string | null;
           kit_id: string;
           stripe_session_id: string;
           amount: number;
@@ -158,7 +158,7 @@ export interface Database {
         };
         Insert: {
           id?: string;
-          user_id: string;
+          user_id?: string | null;
           kit_id: string;
           stripe_session_id: string;
           amount: number;
@@ -171,7 +171,7 @@ export interface Database {
         };
         Update: {
           id?: string;
-          user_id?: string;
+          user_id?: string | null;
           kit_id?: string;
           stripe_session_id?: string;
           amount?: number;

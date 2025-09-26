@@ -52,13 +52,13 @@ export async function POST(request: NextRequest) {
     }
 
     // Type assertion for kit after null check
-    const kitData = kit as { id: string; title: string; user_id: string };
+    const kitData = kit as { id: string; title: string; user_id: string | null };
 
     // Create Stripe customer (in production, check if customer already exists)
     const customer = await stripe.customers.create({
       metadata: {
         kit_id: kitId,
-        user_id: userId || 'temp-user',
+        user_id: userId || null,
       },
     });
 
@@ -117,7 +117,7 @@ export async function POST(request: NextRequest) {
 
     // Create order record
     const orderData = {
-      user_id: userId || 'temp-user',
+      user_id: userId || null,
       kit_id: kitId,
       stripe_session_id: session.id,
       amount: planType === 'oneoff' ? 3700 : 100,

@@ -65,7 +65,7 @@ create table public.outputs (
 -- Create orders table for payment tracking
 create table public.orders (
   id uuid default uuid_generate_v4() primary key,
-  user_id uuid references public.profiles(id) on delete cascade not null,
+  user_id uuid references public.profiles(id) on delete cascade,
   kit_id uuid references public.kits(id) on delete cascade not null,
   stripe_session_id text not null,
   amount integer not null, -- in pence/cents
@@ -96,22 +96,22 @@ create policy "Users can update own profile" on public.profiles
   for update using (auth.uid() = id);
 
 -- Kits policies
-create policy "Kits are viewable by owner" on public.kits
-  for select using (auth.uid() = user_id);
+create policy "Kits are viewable by owner or anonymous" on public.kits
+  for select using (auth.uid() = user_id OR user_id IS NULL);
 
-create policy "Users can insert their own kits" on public.kits
-  for insert with check (auth.uid() = user_id);
+create policy "Users can insert their own kits or anonymous kits" on public.kits
+  for insert with check (auth.uid() = user_id OR user_id IS NULL);
 
-create policy "Users can update their own kits" on public.kits
-  for update using (auth.uid() = user_id);
+create policy "Users can update their own kits or anonymous kits" on public.kits
+  for update using (auth.uid() = user_id OR user_id IS NULL);
 
 -- Outputs policies
-create policy "Outputs are viewable by kit owner" on public.outputs
+create policy "Outputs are viewable by kit owner or anonymous" on public.outputs
   for select using (
     exists (
       select 1 from public.kits
       where kits.id = outputs.kit_id
-      and kits.user_id = auth.uid()
+      and (kits.user_id = auth.uid() OR kits.user_id IS NULL)
     )
   );
 
@@ -119,8 +119,8 @@ create policy "Service role can manage outputs" on public.outputs
   for all using (current_setting('role') = 'service_role');
 
 -- Orders policies
-create policy "Orders are viewable by owner" on public.orders
-  for select using (auth.uid() = user_id);
+create policy "Orders are viewable by owner or anonymous" on public.orders
+  for select using (auth.uid() = user_id OR user_id IS NULL);
 
 create policy "Service role can manage orders" on public.orders
   for all using (current_setting('role') = 'service_role');

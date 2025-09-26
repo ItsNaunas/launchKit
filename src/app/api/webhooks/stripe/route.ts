@@ -125,7 +125,7 @@ export async function POST(request: NextRequest) {
           .single();
 
         const orderData = order as any;
-        if (orderData?.user_id && orderData.user_id !== 'temp-user') {
+        if (orderData?.user_id) {
           await supabaseAdmin
             .from('profiles')
             .update({ plan_status: 'free' } as never)
