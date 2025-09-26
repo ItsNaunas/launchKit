@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
+import { supabaseAdmin } from '@/lib/supabase';
 
 export async function GET(
   request: NextRequest,
@@ -10,7 +10,7 @@ export async function GET(
     const kitId = resolvedParams.id;
 
     // Get kit to verify access
-    const { data: kit, error: kitError } = await supabase
+    const { data: kit, error: kitError } = await supabaseAdmin
       .from('kits')
       .select('has_access')
       .eq('id', kitId)
@@ -34,7 +34,7 @@ export async function GET(
     }
 
     // Get all outputs for this kit
-    const { data: outputs, error: outputsError } = await supabase
+    const { data: outputs, error: outputsError } = await supabaseAdmin
       .from('outputs')
       .select('*')
       .eq('kit_id', kitId)

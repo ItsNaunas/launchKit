@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
+import { supabaseAdmin } from '@/lib/supabase';
 import { PromptAssembler } from '@/lib/prompt-assembler';
 
 export async function POST(
@@ -18,7 +18,7 @@ export async function POST(
     }
 
     // Get kit data with profiling information
-    const { data: kit, error: kitError } = await supabase
+    const { data: kit, error: kitError } = await supabaseAdmin
       .from('kits')
       .select('*')
       .eq('id', id)
@@ -64,7 +64,7 @@ export async function POST(
     const mockContent = generateMockContent(type);
 
     // Save the generated content
-    const { error: saveError } = await supabase
+    const { error: saveError } = await supabaseAdmin
       .from('outputs')
       .upsert({
         kit_id: id,

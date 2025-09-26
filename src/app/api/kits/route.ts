@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
+import { supabaseAdmin } from '@/lib/supabase';
 import { z } from 'zod';
 
 // Simple intake schema for the new flow
@@ -38,11 +38,10 @@ export async function POST(request: NextRequest) {
       content_strengths: JSON.stringify([]),
       constraints: null,
       revenue_target_30d: null,
-      status: 'draft', // New status field
     };
 
-    // Insert into database
-    const { data: kit, error } = await supabase
+    // Insert into database using admin client to bypass RLS
+    const { data: kit, error } = await supabaseAdmin
       .from('kits')
       .insert(kitData as never)
       .select('id')
