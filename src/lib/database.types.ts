@@ -29,7 +29,7 @@ export interface Database {
       kits: {
         Row: {
           id: string;
-          user_id: string;
+          user_id: string | null;
           title: string;
           has_access: boolean;
           created_at: string;
@@ -58,7 +58,7 @@ export interface Database {
         };
         Insert: {
           id?: string;
-          user_id: string;
+          user_id?: string | null;
           title: string;
           has_access?: boolean;
           created_at?: string;
@@ -86,7 +86,7 @@ export interface Database {
         };
         Update: {
           id?: string;
-          user_id?: string;
+          user_id?: string | null;
           title?: string;
           has_access?: boolean;
           created_at?: string;

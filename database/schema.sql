@@ -16,7 +16,7 @@ create table public.profiles (
 -- Create kits table with intake form fields
 create table public.kits (
   id uuid default uuid_generate_v4() primary key,
-  user_id uuid references public.profiles(id) on delete cascade not null,
+  user_id uuid references public.profiles(id) on delete cascade,
   title text not null,
   has_access boolean default false,
   created_at timestamp with time zone default timezone('utc'::text, now()) not null,

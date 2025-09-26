@@ -8,27 +8,8 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const validatedData = simpleIntakeSchema.parse(body);
     
-    const tempUserId = crypto.randomUUID();
-    
-    // Create a temporary profile first
-    const { error: profileError } = await supabaseAdmin
-      .from('profiles')
-      .upsert({
-        id: tempUserId,
-        email: `temp-${tempUserId}@example.com`,
-        plan_status: 'free'
-      } as never);
-    
-    if (profileError) {
-      console.error('Profile creation error:', profileError);
-      return NextResponse.json(
-        { error: 'Failed to create user profile' },
-        { status: 500 }
-      );
-    }
-    
     const kitData = {
-      user_id: tempUserId,
+      user_id: null, // Allow anonymous kit creation
       title: validatedData.business_idea.substring(0, 80), // Truncate to fit title field
       has_access: true, // Grant access immediately for testing
       one_liner: validatedData.business_idea,
