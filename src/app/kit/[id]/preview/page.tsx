@@ -38,6 +38,7 @@ export default function KitPreviewPage({ params }: { params: Promise<{ id: strin
 
         if (businessCaseResponse.ok) {
           const businessCaseData = await businessCaseResponse.json();
+          console.log('Business Case API Response:', businessCaseData); // Debug log
           setOutputs(prev => ({
             ...prev,
             business_case: {
@@ -49,6 +50,8 @@ export default function KitPreviewPage({ params }: { params: Promise<{ id: strin
               updated_at: new Date().toISOString(),
             },
           }));
+        } else {
+          console.error('Business Case API Error:', businessCaseResponse.status, await businessCaseResponse.text());
         }
 
         // Generate content strategy
@@ -62,6 +65,7 @@ export default function KitPreviewPage({ params }: { params: Promise<{ id: strin
 
         if (contentStrategyResponse.ok) {
           const contentStrategyData = await contentStrategyResponse.json();
+          console.log('Content Strategy API Response:', contentStrategyData); // Debug log
           setOutputs(prev => ({
             ...prev,
             content_strategy: {
@@ -73,6 +77,8 @@ export default function KitPreviewPage({ params }: { params: Promise<{ id: strin
               updated_at: new Date().toISOString(),
             },
           }));
+        } else {
+          console.error('Content Strategy API Error:', contentStrategyResponse.status, await contentStrategyResponse.text());
         }
       } catch (error) {
         console.error('Error generating content:', error);
@@ -200,22 +206,22 @@ export default function KitPreviewPage({ params }: { params: Promise<{ id: strin
           </div>
                 </div>
 
-        {/* Payment Placeholder */}
-        <div className="mt-8 bg-white rounded-lg shadow-sm p-6">
+        {/* Unlock Kit Section */}
+        <div className="mt-8 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg shadow-sm p-6">
           <div className="text-center">
             <h3 className="text-xl font-semibold text-gray-900 mb-2">
-              🚧 Payment Integration Coming Soon
+              🔓 Unlock Your Complete Launch Kit
             </h3>
             <p className="text-gray-600 mb-4">
-              For now, enjoy free access to your complete launch kit. 
-              Payment processing will be added soon.
+              You've seen the preview - now get full access to your personalized business strategy, 
+              content calendar, and actionable insights.
             </p>
               <Button 
               onClick={handleContinueToDashboard}
                 size="lg"
-              className="px-8 py-3"
+              className="px-8 py-3 bg-blue-600 hover:bg-blue-700"
               >
-              Continue to Dashboard
+              Access My Dashboard
               </Button>
           </div>
         </div>

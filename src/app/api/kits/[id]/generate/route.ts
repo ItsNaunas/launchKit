@@ -83,8 +83,8 @@ export async function POST(
           {
             role: "system",
             content: type === 'business_case' 
-              ? "You are a business strategy expert. Generate a comprehensive business case with positioning, value proposition, target audience analysis, key benefits, pricing strategy, name ideas, taglines, risks, and actionable next steps. Return your response as valid JSON."
-              : "You are a content marketing expert. Generate a comprehensive content strategy with primary channels, posting cadence, content tone, hook formulas, and 30-day themes. Return your response as valid JSON."
+              ? "You are a business strategy expert. Generate a comprehensive business case with positioning, value proposition, target audience analysis, key benefits, pricing strategy, name ideas, taglines, risks, and actionable next steps. Return ONLY valid JSON with no additional text or formatting."
+              : "You are a content marketing expert. Generate a comprehensive content strategy with primary channels, posting cadence, content tone, hook formulas, and 30-day themes. Return ONLY valid JSON with no additional text or formatting."
           },
           {
             role: "user",
@@ -100,8 +100,22 @@ export async function POST(
         throw new Error('No response from OpenAI');
       }
 
+      console.log('AI Response:', aiResponse); // Debug log
+
       // Parse the AI response as JSON
-      aiContent = JSON.parse(aiResponse);
+      try {
+        aiContent = JSON.parse(aiResponse);
+      } catch (parseError) {
+        console.error('JSON Parse Error:', parseError);
+        console.error('Raw AI Response:', aiResponse);
+        // If JSON parsing fails, try to extract JSON from the response
+        const jsonMatch = aiResponse.match(/\{[\s\S]*\}/);
+        if (jsonMatch) {
+          aiContent = JSON.parse(jsonMatch[0]);
+        } else {
+          throw new Error('Invalid JSON response from AI');
+        }
+      }
     } catch (error) {
       console.error('OpenAI API error:', error);
       // Fallback to mock content if AI fails
