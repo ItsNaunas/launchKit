@@ -83,8 +83,44 @@ export async function POST(
           {
             role: "system",
             content: type === 'business_case' 
-              ? "You are a business strategy expert. Generate a comprehensive business case with positioning, value proposition, target audience analysis, key benefits, pricing strategy, name ideas, taglines, risks, and actionable next steps. Return ONLY valid JSON with no additional text or formatting."
-              : "You are a content marketing expert. Generate a comprehensive content strategy with primary channels, posting cadence, content tone, hook formulas, and 30-day themes. Return ONLY valid JSON with no additional text or formatting."
+              ? `You are a business strategy expert. Generate a comprehensive business case for: "${prompt}"
+
+Return ONLY valid JSON with this EXACT structure:
+{
+  "positioning": "string - how the business positions itself in the market",
+  "value_prop": "string - main value proposition",
+  "audience_summary": "string - target audience description",
+  "offer_bullets": ["string1", "string2", "string3"],
+  "brand_identity": {
+    "vibe": "string - brand personality",
+    "keywords": ["keyword1", "keyword2", "keyword3"]
+  },
+  "pricing": {
+    "idea": "string - main pricing recommendation",
+    "alternatives": ["alt1", "alt2"]
+  },
+  "name_ideas": ["name1", "name2", "name3"],
+  "taglines": ["tagline1", "tagline2"],
+  "risks": ["risk1", "risk2"],
+  "first_3_steps": ["step1", "step2", "step3"]
+}
+
+Do not include any text outside the JSON.`
+              : `You are a content marketing expert. Generate a comprehensive content strategy for: "${prompt}"
+
+Return ONLY valid JSON with this EXACT structure:
+{
+  "channels": ["channel1", "channel2", "channel3"],
+  "cadence": {
+    "channel1": "frequency description",
+    "channel2": "frequency description"
+  },
+  "tone": "string - content tone and style",
+  "hooks_7": ["hook1", "hook2", "hook3", "hook4", "hook5", "hook6", "hook7"],
+  "thirty_day_themes": ["Week 1: theme", "Week 2: theme", "Week 3: theme", "Week 4: theme"]
+}
+
+Do not include any text outside the JSON.`
           },
           {
             role: "user",
@@ -105,13 +141,32 @@ export async function POST(
       // Parse the AI response as JSON
       try {
         aiContent = JSON.parse(aiResponse);
+        
+        // Validate the response structure
+        if (type === 'business_case') {
+          aiContent = validateBusinessCaseResponse(aiContent);
+        } else if (type === 'content_strategy') {
+          aiContent = validateContentStrategyResponse(aiContent);
+        }
+        
       } catch (parseError) {
         console.error('JSON Parse Error:', parseError);
         console.error('Raw AI Response:', aiResponse);
         // If JSON parsing fails, try to extract JSON from the response
         const jsonMatch = aiResponse.match(/\{[\s\S]*\}/);
         if (jsonMatch) {
-          aiContent = JSON.parse(jsonMatch[0]);
+          try {
+            aiContent = JSON.parse(jsonMatch[0]);
+            // Validate the extracted content
+            if (type === 'business_case') {
+              aiContent = validateBusinessCaseResponse(aiContent);
+            } else if (type === 'content_strategy') {
+              aiContent = validateContentStrategyResponse(aiContent);
+            }
+          } catch (validationError) {
+            console.error('Validation Error:', validationError);
+            throw new Error('Invalid response structure from AI');
+          }
         } else {
           throw new Error('Invalid JSON response from AI');
         }
@@ -153,6 +208,60 @@ export async function POST(
       { status: 500 }
     );
   }
+}
+
+// Validation functions for AI responses
+function validateBusinessCaseResponse(content: any): any {
+  const requiredFields = ['positioning', 'value_prop', 'audience_summary', 'offer_bullets', 'brand_identity', 'pricing', 'name_ideas', 'taglines', 'risks', 'first_3_steps'];
+  
+  for (const field of requiredFields) {
+    if (!content[field]) {
+      console.error(`Missing required field: ${field}`);
+      throw new Error(`Invalid business case structure: missing ${field}`);
+    }
+  }
+  
+  // Validate nested objects
+  if (!content.brand_identity.vibe || !Array.isArray(content.brand_identity.keywords)) {
+    throw new Error('Invalid brand_identity structure');
+  }
+  
+  if (!content.pricing.idea || !Array.isArray(content.pricing.alternatives)) {
+    throw new Error('Invalid pricing structure');
+  }
+  
+  // Ensure arrays are arrays
+  const arrayFields = ['offer_bullets', 'name_ideas', 'taglines', 'risks', 'first_3_steps'];
+  for (const field of arrayFields) {
+    if (!Array.isArray(content[field])) {
+      throw new Error(`Invalid ${field}: must be an array`);
+    }
+  }
+  
+  return content;
+}
+
+function validateContentStrategyResponse(content: any): any {
+  const requiredFields = ['channels', 'cadence', 'tone', 'hooks_7', 'thirty_day_themes'];
+  
+  for (const field of requiredFields) {
+    if (!content[field]) {
+      console.error(`Missing required field: ${field}`);
+      throw new Error(`Invalid content strategy structure: missing ${field}`);
+    }
+  }
+  
+  // Validate arrays
+  if (!Array.isArray(content.channels) || !Array.isArray(content.hooks_7) || !Array.isArray(content.thirty_day_themes)) {
+    throw new Error('Invalid array structure in content strategy');
+  }
+  
+  // Validate cadence is an object
+  if (typeof content.cadence !== 'object' || Array.isArray(content.cadence)) {
+    throw new Error('Invalid cadence structure: must be an object');
+  }
+  
+  return content;
 }
 
 // Mock content generator (replace with actual OpenAI integration)
