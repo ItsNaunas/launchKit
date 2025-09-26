@@ -40,6 +40,7 @@ export default function KitDashboardPage({ params }: { params: Promise<{ id: str
             const outputsResponse = await fetch(`/api/kits/${kitId}/outputs`);
             if (outputsResponse.ok) {
               const outputsData = await outputsResponse.json();
+              console.log('Dashboard received outputs:', outputsData); // Debug log
               setOutputs(outputsData);
             }
           }
@@ -338,6 +339,8 @@ export default function KitDashboardPage({ params }: { params: Promise<{ id: str
 
 // Component to display business case content
 function BusinessCaseDisplay({ content }: { content: BusinessCaseContent }) {
+  console.log('BusinessCaseDisplay received content:', content); // Debug log
+  
   return (
     <div className="space-y-6">
       <div>
@@ -378,6 +381,8 @@ function BusinessCaseDisplay({ content }: { content: BusinessCaseContent }) {
 
 // Component to display content strategy
 function ContentStrategyDisplay({ content }: { content: ContentStrategyContent }) {
+  console.log('ContentStrategyDisplay received content:', content); // Debug log
+  
   return (
     <div className="space-y-6">
       <div>

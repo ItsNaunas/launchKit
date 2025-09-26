@@ -51,9 +51,13 @@ export async function GET(
 
     // Transform outputs for easier frontend consumption
     const transformedOutputs = (outputs as any[]).reduce((acc, output) => {
+      console.log('Raw output from DB:', output); // Debug log
+      const parsedContent = JSON.parse(output.content);
+      console.log('Parsed content:', parsedContent); // Debug log
+      
       acc[output.type] = {
         id: output.id,
-        content: JSON.parse(output.content),
+        content: parsedContent,
         regen_count: output.regen_count,
         regens_remaining: 3 - output.regen_count,
         created_at: output.created_at,
@@ -68,6 +72,8 @@ export async function GET(
       created_at: string;
       updated_at: string;
     }>);
+
+    console.log('Transformed outputs:', transformedOutputs); // Debug log
 
     return NextResponse.json(transformedOutputs);
 
