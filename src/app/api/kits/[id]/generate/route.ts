@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase';
 import { PromptAssembler } from '@/lib/prompt-assembler';
 import { kitIdSchema, generateContentSchema } from '@/lib/validation';
+import OpenAI from 'openai';
 
 export async function POST(
   request: NextRequest,
@@ -68,9 +69,44 @@ export async function POST(
         );
     }
 
-    // TODO: Replace with actual OpenAI API call
-    // For now, return a mock response
-    const mockContent = generateMockContent(type);
+    // Initialize OpenAI client
+    const openai = new OpenAI({
+      apiKey: process.env.OPENAI_API_KEY,
+    });
+
+    // Generate AI content
+    let aiContent;
+    try {
+      const completion = await openai.chat.completions.create({
+        model: "gpt-4",
+        messages: [
+          {
+            role: "system",
+            content: type === 'business_case' 
+              ? "You are a business strategy expert. Generate a comprehensive business case with positioning, value proposition, target audience analysis, key benefits, pricing strategy, name ideas, taglines, risks, and actionable next steps. Return your response as valid JSON."
+              : "You are a content marketing expert. Generate a comprehensive content strategy with primary channels, posting cadence, content tone, hook formulas, and 30-day themes. Return your response as valid JSON."
+          },
+          {
+            role: "user",
+            content: prompt
+          }
+        ],
+        temperature: 0.7,
+        max_tokens: 2000,
+      });
+
+      const aiResponse = completion.choices[0]?.message?.content;
+      if (!aiResponse) {
+        throw new Error('No response from OpenAI');
+      }
+
+      // Parse the AI response as JSON
+      aiContent = JSON.parse(aiResponse);
+    } catch (error) {
+      console.error('OpenAI API error:', error);
+      // Fallback to mock content if AI fails
+      aiContent = generateMockContent(type);
+    }
 
     // Save the generated content
     const { error: saveError } = await supabaseAdmin
@@ -78,7 +114,7 @@ export async function POST(
       .upsert({
         kit_id: id,
         type: type,
-        content: JSON.stringify(mockContent),
+        content: JSON.stringify(aiContent),
         regen_count: 0,
       } as never);
 
@@ -92,7 +128,7 @@ export async function POST(
 
     return NextResponse.json({
       success: true,
-      content: mockContent,
+      content: aiContent,
       prompt: prompt, // Include prompt for debugging
     });
 
