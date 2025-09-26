@@ -160,7 +160,7 @@ export default function TeaserPage({ params }: { params: Promise<{ id: string }>
               <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-transparent pointer-events-none"></div>
               <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2">
                 <span className="bg-purple-600 text-white px-4 py-2 rounded-full text-sm font-medium">
-                  Coming Soon
+                  Unlock Your Kit
                 </span>
               </div>
             </div>
@@ -170,7 +170,7 @@ export default function TeaserPage({ params }: { params: Promise<{ id: string }>
         {/* CTA Section */}
         <div className="text-center bg-white rounded-lg shadow-sm p-8">
           <h3 className="text-2xl font-bold text-gray-900 mb-4">
-            Ready to See Your Analysis?
+            Ready to Unlock Your Kit?
           </h3>
           <p className="text-gray-600 mb-6">
             Click below to generate your personalized business case, content strategy, and website copy.
@@ -181,7 +181,7 @@ export default function TeaserPage({ params }: { params: Promise<{ id: string }>
             size="lg"
             className="px-8 py-4 text-lg flex items-center gap-2 mx-auto"
           >
-            Generate My Analysis
+            Unlock My Kit
             <ArrowRight className="h-5 w-5" />
           </Button>
           
