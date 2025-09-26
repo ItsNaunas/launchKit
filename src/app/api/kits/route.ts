@@ -14,7 +14,7 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const validatedData = SimpleIntakeSchema.parse(body);
     
-    const tempUserId = 'temp-user-' + Date.now();
+    const tempUserId = crypto.randomUUID();
     
     const kitData = {
       user_id: tempUserId,
