@@ -31,7 +31,7 @@ export function SimpleIntakeForm({ onSubmit, isLoading = false }: SimpleIntakeFo
           Tell Us About Your Business Idea
         </h1>
         <p className="text-gray-600">
-          We'll create a personalized launch strategy just for you.
+          We&apos;ll create a personalized launch strategy just for you.
         </p>
       </div>
 

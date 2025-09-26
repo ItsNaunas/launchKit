@@ -32,7 +32,13 @@ export async function POST(
     }
 
     // Create prompt assembler with simplified data
-    const promptAssembler = new PromptAssembler(kit, {}, {});
+    const profilingData = {
+      audienceDetail: '',
+      outcomePreference: '',
+      tonePreference: ''
+    };
+    const selectedOptions = {};
+    const promptAssembler = new PromptAssembler(kit, profilingData, selectedOptions);
 
     // Generate the appropriate prompt
     let prompt: string;

@@ -16,7 +16,6 @@ export default function PaywallPage({ params }: { params: Promise<{ id: string }
   const [selectedPlan, setSelectedPlan] = useState<'oneoff' | 'subscription'>('oneoff');
   const [isLoading, setIsLoading] = useState(true);
   const [dailyCount, setDailyCount] = useState(0);
-  const [isAtCapacity] = useState(false);
 
   useEffect(() => {
     const resolveParams = async () => {

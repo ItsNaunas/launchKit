@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/Button';
-import { Check, Sparkles, FileText, Calendar, Globe, Download, RefreshCw } from 'lucide-react';
+import { FileText, Calendar } from 'lucide-react';
 
 interface KitData {
   id: string;
@@ -77,6 +77,60 @@ export default function KitPreviewPage({ params }: { params: Promise<{ id: strin
   useEffect(() => {
     if (!kitId) return;
     
+    const generateAllContent = async () => {
+      try {
+        // Generate business case
+        const businessCaseResponse = await fetch(`/api/kits/${kitId}/generate`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ type: 'business_case' }),
+        });
+
+        if (businessCaseResponse.ok) {
+          const businessCaseData = await businessCaseResponse.json();
+          setOutputs(prev => ({
+            ...prev,
+            business_case: {
+              id: `temp-${Date.now()}`,
+              content: businessCaseData.content,
+              regen_count: 0,
+              regens_remaining: 3,
+              created_at: new Date().toISOString(),
+              updated_at: new Date().toISOString(),
+            },
+          }));
+        }
+
+        // Generate content strategy
+        const contentStrategyResponse = await fetch(`/api/kits/${kitId}/generate`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ type: 'content_strategy' }),
+        });
+
+        if (contentStrategyResponse.ok) {
+          const contentStrategyData = await contentStrategyResponse.json();
+          setOutputs(prev => ({
+            ...prev,
+            content_strategy: {
+              id: `temp-${Date.now()}`,
+              content: contentStrategyData.content,
+              regen_count: 0,
+              regens_remaining: 3,
+              created_at: new Date().toISOString(),
+              updated_at: new Date().toISOString(),
+            },
+          }));
+        }
+      } catch (error) {
+        console.error('Error generating content:', error);
+      }
+    };
+    
     const fetchData = async () => {
       try {
         // Fetch kit data
@@ -99,60 +153,6 @@ export default function KitPreviewPage({ params }: { params: Promise<{ id: strin
 
     fetchData();
   }, [kitId]);
-
-  const generateAllContent = async () => {
-    try {
-      // Generate business case
-      const businessCaseResponse = await fetch(`/api/kits/${kitId}/generate`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ type: 'business_case' }),
-      });
-
-      if (businessCaseResponse.ok) {
-        const businessCaseData = await businessCaseResponse.json();
-        setOutputs(prev => ({
-          ...prev,
-          business_case: {
-            id: `temp-${Date.now()}`,
-            content: businessCaseData.content,
-            regen_count: 0,
-            regens_remaining: 3,
-            created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString(),
-          },
-        }));
-      }
-
-      // Generate content strategy
-      const contentStrategyResponse = await fetch(`/api/kits/${kitId}/generate`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ type: 'content_strategy' }),
-      });
-
-      if (contentStrategyResponse.ok) {
-        const contentStrategyData = await contentStrategyResponse.json();
-        setOutputs(prev => ({
-          ...prev,
-          content_strategy: {
-            id: `temp-${Date.now()}`,
-            content: contentStrategyData.content,
-            regen_count: 0,
-            regens_remaining: 3,
-            created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString(),
-          },
-        }));
-      }
-    } catch (error) {
-      console.error('Error generating content:', error);
-    }
-  };
 
   const handleContinueToDashboard = () => {
     window.location.href = `/kit/${kitId}/dashboard`;
@@ -210,8 +210,8 @@ export default function KitPreviewPage({ params }: { params: Promise<{ id: strin
                 <FileText className="h-6 w-6 text-blue-600" />
                 <h2 className="text-xl font-semibold text-gray-900">Business Case & Strategy</h2>
               </div>
-            </div>
-
+                    </div>
+                    
             <div className="p-6">
               {outputs.business_case ? (
                 <BusinessCaseDisplay content={outputs.business_case.content} />
@@ -221,17 +221,17 @@ export default function KitPreviewPage({ params }: { params: Promise<{ id: strin
                   <p className="text-gray-600">Generating your business case...</p>
                 </div>
               )}
-            </div>
-          </div>
-
+                      </div>
+                    </div>
+                    
           {/* Content Strategy Section */}
           <div className="bg-white rounded-lg shadow-sm">
             <div className="p-6 border-b border-gray-200">
               <div className="flex items-center gap-3">
                 <Calendar className="h-6 w-6 text-green-600" />
                 <h2 className="text-xl font-semibold text-gray-900">Content Strategy</h2>
-              </div>
-            </div>
+                  </div>
+                </div>
 
             <div className="p-6">
               {outputs.content_strategy ? (
@@ -244,7 +244,7 @@ export default function KitPreviewPage({ params }: { params: Promise<{ id: strin
               )}
             </div>
           </div>
-        </div>
+                </div>
 
         {/* Payment Placeholder */}
         <div className="mt-8 bg-white rounded-lg shadow-sm p-6">
@@ -256,13 +256,13 @@ export default function KitPreviewPage({ params }: { params: Promise<{ id: strin
               For now, enjoy free access to your complete launch kit. 
               Payment processing will be added soon.
             </p>
-            <Button
+              <Button 
               onClick={handleContinueToDashboard}
-              size="lg"
+                size="lg"
               className="px-8 py-3"
-            >
+              >
               Continue to Dashboard
-            </Button>
+              </Button>
           </div>
         </div>
       </div>
