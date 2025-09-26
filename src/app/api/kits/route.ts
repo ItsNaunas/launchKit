@@ -1,76 +1,45 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { IntakeSchema, MiniIntakeSchema } from '@/lib/schemas';
 import { supabase } from '@/lib/supabase';
+import { z } from 'zod';
+
+// Simple intake schema for the new flow
+const SimpleIntakeSchema = z.object({
+  business_idea: z.string().min(1, 'Business idea is required'),
+  target_audience: z.string().min(1, 'Target audience is required'),
+  main_challenge: z.string().min(1, 'Main challenge is required'),
+});
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
+    const validatedData = SimpleIntakeSchema.parse(body);
     
-    // Check if this is mini intake data or full intake data
-    let validatedData;
-    let kitData;
+    const tempUserId = 'temp-user-' + Date.now();
     
-    try {
-      // Try to validate as mini intake first
-      validatedData = MiniIntakeSchema.parse(body);
-      
-      // Convert mini intake to kit data
-      const tempUserId = 'temp-user-' + Date.now();
-      
-      kitData = {
-        user_id: tempUserId,
-        title: validatedData.business_idea.substring(0, 80), // Truncate to fit title field
-        has_access: false,
-        one_liner: validatedData.business_idea,
-        category: 'service', // Default category
-        target_audience: 'General audience', // Default
-        primary_goal: 'launch', // Default
-        budget_band: validatedData.budget === 'shoestring' ? '<100' : 
-                    validatedData.budget === 'moderate' ? '100-500' : '500-2000',
-        time_horizon: '30d', // Default
-        challenges: JSON.stringify(validatedData.challenges),
-        geography: 'UK', // Default
-        brand_vibe: 'accessible', // Default
-        sales_channel_focus: 'Mixed', // Default
-        business_model: null,
-        fulfilment: null,
-        pricing_idea: null,
-        competitor_links: JSON.stringify([]),
-        inspiration_links: JSON.stringify([]),
-        content_strengths: JSON.stringify([]),
-        constraints: null,
-        revenue_target_30d: null,
-      };
-    } catch {
-      // If mini intake fails, try full intake schema
-      validatedData = IntakeSchema.parse(body);
-      
-      const tempUserId = 'temp-user-' + Date.now();
-      
-      kitData = {
-        user_id: tempUserId,
-        title: validatedData.idea_title,
-        has_access: false,
-        one_liner: validatedData.one_liner,
-        category: validatedData.category,
-        target_audience: validatedData.target_audience,
-        primary_goal: validatedData.primary_goal,
-        budget_band: validatedData.budget_band,
-        time_horizon: validatedData.time_horizon,
-        challenges: JSON.stringify(validatedData.top_3_challenges),
-        geography: validatedData.geography,
-        brand_vibe: validatedData.brand_vibe,
-        sales_channel_focus: validatedData.sales_channel_focus,
-        business_model: validatedData.business_model || null,
-        fulfilment: validatedData.fulfilment || null,
-        pricing_idea: validatedData.pricing_idea || null,
-        competitor_links: JSON.stringify(validatedData.competitor_links || []),
-        inspiration_links: JSON.stringify(validatedData.inspiration_links || []),
-        content_strengths: JSON.stringify(validatedData.content_strengths || []),
-        constraints: validatedData.constraints || null,
-        revenue_target_30d: validatedData.revenue_target_30d || null,
-      };
-    }
+    const kitData = {
+      user_id: tempUserId,
+      title: validatedData.business_idea.substring(0, 80), // Truncate to fit title field
+      has_access: true, // Grant access immediately for testing
+      one_liner: validatedData.business_idea,
+      category: 'service', // Default category
+      target_audience: validatedData.target_audience,
+      primary_goal: 'launch', // Default
+      budget_band: 'none', // Default
+      time_horizon: '30d', // Default
+      challenges: JSON.stringify([validatedData.main_challenge]),
+      geography: 'UK', // Default
+      brand_vibe: 'accessible', // Default
+      sales_channel_focus: 'Mixed', // Default
+      business_model: null,
+      fulfilment: null,
+      pricing_idea: null,
+      competitor_links: JSON.stringify([]),
+      inspiration_links: JSON.stringify([]),
+      content_strengths: JSON.stringify([]),
+      constraints: null,
+      revenue_target_30d: null,
+      status: 'draft', // New status field
+    };
 
     // Insert into database
     const { data: kit, error } = await supabase
@@ -93,9 +62,9 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error('API error:', error);
     
-    if (error instanceof Error && error.name === 'ZodError') {
+    if (error instanceof z.ZodError) {
       return NextResponse.json(
-        { error: 'Invalid form data', details: error.message },
+        { error: 'Invalid form data', details: error.errors },
         { status: 400 }
       );
     }

@@ -1,13 +1,18 @@
 'use client';
 
 import { useState } from 'react';
-import { IntakeForm } from '@/components/IntakeForm';
-import { type IntakeFormData } from '@/lib/schemas';
+import { SimpleIntakeForm } from '@/components/SimpleIntakeForm';
+
+interface SimpleIntakeData {
+  business_idea: string;
+  target_audience: string;
+  main_challenge: string;
+}
 
 export default function StartPage() {
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = async (data: IntakeFormData) => {
+  const handleSubmit = async (data: SimpleIntakeData) => {
     setIsLoading(true);
     try {
       const response = await fetch('/api/kits', {
@@ -36,7 +41,7 @@ export default function StartPage() {
 
   return (
     <div className="min-h-screen bg-gray-50 py-8">
-      <IntakeForm onSubmit={handleSubmit} isLoading={isLoading} />
+      <SimpleIntakeForm onSubmit={handleSubmit} isLoading={isLoading} />
     </div>
   );
 }

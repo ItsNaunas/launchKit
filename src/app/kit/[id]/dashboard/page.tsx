@@ -228,19 +228,20 @@ export default function KitDashboardPage({ params }: { params: Promise<{ id: str
     );
   }
 
-  if (!kit.has_access) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-900">Access Required</h1>
-          <p className="text-gray-600 mt-2 mb-4">Please complete payment to access your launch kit.</p>
-          <Button onClick={() => window.location.href = `/kit/${kitId}/preview`}>
-            Go to Payment
-          </Button>
-        </div>
-      </div>
-    );
-  }
+  // Remove payment gate for testing
+  // if (!kit.has_access) {
+  //   return (
+  //     <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+  //       <div className="text-center">
+  //         <h1 className="text-2xl font-bold text-gray-900">Access Required</h1>
+  //         <p className="text-gray-600 mt-2 mb-4">Please complete payment to access your launch kit.</p>
+  //         <Button onClick={() => window.location.href = `/kit/${kitId}/preview`}>
+  //           Go to Payment
+  //         </Button>
+  //       </div>
+  //     </div>
+  //   );
+  // }
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -254,7 +255,7 @@ export default function KitDashboardPage({ params }: { params: Promise<{ id: str
             </div>
             <div className="text-right">
               <div className="text-sm text-gray-500">LaunchKit AI</div>
-              <div className="text-lg font-semibold text-green-600">✓ Paid Access</div>
+              <div className="text-lg font-semibold text-green-600">✓ Free Access</div>
             </div>
           </div>
         </div>

@@ -31,12 +31,8 @@ export async function POST(
       );
     }
 
-    // Parse profiling data
-    const selectedOptions = (kit as any).selected_options ? JSON.parse((kit as any).selected_options) : {};
-    const profilingData = (kit as any).profiling_data ? JSON.parse((kit as any).profiling_data) : {};
-
-    // Create prompt assembler
-    const promptAssembler = new PromptAssembler(kit, profilingData, selectedOptions);
+    // Create prompt assembler with simplified data
+    const promptAssembler = new PromptAssembler(kit, {}, {});
 
     // Generate the appropriate prompt
     let prompt: string;

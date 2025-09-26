@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/Button';
-import { Check, Lock, Sparkles } from 'lucide-react';
+import { Check, Sparkles, FileText, Calendar, Globe, Download, RefreshCw } from 'lucide-react';
 
 interface KitData {
   id: string;
@@ -11,26 +11,64 @@ interface KitData {
   has_access: boolean;
 }
 
+interface BusinessCaseContent {
+  positioning: string;
+  value_prop: string;
+  audience_summary: string;
+  offer_bullets: string[];
+  brand_identity: {
+    vibe: string;
+    keywords: string[];
+  };
+  pricing: {
+    idea: string;
+    alternatives: string[];
+  };
+  name_ideas: string[];
+  taglines: string[];
+  risks: string[];
+  first_3_steps: string[];
+}
+
+interface ContentStrategyContent {
+  channels: string[];
+  cadence: Record<string, string>;
+  tone: string;
+  hooks_7: string[];
+  thirty_day_themes: string[];
+}
+
+interface OutputData {
+  business_case?: {
+    id: string;
+    content: BusinessCaseContent;
+    regen_count: number;
+    regens_remaining: number;
+    created_at: string;
+    updated_at: string;
+  };
+  content_strategy?: {
+    id: string;
+    content: ContentStrategyContent;
+    regen_count: number;
+    regens_remaining: number;
+    created_at: string;
+    updated_at: string;
+  };
+}
+
 export default function KitPreviewPage({ params }: { params: Promise<{ id: string }> }) {
   const [kit, setKit] = useState<KitData | null>(null);
+  const [outputs, setOutputs] = useState<OutputData>({});
   const [isLoading, setIsLoading] = useState(true);
-  const [selectedPlan, setSelectedPlan] = useState<'oneoff' | 'subscription'>('oneoff');
+  const [isGenerating, setIsGenerating] = useState(false);
   const [kitId, setKitId] = useState<string>('');
 
-  // Resolve params and handle payment success
+  // Resolve params
   useEffect(() => {
     const resolveParams = async () => {
       const resolvedParams = await params;
       setKitId(resolvedParams.id);
-      
-      // Check for payment success in URL params
-      const urlParams = new URLSearchParams(window.location.search);
-      if (urlParams.get('success') === 'true') {
-        // Redirect to dashboard after successful payment
-        setTimeout(() => {
-          window.location.href = `/kit/${resolvedParams.id}/dashboard`;
-        }, 2000);
-      }
     };
     
     resolveParams();
@@ -39,82 +77,95 @@ export default function KitPreviewPage({ params }: { params: Promise<{ id: strin
   useEffect(() => {
     if (!kitId) return;
     
-    const fetchKit = async () => {
+    const fetchData = async () => {
       try {
-        const response = await fetch(`/api/kits/${kitId}`);
-        if (response.ok) {
-          const kitData = await response.json();
+        // Fetch kit data
+        const kitResponse = await fetch(`/api/kits/${kitId}`);
+        if (kitResponse.ok) {
+          const kitData = await kitResponse.json();
           setKit(kitData);
         }
+
+        // Trigger AI generation for all content types
+        setIsGenerating(true);
+        await generateAllContent();
       } catch (error) {
-        console.error('Error fetching kit:', error);
+        console.error('Error fetching data:', error);
       } finally {
         setIsLoading(false);
+        setIsGenerating(false);
       }
     };
 
-    fetchKit();
+    fetchData();
   }, [kitId]);
 
-  const handlePayment = async () => {
+  const generateAllContent = async () => {
     try {
-      // For testing without Stripe, directly grant access
-      const testMode = !process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY;
-      
-      if (testMode) {
-        // Test mode: directly grant access and redirect
-        const response = await fetch(`/api/kits/${kitId}`, {
-          method: 'PATCH',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ has_access: true }),
-        });
-        
-        if (response.ok) {
-          window.location.href = `/kit/${kitId}/preview?success=true`;
-        } else {
-          throw new Error('Failed to grant test access');
-        }
-        return;
-      }
-
-      // Production mode: use Stripe
-      const response = await fetch('/api/checkout', {
+      // Generate business case
+      const businessCaseResponse = await fetch(`/api/kits/${kitId}/generate`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          kitId: kitId,
-          planType: selectedPlan,
-          // TODO: Add actual userId when auth is implemented
-          userId: undefined,
-        }),
+        body: JSON.stringify({ type: 'business_case' }),
       });
 
-      if (!response.ok) {
-        throw new Error('Failed to create checkout session');
+      if (businessCaseResponse.ok) {
+        const businessCaseData = await businessCaseResponse.json();
+        setOutputs(prev => ({
+          ...prev,
+          business_case: {
+            id: `temp-${Date.now()}`,
+            content: businessCaseData.content,
+            regen_count: 0,
+            regens_remaining: 3,
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString(),
+          },
+        }));
       }
 
-      const { url } = await response.json();
-      
-      // Redirect to Stripe checkout
-      if (url) {
-        window.location.href = url;
+      // Generate content strategy
+      const contentStrategyResponse = await fetch(`/api/kits/${kitId}/generate`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ type: 'content_strategy' }),
+      });
+
+      if (contentStrategyResponse.ok) {
+        const contentStrategyData = await contentStrategyResponse.json();
+        setOutputs(prev => ({
+          ...prev,
+          content_strategy: {
+            id: `temp-${Date.now()}`,
+            content: contentStrategyData.content,
+            regen_count: 0,
+            regens_remaining: 3,
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString(),
+          },
+        }));
       }
     } catch (error) {
-      console.error('Payment error:', error);
-      alert('Something went wrong with the payment. Please try again.');
+      console.error('Error generating content:', error);
     }
   };
 
-  if (isLoading) {
+  const handleContinueToDashboard = () => {
+    window.location.href = `/kit/${kitId}/dashboard`;
+  };
+
+  if (isLoading || isGenerating) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
-          <p className="mt-2 text-gray-600">Loading your kit...</p>
+          <p className="mt-2 text-gray-600">
+            {isGenerating ? 'Generating your analysis...' : 'Loading your kit...'}
+          </p>
         </div>
       </div>
     );
@@ -131,225 +182,173 @@ export default function KitPreviewPage({ params }: { params: Promise<{ id: strin
     );
   }
 
-  // Check for success message
-  const urlParams = new URLSearchParams(window.location.search);
-  if (urlParams.get('success') === 'true') {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="text-6xl mb-4">🎉</div>
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">Payment Successful!</h1>
-          <p className="text-gray-600 mb-4">Redirecting you to your launch kit dashboard...</p>
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
-        </div>
-      </div>
-    );
-  }
-
-  // If user already has access, redirect to dashboard
-  if (kit.has_access) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">You already have access!</h1>
-          <p className="text-gray-600 mb-4">Redirecting you to your dashboard...</p>
-          <Button onClick={() => window.location.href = `/kit/${kitId}/dashboard`}>
-            Go to Dashboard
-          </Button>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
       <div className="bg-white shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <h1 className="text-2xl font-bold text-gray-900">LaunchKit AI</h1>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900">{kit.title}</h1>
+              <p className="text-gray-600 mt-1">{kit.one_liner}</p>
+            </div>
+            <div className="text-right">
+              <div className="text-sm text-gray-500">LaunchKit AI</div>
+              <div className="text-lg font-semibold text-green-600">✓ Analysis Complete</div>
+            </div>
+          </div>
         </div>
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           
-          {/* Main Content - Kit Preview */}
-          <div className="lg:col-span-2 space-y-8">
-            <div className="bg-white rounded-lg shadow-sm p-6">
-              <div className="flex items-center gap-3 mb-4">
-                <Sparkles className="h-6 w-6 text-blue-600" />
-                <h2 className="text-xl font-semibold text-gray-900">Your Launch Kit</h2>
+          {/* Business Case Section */}
+          <div className="bg-white rounded-lg shadow-sm">
+            <div className="p-6 border-b border-gray-200">
+              <div className="flex items-center gap-3">
+                <FileText className="h-6 w-6 text-blue-600" />
+                <h2 className="text-xl font-semibold text-gray-900">Business Case & Strategy</h2>
               </div>
-              
-              <h3 className="text-2xl font-bold text-gray-900 mb-2">{kit.title}</h3>
-              <p className="text-gray-600 mb-6">{kit.one_liner}</p>
-              
-              {/* Content Teasers */}
-              <div className="space-y-6">
-                
-                {/* Business Case Teaser */}
-                <div className="relative">
-                  <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg p-6">
-                    <div className="flex items-center justify-between mb-4">
-                      <h4 className="text-lg font-semibold text-gray-900">📊 Business Case & Strategy</h4>
-                      <Lock className="h-5 w-5 text-gray-400" />
-                    </div>
-                    
-                    <div className="space-y-3 text-sm text-gray-600">
-                      <div className="blur-sm select-none">
-                        <p>Your positioning strategy leverages the growing demand for...</p>
-                        <p>Target audience analysis reveals 3 key segments...</p>
-                        <p>Recommended pricing structure: £X for premium tier...</p>
-                      </div>
-                    </div>
-                    
-                    <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-transparent rounded-lg"></div>
-                    <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2">
-                      <span className="bg-blue-600 text-white px-4 py-2 rounded-full text-sm font-medium">
-                        Coming Soon
-                      </span>
-                    </div>
-                  </div>
-                </div>
+            </div>
 
-                {/* Content Strategy Teaser */}
-                <div className="relative">
-                  <div className="bg-gradient-to-r from-green-50 to-emerald-50 rounded-lg p-6">
-                    <div className="flex items-center justify-between mb-4">
-                      <h4 className="text-lg font-semibold text-gray-900">📱 Content Strategy</h4>
-                      <Lock className="h-5 w-5 text-gray-400" />
-                    </div>
-                    
-                    <div className="space-y-3 text-sm text-gray-600">
-                      <div className="blur-sm select-none">
-                        <p>30-day content calendar with daily post ideas...</p>
-                        <p>7 viral hook templates for your niche...</p>
-                        <p>Channel-specific optimization for Instagram and...</p>
-                      </div>
-                    </div>
-                    
-                    <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-transparent rounded-lg"></div>
-                    <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2">
-                      <span className="bg-green-600 text-white px-4 py-2 rounded-full text-sm font-medium">
-                        Coming Soon
-                      </span>
-                    </div>
-                  </div>
+            <div className="p-6">
+              {outputs.business_case ? (
+                <BusinessCaseDisplay content={outputs.business_case.content} />
+              ) : (
+                <div className="text-center py-8">
+                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
+                  <p className="text-gray-600">Generating your business case...</p>
                 </div>
-
-                {/* Templates Library Teaser */}
-                <div className="relative">
-                  <div className="bg-gradient-to-r from-purple-50 to-pink-50 rounded-lg p-6">
-                    <div className="flex items-center justify-between mb-4">
-                      <h4 className="text-lg font-semibold text-gray-900">📄 Templates Library</h4>
-                      <Lock className="h-5 w-5 text-gray-400" />
-                    </div>
-                    
-                    <div className="space-y-3 text-sm text-gray-600">
-                      <div className="blur-sm select-none">
-                        <p>Email templates for customer outreach...</p>
-                        <p>Social media post templates...</p>
-                        <p>Pitch deck templates for investors...</p>
-                      </div>
-                    </div>
-                    
-                    <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-transparent rounded-lg"></div>
-                    <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2">
-                      <span className="bg-purple-600 text-white px-4 py-2 rounded-full text-sm font-medium">
-                        Coming Soon
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              )}
             </div>
           </div>
 
-          {/* Sidebar - Payment Options */}
-          <div className="lg:col-span-1">
-            <div className="bg-white rounded-lg shadow-sm p-6 sticky top-8">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Choose Your Plan</h3>
-              
-              <div className="space-y-4">
-                {/* One-off Plan */}
-                <div 
-                  className={`border-2 rounded-lg p-4 cursor-pointer transition-colors ${
-                    selectedPlan === 'oneoff' 
-                      ? 'border-blue-500 bg-blue-50' 
-                      : 'border-gray-200 hover:border-gray-300'
-                  }`}
-                  onClick={() => setSelectedPlan('oneoff')}
-                >
-                  <div className="flex items-center justify-between mb-2">
-                    <h4 className="font-semibold text-gray-900">Pay Once</h4>
-                    <div className="text-2xl font-bold text-gray-900">£37</div>
-                  </div>
-                  <p className="text-sm text-gray-600 mb-3">Get immediate access to your complete launch kit</p>
-                  <ul className="space-y-1 text-sm text-gray-600">
-                    <li className="flex items-center gap-2">
-                      <Check className="h-4 w-4 text-green-500" />
-                      Complete business case
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <Check className="h-4 w-4 text-green-500" />
-                      30-day content strategy
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <Check className="h-4 w-4 text-green-500" />
-                      Downloadable PDFs
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <Check className="h-4 w-4 text-green-500" />
-                      3 regenerations per section
-                    </li>
-                  </ul>
-                </div>
-
-                {/* Subscription Plan */}
-                <div 
-                  className={`border-2 rounded-lg p-4 cursor-pointer transition-colors ${
-                    selectedPlan === 'subscription' 
-                      ? 'border-blue-500 bg-blue-50' 
-                      : 'border-gray-200 hover:border-gray-300'
-                  }`}
-                  onClick={() => setSelectedPlan('subscription')}
-                >
-                  <div className="flex items-center justify-between mb-2">
-                    <h4 className="font-semibold text-gray-900">Daily Plan</h4>
-                    <div className="text-2xl font-bold text-gray-900">£1<span className="text-sm font-normal">/day</span></div>
-                  </div>
-                  <p className="text-sm text-gray-600 mb-3">Pay as you go for 37 days (£37 total)</p>
-                  <ul className="space-y-1 text-sm text-gray-600">
-                    <li className="flex items-center gap-2">
-                      <Check className="h-4 w-4 text-green-500" />
-                      Same features as pay once
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <Check className="h-4 w-4 text-green-500" />
-                      Spread the cost over time
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <Check className="h-4 w-4 text-green-500" />
-                      Cancel anytime
-                    </li>
-                  </ul>
-                </div>
+          {/* Content Strategy Section */}
+          <div className="bg-white rounded-lg shadow-sm">
+            <div className="p-6 border-b border-gray-200">
+              <div className="flex items-center gap-3">
+                <Calendar className="h-6 w-6 text-green-600" />
+                <h2 className="text-xl font-semibold text-gray-900">Content Strategy</h2>
               </div>
+            </div>
 
-              <Button 
-                onClick={handlePayment}
-                className="w-full mt-6"
-                size="lg"
-              >
-                {selectedPlan === 'oneoff' ? 'Pay £37 Now' : 'Start £1/day Plan'}
-              </Button>
-
-              <p className="text-xs text-gray-500 text-center mt-3">
-                Secure payment powered by Stripe
-              </p>
+            <div className="p-6">
+              {outputs.content_strategy ? (
+                <ContentStrategyDisplay content={outputs.content_strategy.content} />
+              ) : (
+                <div className="text-center py-8">
+                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600 mx-auto mb-4"></div>
+                  <p className="text-gray-600">Generating your content strategy...</p>
+                </div>
+              )}
             </div>
           </div>
         </div>
+
+        {/* Payment Placeholder */}
+        <div className="mt-8 bg-white rounded-lg shadow-sm p-6">
+          <div className="text-center">
+            <h3 className="text-xl font-semibold text-gray-900 mb-2">
+              🚧 Payment Integration Coming Soon
+            </h3>
+            <p className="text-gray-600 mb-4">
+              For now, enjoy free access to your complete launch kit. 
+              Payment processing will be added soon.
+            </p>
+            <Button
+              onClick={handleContinueToDashboard}
+              size="lg"
+              className="px-8 py-3"
+            >
+              Continue to Dashboard
+            </Button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Component to display business case content
+function BusinessCaseDisplay({ content }: { content: BusinessCaseContent }) {
+  return (
+    <div className="space-y-4">
+      <div>
+        <h3 className="font-semibold text-gray-900 mb-2">Positioning</h3>
+        <p className="text-gray-700 text-sm">{content.positioning}</p>
+      </div>
+      
+      <div>
+        <h3 className="font-semibold text-gray-900 mb-2">Value Proposition</h3>
+        <p className="text-gray-700 text-sm">{content.value_prop}</p>
+      </div>
+
+      <div>
+        <h3 className="font-semibold text-gray-900 mb-2">Target Audience</h3>
+        <p className="text-gray-700 text-sm">{content.audience_summary}</p>
+      </div>
+
+      <div>
+        <h3 className="font-semibold text-gray-900 mb-2">Key Benefits</h3>
+        <ul className="list-disc list-inside space-y-1 text-gray-700 text-sm">
+          {content.offer_bullets?.slice(0, 3).map((bullet: string, index: number) => (
+            <li key={index}>{bullet}</li>
+          ))}
+        </ul>
+      </div>
+
+      <div>
+        <h3 className="font-semibold text-gray-900 mb-2">Next Steps</h3>
+        <ol className="list-decimal list-inside space-y-1 text-gray-700 text-sm">
+          {content.first_3_steps?.slice(0, 3).map((step: string, index: number) => (
+            <li key={index}>{step}</li>
+          ))}
+        </ol>
+      </div>
+    </div>
+  );
+}
+
+// Component to display content strategy
+function ContentStrategyDisplay({ content }: { content: ContentStrategyContent }) {
+  return (
+    <div className="space-y-4">
+      <div>
+        <h3 className="font-semibold text-gray-900 mb-2">Primary Channels</h3>
+        <div className="flex flex-wrap gap-2">
+          {content.channels?.slice(0, 4).map((channel: string, index: number) => (
+            <span key={index} className="px-2 py-1 bg-blue-100 text-blue-800 rounded text-xs">
+              {channel}
+            </span>
+          ))}
+        </div>
+      </div>
+
+      <div>
+        <h3 className="font-semibold text-gray-900 mb-2">Content Tone</h3>
+        <p className="text-gray-700 text-sm">{content.tone}</p>
+      </div>
+
+      <div>
+        <h3 className="font-semibold text-gray-900 mb-2">Hook Templates</h3>
+        <ul className="list-disc list-inside space-y-1 text-gray-700 text-sm">
+          {content.hooks_7?.slice(0, 3).map((hook: string, index: number) => (
+            <li key={index}>{hook}</li>
+          ))}
+        </ul>
+      </div>
+
+      <div>
+        <h3 className="font-semibold text-gray-900 mb-2">30-Day Themes</h3>
+        <ul className="space-y-1">
+          {content.thirty_day_themes?.slice(0, 2).map((theme: string, index: number) => (
+            <li key={index} className="flex items-start gap-2">
+              <span className="font-medium text-green-600 text-xs">Week {index + 1}:</span>
+              <span className="text-gray-700 text-xs">{theme.replace(/^Week \d+:\s*/, '')}</span>
+            </li>
+          ))}
+        </ul>
       </div>
     </div>
   );

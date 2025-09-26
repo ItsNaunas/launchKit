@@ -1,62 +1,12 @@
 'use client';
 
-import { useState } from 'react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/Button';
-import { MiniIntakeForm } from '@/components/MiniIntakeForm';
 import { useAuth } from '@/contexts/AuthContext';
 import { Sparkles, Target, Zap, Download, LogOut } from 'lucide-react';
 
-interface MiniIntakeData {
-  business_idea: string;
-  budget: 'shoestring' | 'moderate' | 'premium';
-  challenges: string[];
-}
-
 export default function HomePage() {
-  const [showMiniIntake, setShowMiniIntake] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
   const { user, signOut } = useAuth();
-
-  const handleMiniIntakeSubmit = async (data: MiniIntakeData) => {
-    setIsLoading(true);
-    try {
-      // Create a kit with mini-intake data
-      const response = await fetch('/api/kits', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          idea_title: data.business_idea,
-          one_liner: data.business_idea,
-          category: 'service', // Default, will be refined in teaser flow
-          target_audience: 'General audience', // Will be refined
-          primary_goal: 'launch',
-          budget_band: data.budget === 'shoestring' ? 'none' : data.budget === 'moderate' ? '100-500' : '500-2000',
-          time_horizon: '30d',
-          challenges: JSON.stringify(data.challenges),
-          geography: 'UK',
-          brand_vibe: 'accessible',
-          sales_channel_focus: 'Mixed'
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to create kit');
-      }
-
-      const { kitId } = await response.json();
-      
-      // Redirect to teaser flow
-      window.location.href = `/kit/${kitId}/teaser`;
-    } catch (error) {
-      console.error('Error creating kit:', error);
-      alert('Something went wrong. Please try again.');
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-amber-50">
@@ -97,44 +47,34 @@ export default function HomePage() {
       {/* Hero Section */}
       <section className="relative py-20 overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
-          {!showMiniIntake ? (
-            <>
-              <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6">
-                Launch Your Business Idea
-                <span className="block text-orange-600">in 30 Days with AI</span>
-              </h1>
-              
-              <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
-                Get a complete launch strategy, content plan, and business roadmap 
-                tailored specifically for your idea. No generic templates—just AI-powered 
-                insights that actually work.
-              </p>
+          <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6">
+            Launch Your Business Idea
+            <span className="block text-orange-600">in 30 Days with AI</span>
+          </h1>
+          
+          <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
+            Get a complete launch strategy, content plan, and business roadmap 
+            tailored specifically for your idea. No generic templates—just AI-powered 
+            insights that actually work.
+          </p>
 
-              <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
-                <Button 
-                  size="lg" 
-                  className="px-8 py-4 text-lg"
-                  onClick={() => setShowMiniIntake(true)}
-                >
-                  What&apos;s your dream business?
-                </Button>
-                <Button variant="outline" size="lg" className="px-8 py-4 text-lg">
-                  See Example Kit
-                </Button>
-              </div>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
+            <Link href="/start">
+              <Button 
+                size="lg" 
+                className="px-8 py-4 text-lg"
+              >
+                Generate My Starter Kit
+              </Button>
+            </Link>
+            <Button variant="outline" size="lg" className="px-8 py-4 text-lg">
+              See Example Kit
+            </Button>
+          </div>
 
-              <p className="text-sm text-gray-500">
-                ✨ £37 one-time or £1/day for 37 days • No subscriptions • Instant access
-              </p>
-            </>
-          ) : (
-            <div className="max-w-4xl mx-auto">
-              <MiniIntakeForm 
-                onSubmit={handleMiniIntakeSubmit}
-                isLoading={isLoading}
-              />
-            </div>
-          )}
+          <p className="text-sm text-gray-500">
+            ✨ Free access during beta • AI-powered insights • Instant results
+          </p>
         </div>
 
         {/* Background decoration */}
@@ -239,13 +179,14 @@ export default function HomePage() {
                   <span className="text-gray-700">3 regenerations per section</span>
                 </li>
               </ul>
-              <Button 
-                className="w-full" 
-                size="lg"
-                onClick={() => window.location.href = '/start'}
-              >
-                Get Started
-              </Button>
+              <Link href="/start">
+                <Button 
+                  className="w-full" 
+                  size="lg"
+                >
+                  Get Started
+                </Button>
+              </Link>
             </div>
 
             <div className="bg-white rounded-xl shadow-sm border-2 border-orange-200 p-8 relative">
@@ -287,14 +228,15 @@ export default function HomePage() {
                   <span className="text-gray-700">Same £37 total</span>
                 </li>
               </ul>
-              <Button 
-                variant="outline" 
-                className="w-full" 
-                size="lg"
-                onClick={() => window.location.href = '/start'}
-              >
-                Get Started
-              </Button>
+              <Link href="/start">
+                <Button 
+                  variant="outline" 
+                  className="w-full" 
+                  size="lg"
+                >
+                  Get Started
+                </Button>
+              </Link>
             </div>
           </div>
         </div>
@@ -309,14 +251,15 @@ export default function HomePage() {
           <p className="text-xl text-orange-100 mb-8 max-w-2xl mx-auto">
             Join hundreds of entrepreneurs who&apos;ve turned their ideas into reality with AI-powered launch strategies.
           </p>
-          <Button 
-            variant="secondary" 
-            size="lg" 
-            className="px-8 py-4 text-lg"
-            onClick={() => window.location.href = '/start'}
-          >
-            Create My Launch Kit Now
-          </Button>
+          <Link href="/start">
+            <Button 
+              variant="secondary" 
+              size="lg" 
+              className="px-8 py-4 text-lg"
+            >
+              Create My Launch Kit Now
+            </Button>
+          </Link>
         </div>
       </section>
 
