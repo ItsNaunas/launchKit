@@ -213,7 +213,7 @@ export default function KitPreviewPage({ params }: { params: Promise<{ id: strin
               🔓 Unlock Your Complete Launch Kit
             </h3>
             <p className="text-gray-600 mb-4">
-              You've seen the preview - now get full access to your personalized business strategy, 
+              You&apos;ve seen the preview - now get full access to your personalized business strategy, 
               content calendar, and actionable insights.
             </p>
               <Button 

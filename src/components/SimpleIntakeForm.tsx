@@ -37,7 +37,7 @@ export function SimpleIntakeForm({ onSubmit, isLoading = false }: SimpleIntakeFo
         
         <div>
           <Input
-            label="What's your business idea?"
+            label="What&apos;s your business idea?"
             {...register('business_idea')}
             placeholder="e.g., Local dog walking service for busy professionals"
             error={errors.business_idea?.message}
@@ -57,9 +57,9 @@ export function SimpleIntakeForm({ onSubmit, isLoading = false }: SimpleIntakeFo
 
         <div>
           <Textarea
-            label="What's your biggest challenge right now?"
+            label="What&apos;s your biggest challenge right now?"
             {...register('main_challenge')}
-            placeholder="What's holding you back from launching? (e.g., finding customers, pricing, time, skills...)"
+            placeholder="What&apos;s holding you back from launching? (e.g., finding customers, pricing, time, skills...)"
             error={errors.main_challenge?.message}
             required
           />

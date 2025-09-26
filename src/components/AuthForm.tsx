@@ -160,7 +160,7 @@ export function AuthForm({ mode, onSuccess, onSwitchMode }: AuthFormProps) {
             className="text-blue-600 hover:text-blue-700 text-sm"
           >
             {mode === 'signin' 
-              ? "Don't have an account? Sign up" 
+              ? "Don&apos;t have an account? Sign up" 
               : 'Already have an account? Sign in'
             }
           </button>
