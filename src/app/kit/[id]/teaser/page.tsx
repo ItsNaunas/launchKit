@@ -3,12 +3,7 @@
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/Button';
 import { ArrowRight, FileText, Calendar, Globe, Lock } from 'lucide-react';
-
-interface KitData {
-  id: string;
-  title: string;
-  one_liner: string;
-}
+import { type KitData } from '@/lib/shared-types';
 
 export default function TeaserPage({ params }: { params: Promise<{ id: string }> }) {
   const [kit, setKit] = useState<KitData | null>(null);

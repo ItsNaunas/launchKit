@@ -4,10 +4,23 @@ import { Database } from './database.types';
 // Check if we're in a build context where env vars might not be available
 const isBuilding = process.env.NODE_ENV === 'production' && !process.env.NEXT_PUBLIC_SUPABASE_URL;
 
-// Provide fallback values for build time when env vars aren't available
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://zbpxtdrmxkkhvagkqwew.supabase.co';
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpicnh0ZHJteGtraHZhZ2txd2V3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzQ1NDA2ODAsImV4cCI6MjA1MDExNjY4MH0.placeholder';
-const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpicnh0ZHJteGtraHZhZ2txd2V3Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTczNDU0MDY4MCwiZXhwIjoyMDUwMTE2NjgwfQ.placeholder';
+// Get environment variables - no fallbacks for security
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+// Validate required environment variables
+if (!isBuilding) {
+  if (!supabaseUrl) {
+    throw new Error('Missing NEXT_PUBLIC_SUPABASE_URL environment variable');
+  }
+  if (!supabaseAnonKey) {
+    throw new Error('Missing NEXT_PUBLIC_SUPABASE_ANON_KEY environment variable');
+  }
+  if (!supabaseServiceKey) {
+    throw new Error('Missing SUPABASE_SERVICE_ROLE_KEY environment variable');
+  }
+}
 
 let supabaseInstance: SupabaseClient<Database> | null = null;
 let supabaseAdminInstance: SupabaseClient<Database> | null = null;
@@ -21,7 +34,7 @@ export const supabase = new Proxy({} as SupabaseClient<Database>, {
     }
     
     if (!supabaseInstance) {
-      supabaseInstance = createClient<Database>(supabaseUrl, supabaseAnonKey);
+      supabaseInstance = createClient<Database>(supabaseUrl!, supabaseAnonKey!);
     }
     
     return (supabaseInstance as any)[prop];
@@ -37,7 +50,7 @@ export const supabaseAdmin = new Proxy({} as SupabaseClient<Database>, {
     }
     
     if (!supabaseAdminInstance) {
-      supabaseAdminInstance = createClient<Database>(supabaseUrl, supabaseServiceKey);
+      supabaseAdminInstance = createClient<Database>(supabaseUrl!, supabaseServiceKey!);
     }
     
     return (supabaseAdminInstance as any)[prop];

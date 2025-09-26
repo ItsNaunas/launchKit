@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase';
+import { kitIdSchema } from '@/lib/validation';
 
 export async function GET(
   request: NextRequest,
@@ -7,7 +8,7 @@ export async function GET(
 ) {
   try {
     const resolvedParams = await params;
-    const kitId = resolvedParams.id;
+    const { id: kitId } = kitIdSchema.parse(resolvedParams);
 
     // Get kit to verify access
     const { data: kit, error: kitError } = await supabaseAdmin

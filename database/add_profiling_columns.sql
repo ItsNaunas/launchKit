@@ -1,6 +1,11 @@
--- Add profiling columns to kits table
+-- Add missing profiling columns to existing kits table
 -- Run this in your Supabase SQL editor
 
+-- Add the missing columns to the kits table
 ALTER TABLE public.kits 
-ADD COLUMN selected_options text, -- JSON stringified object of selected options from teaser steps
-ADD COLUMN profiling_data text; -- JSON stringified object of profiling questions data
+ADD COLUMN IF NOT EXISTS selected_options text,
+ADD COLUMN IF NOT EXISTS profiling_data text;
+
+-- Add comments for documentation
+COMMENT ON COLUMN public.kits.selected_options IS 'JSON stringified object of selected options from profiling flow';
+COMMENT ON COLUMN public.kits.profiling_data IS 'JSON stringified object of profiling data from progressive profiling';

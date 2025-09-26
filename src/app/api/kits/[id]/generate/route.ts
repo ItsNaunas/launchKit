@@ -1,21 +1,16 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase';
 import { PromptAssembler } from '@/lib/prompt-assembler';
+import { kitIdSchema, generateContentSchema } from '@/lib/validation';
 
 export async function POST(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = await params;
-    const { type } = await request.json();
-
-    if (!type || !['business_case', 'content_strategy', 'website_content'].includes(type)) {
-      return NextResponse.json(
-        { error: 'Invalid content type. Must be business_case, content_strategy, or website_content' },
-        { status: 400 }
-      );
-    }
+    const resolvedParams = await params;
+    const { id } = kitIdSchema.parse(resolvedParams);
+    const { type } = generateContentSchema.parse(await request.json());
 
     // Get kit data with profiling information
     const { data: kit, error: kitError } = await supabaseAdmin
@@ -48,9 +43,6 @@ export async function POST(
         break;
       case 'content_strategy':
         prompt = promptAssembler.generateContentStrategyPrompt();
-        break;
-      case 'website_content':
-        prompt = promptAssembler.generateWebsiteContentPrompt();
         break;
       default:
         return NextResponse.json(
@@ -158,31 +150,6 @@ function generateMockContent(type: string): any {
         "Week 4: Optimization & Growth"
       ]
     },
-    website_content: {
-      hero: {
-        headline: "Launch Your Business in 30 Days",
-        subheadline: "Get everything you need to go from idea to first customers with our proven system",
-        cta: "Start Your Launch Kit"
-      },
-      value_props: [
-        "Complete business setup in 30 days",
-        "Proven framework used by 500+ entrepreneurs",
-        "Ongoing support and optimization"
-      ],
-      about: "We help entrepreneurs turn their ideas into profitable businesses. Our proven system has helped over 500 people launch successfully, generating over £2M in combined revenue.",
-      social_proof: "Join 500+ successful entrepreneurs who have launched with our system",
-      faq: [
-        {
-          question: "How long does the setup take?",
-          answer: "Most people complete the initial setup in 2-4 weeks, depending on their availability."
-        },
-        {
-          question: "What if I need help?",
-          answer: "We provide ongoing support via email and our community forum."
-        }
-      ],
-      meta_description: "Launch your business in 30 days with our proven system. Complete setup, ongoing support, and proven results. Join 500+ successful entrepreneurs."
-    }
   };
 
   return baseContent[type as keyof typeof baseContent] || {};

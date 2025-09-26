@@ -53,6 +53,8 @@ export interface Database {
           content_strengths: string | null; // JSON array
           constraints: string | null;
           revenue_target_30d: number | null;
+          selected_options: string | null;
+          profiling_data: string | null;
         };
         Insert: {
           id?: string;
@@ -79,6 +81,8 @@ export interface Database {
           content_strengths?: string | null;
           constraints?: string | null;
           revenue_target_30d?: number | null;
+          selected_options?: string | null;
+          profiling_data?: string | null;
         };
         Update: {
           id?: string;
@@ -105,6 +109,8 @@ export interface Database {
           content_strengths?: string | null;
           constraints?: string | null;
           revenue_target_30d?: number | null;
+          selected_options?: string | null;
+          profiling_data?: string | null;
         };
       };
       outputs: {

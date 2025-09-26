@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase';
+import { kitIdSchema } from '@/lib/validation';
 
 export async function GET(
   request: NextRequest,
@@ -7,10 +8,12 @@ export async function GET(
 ) {
   try {
     const resolvedParams = await params;
+    const { id } = kitIdSchema.parse(resolvedParams);
+    
     const { data: kit, error } = await supabaseAdmin
       .from('kits')
       .select('id, title, one_liner, has_access')
-      .eq('id', resolvedParams.id)
+      .eq('id', id)
       .single();
 
     if (error || !kit) {
@@ -39,11 +42,12 @@ export async function PATCH(
   try {
     const body = await request.json();
     const resolvedParams = await params;
+    const { id } = kitIdSchema.parse(resolvedParams);
     
     const { data: kit, error } = await supabaseAdmin
       .from('kits')
       .update(body as never)
-      .eq('id', resolvedParams.id)
+      .eq('id', id)
       .select('id, title, one_liner, has_access')
       .single();
 

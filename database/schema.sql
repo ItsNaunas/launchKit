@@ -44,7 +44,11 @@ create table public.kits (
   constraints text,
   
   -- Optional future fields
-  revenue_target_30d integer check (revenue_target_30d >= 0)
+  revenue_target_30d integer check (revenue_target_30d >= 0),
+  
+  -- Profiling data fields
+  selected_options text, -- JSON stringified object of selected options
+  profiling_data text -- JSON stringified object of profiling data
 );
 
 -- Create outputs table for generated content

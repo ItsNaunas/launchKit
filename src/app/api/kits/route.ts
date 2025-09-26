@@ -1,18 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase';
+import { simpleIntakeSchema } from '@/lib/validation';
 import { z } from 'zod';
-
-// Simple intake schema for the new flow
-const SimpleIntakeSchema = z.object({
-  business_idea: z.string().min(1, 'Business idea is required'),
-  target_audience: z.string().min(1, 'Target audience is required'),
-  main_challenge: z.string().min(1, 'Main challenge is required'),
-});
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const validatedData = SimpleIntakeSchema.parse(body);
+    const validatedData = simpleIntakeSchema.parse(body);
     
     const tempUserId = crypto.randomUUID();
     
@@ -23,7 +17,7 @@ export async function POST(request: NextRequest) {
         id: tempUserId,
         email: `temp-${tempUserId}@example.com`,
         plan_status: 'free'
-      });
+      } as never);
     
     if (profileError) {
       console.error('Profile creation error:', profileError);
@@ -80,13 +74,19 @@ export async function POST(request: NextRequest) {
     
     if (error instanceof z.ZodError) {
       return NextResponse.json(
-        { error: 'Invalid form data', details: error.errors },
+        { 
+          error: 'Invalid form data', 
+          details: error.errors.map(err => ({
+            field: err.path.join('.'),
+            message: err.message
+          }))
+        },
         { status: 400 }
       );
     }
 
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { error: 'Failed to create kit. Please try again.' },
       { status: 500 }
     );
   }

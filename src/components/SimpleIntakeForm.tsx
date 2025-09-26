@@ -2,15 +2,11 @@
 
 import React from 'react';
 import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { Textarea } from '@/components/ui/Textarea';
-
-interface SimpleIntakeData {
-  business_idea: string;
-  target_audience: string;
-  main_challenge: string;
-}
+import { simpleIntakeSchema, type SimpleIntakeData } from '@/lib/validation';
 
 interface SimpleIntakeFormProps {
   onSubmit: (data: SimpleIntakeData) => Promise<void>;
@@ -22,7 +18,9 @@ export function SimpleIntakeForm({ onSubmit, isLoading = false }: SimpleIntakeFo
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<SimpleIntakeData>();
+  } = useForm<SimpleIntakeData>({
+    resolver: zodResolver(simpleIntakeSchema),
+  });
 
   return (
     <div className="max-w-2xl mx-auto p-6 bg-white rounded-lg shadow-lg">
@@ -40,7 +38,7 @@ export function SimpleIntakeForm({ onSubmit, isLoading = false }: SimpleIntakeFo
         <div>
           <Input
             label="What's your business idea?"
-            {...register('business_idea', { required: 'Business idea is required' })}
+            {...register('business_idea')}
             placeholder="e.g., Local dog walking service for busy professionals"
             error={errors.business_idea?.message}
             required
@@ -50,7 +48,7 @@ export function SimpleIntakeForm({ onSubmit, isLoading = false }: SimpleIntakeFo
         <div>
           <Textarea
             label="Who is your target audience?"
-            {...register('target_audience', { required: 'Target audience is required' })}
+            {...register('target_audience')}
             placeholder="Describe your ideal customers - their age, profession, pain points, goals..."
             error={errors.target_audience?.message}
             required
@@ -60,7 +58,7 @@ export function SimpleIntakeForm({ onSubmit, isLoading = false }: SimpleIntakeFo
         <div>
           <Textarea
             label="What's your biggest challenge right now?"
-            {...register('main_challenge', { required: 'Main challenge is required' })}
+            {...register('main_challenge')}
             placeholder="What's holding you back from launching? (e.g., finding customers, pricing, time, skills...)"
             error={errors.main_challenge?.message}
             required

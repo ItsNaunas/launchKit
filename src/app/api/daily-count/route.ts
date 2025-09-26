@@ -1,12 +1,12 @@
 import { NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
+import { supabaseAdmin } from '@/lib/supabase';
 
 export async function GET() {
   try {
     const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD format
     
     // Get count of kits created today
-    const { count, error } = await supabase
+    const { count, error } = await supabaseAdmin
       .from('kits')
       .select('*', { count: 'exact', head: true })
       .gte('created_at', `${today}T00:00:00.000Z`)

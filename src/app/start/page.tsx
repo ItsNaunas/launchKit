@@ -2,12 +2,7 @@
 
 import { useState } from 'react';
 import { SimpleIntakeForm } from '@/components/SimpleIntakeForm';
-
-interface SimpleIntakeData {
-  business_idea: string;
-  target_audience: string;
-  main_challenge: string;
-}
+import { type SimpleIntakeData } from '@/lib/validation';
 
 export default function StartPage() {
   const [isLoading, setIsLoading] = useState(false);

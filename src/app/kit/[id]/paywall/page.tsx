@@ -3,12 +3,7 @@
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/Button';
 import { Check, Clock, Users, Shield, Star } from 'lucide-react';
-
-interface KitData {
-  id: string;
-  title: string;
-  one_liner: string;
-}
+import { type KitData } from '@/lib/shared-types';
 
 export default function PaywallPage({ params }: { params: Promise<{ id: string }> }) {
   const [kit, setKit] = useState<KitData | null>(null);

@@ -1,17 +1,18 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
+import { supabaseAdmin } from '@/lib/supabase';
+import { kitIdSchema, profilingDataSchema } from '@/lib/validation';
 
 export async function POST(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = await params;
-    const body = await request.json();
-    const { selectedOptions, profilingData } = body;
+    const resolvedParams = await params;
+    const { id } = kitIdSchema.parse(resolvedParams);
+    const { selectedOptions, profilingData } = profilingDataSchema.parse(await request.json());
 
     // Update the kit with profiling data
-    const { error } = await supabase
+    const { error } = await supabaseAdmin
       .from('kits')
       .update({
         selected_options: JSON.stringify(selectedOptions),
