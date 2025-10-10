@@ -106,7 +106,20 @@ Return ONLY valid JSON with this EXACT structure:
 }
 
 Do not include any text outside the JSON.`
-              : `You are a content marketing expert. Generate a comprehensive content strategy for: "${prompt}"
+              : `You are a viral content strategist. Generate explosive, scroll-stopping content ideas for: "${prompt}"
+
+CRITICAL REQUIREMENTS FOR HOOKS:
+- Each hook MUST be a complete TikTok/YouTube-style title or opening line
+- Each hook MUST include a curiosity gap or suspense element (e.g., "you won't believe...", "wait for the end...", "which one worked best?")
+- Each hook MUST hint at a benefit, transformation, or jaw-dropping result
+- Format as natural TikTok/YouTube headlines that stop mid-scroll
+- Think MrBeast, Simon Squibb, viral challenges - bold, audacious, attention-grabbing
+- NO generic formulas - give me actual, specific hooks ready to use
+
+CRITICAL REQUIREMENTS FOR THEMES:
+- Each theme should be BOLD and attention-grabbing (think viral experiments, transformations, challenges)
+- Each theme should be repeatable and remixable for multiple videos
+- Push to extreme scale when possible (massive giveaways, shocking results, record-breaking attempts)
 
 Return ONLY valid JSON with this EXACT structure:
 {
@@ -115,9 +128,9 @@ Return ONLY valid JSON with this EXACT structure:
     "channel1": "frequency description",
     "channel2": "frequency description"
   },
-  "tone": "string - content tone and style",
-  "hooks_7": ["hook1", "hook2", "hook3", "hook4", "hook5", "hook6", "hook7"],
-  "thirty_day_themes": ["Week 1: theme", "Week 2: theme", "Week 3: theme", "Week 4: theme"]
+  "tone": "string - scroll-stopping, curiosity-driven content tone",
+  "hooks_7": ["Actual viral hook 1 with curiosity gap", "Actual viral hook 2 with transformation", "hook3", "hook4", "hook5", "hook6", "hook7"],
+  "thirty_day_themes": ["Week 1: BOLD viral theme", "Week 2: theme", "Week 3: theme", "Week 4: theme"]
 }
 
 Do not include any text outside the JSON.`
@@ -302,28 +315,28 @@ function generateMockContent(type: string): any {
       ]
     },
     content_strategy: {
-      channels: ["LinkedIn", "Instagram", "Email Newsletter", "YouTube"],
+      channels: ["TikTok", "Instagram Reels", "YouTube Shorts", "Twitter/X"],
       cadence: {
-        "LinkedIn": "3 posts per week",
-        "Instagram": "Daily stories + 5 posts per week",
-        "Email Newsletter": "Weekly",
-        "YouTube": "2 videos per month"
+        "TikTok": "3-5 videos per day for maximum virality",
+        "Instagram Reels": "2-3 reels per day + daily stories",
+        "YouTube Shorts": "1-2 shorts per day",
+        "Twitter/X": "5-10 tweets per day + viral threads"
       },
-      tone: "Professional yet approachable, with a focus on practical value",
+      tone: "Scroll-stopping, curiosity-driven, with bold transformations",
       hooks_7: [
-        "The mistake 90% of [audience] make when starting out...",
-        "How I went from idea to £10k revenue in 30 days",
-        "The one thing that changed everything for my business",
-        "Why most [business type] fail (and how to avoid it)",
-        "The secret my competitors don't want you to know",
-        "How to [achieve outcome] without [common struggle]",
-        "The framework that helped me [specific result]"
+        "I turned $100 into $10,000 in 30 days doing THIS... (you won't believe #3)",
+        "Giving away $1,000 to whoever can guess my secret strategy",
+        "This ONE thing got me 100k followers in 30 days (but nobody talks about it)",
+        "Watch me build a business from $0 in 24 hours (LIVE)",
+        "I tested every viral strategy for 30 days... here's what ACTUALLY worked",
+        "They said it was impossible, so I proved them wrong (see the results)",
+        "POV: You're about to discover the method that changed EVERYTHING"
       ],
       thirty_day_themes: [
-        "Week 1: Foundation & Planning",
-        "Week 2: Content Creation & Systems",
-        "Week 3: Audience Building & Engagement",
-        "Week 4: Optimization & Growth"
+        "Week 1: The $0-$1000 Challenge - Documenting the Journey",
+        "Week 2: Testing EVERY Viral Strategy (Which One Wins?)",
+        "Week 3: The Transformation Week - Before vs After Reveal",
+        "Week 4: The Big Experiment - Going ALL IN (Final Results)"
       ]
     },
   };

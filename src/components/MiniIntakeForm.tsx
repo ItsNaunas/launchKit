@@ -19,16 +19,16 @@ interface FormErrors {
 }
 
 const CHALLENGE_OPTIONS = [
-  'Finding my target audience',
-  'Creating compelling content',
-  'Building a brand identity',
-  'Setting the right price',
-  'Getting first customers',
-  'Time management',
-  'Technical skills',
-  'Marketing strategy',
-  'Competition analysis',
-  'Product development',
+  'Creating viral content hooks',
+  'Finding my scroll-stopping angle',
+  'Building a content strategy',
+  'Growing followers/subscribers',
+  'Getting viral engagement',
+  'Creating consistent content',
+  'Video editing skills',
+  'Standing out from competition',
+  'Monetizing my content',
+  'Running viral experiments',
   'Other'
 ];
 
@@ -81,10 +81,10 @@ export function MiniIntakeForm({ onSubmit, isLoading }: {
       <div className="text-center mb-8">
         <div className="flex items-center justify-center gap-2 mb-4">
           <Sparkles className="h-8 w-8 text-orange-600" />
-          <h1 className="text-3xl font-bold text-gray-900">What&apos;s your dream business?</h1>
+          <h1 className="text-3xl font-bold text-gray-900">What could make you go viral?</h1>
         </div>
         <p className="text-lg text-gray-600">
-          Tell us about your idea and we&apos;ll create a personalized launch strategy
+          Get explosive TikTok/YouTube content ideas designed to stop the scroll
         </p>
       </div>
 
@@ -92,11 +92,11 @@ export function MiniIntakeForm({ onSubmit, isLoading }: {
         {/* Business Idea */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
-            Describe your business idea in one sentence
+            What&apos;s your business or content idea?
           </label>
           <Input
             type="text"
-            placeholder="e.g., A subscription service for busy professionals to get healthy meals delivered"
+            placeholder="e.g., Teaching broke college students how to flip $100 into $1000 in 30 days"
             value={formData.business_idea}
             onChange={(e) => setFormData(prev => ({ ...prev, business_idea: e.target.value }))}
             className={errors.business_idea ? 'border-red-500' : ''}
@@ -104,6 +104,9 @@ export function MiniIntakeForm({ onSubmit, isLoading }: {
           {errors.business_idea && (
             <p className="text-red-500 text-sm mt-1">{errors.business_idea}</p>
           )}
+          <p className="text-xs text-gray-500 mt-1">
+            Think bold, specific, and scroll-stopping
+          </p>
         </div>
 
         {/* Budget */}

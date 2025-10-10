@@ -43,10 +43,10 @@ export function IntakeForm({ onSubmit, isLoading = false }: IntakeFormProps) {
     <div className="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-lg">
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-gray-900 mb-2">
-          Launch Your Idea with AI
+          Generate Viral Content Ideas with AI
         </h1>
         <p className="text-gray-600">
-          Tell us about your business idea and we&apos;ll create a complete launch kit tailored for you.
+          Get scroll-stopping TikTok/YouTube-style hooks and explosive content concepts designed to go viral.
         </p>
       </div>
 
@@ -102,10 +102,13 @@ export function IntakeForm({ onSubmit, isLoading = false }: IntakeFormProps) {
             <Textarea
               label="Target Audience"
               {...register('target_audience')}
-              placeholder="Who are your ideal customers? Be specific about demographics, interests, pain points..."
+              placeholder="Who would stop scrolling to watch this? e.g., 25-35 year old entrepreneurs struggling to grow their first business, binge TikTok at night, want fast results..."
               error={errors.target_audience?.message}
               required
             />
+            <p className="text-xs text-gray-500 mt-1">
+              Think about who shares, saves, and obsesses over this type of content
+            </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -117,10 +120,10 @@ export function IntakeForm({ onSubmit, isLoading = false }: IntakeFormProps) {
                 required
               >
                 <option value="">Select goal</option>
-                <option value="launch">Just Launch</option>
-                <option value="first_sales">Get First Sales</option>
-                <option value="validate">Validate Idea</option>
-                <option value="brand">Build Brand</option>
+                <option value="launch">Go Viral Fast</option>
+                <option value="first_sales">Get First Followers/Customers</option>
+                <option value="validate">Test Content Angles</option>
+                <option value="brand">Build Viral Brand</option>
               </Select>
             </div>
 
@@ -157,13 +160,13 @@ export function IntakeForm({ onSubmit, isLoading = false }: IntakeFormProps) {
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-3">
-              Top 3 Challenges <span className="text-red-500">*</span>
+              Top 3 Content Challenges <span className="text-red-500">*</span>
             </label>
             <div className="space-y-3">
               {[0, 1, 2].map((index) => (
                 <Input
                   key={index}
-                  placeholder={`Challenge ${index + 1}`}
+                  placeholder={index === 0 ? 'e.g., Creating scroll-stopping hooks' : index === 1 ? 'e.g., Getting viral engagement' : 'e.g., Standing out from competitors'}
                   value={challenges[index] || ''}
                   onChange={(e) => handleChallengeChange(index, e.target.value)}
                   error={errors.top_3_challenges?.[index]?.message}
@@ -193,16 +196,16 @@ export function IntakeForm({ onSubmit, isLoading = false }: IntakeFormProps) {
 
             <div>
               <Select
-                label="Brand Vibe"
+                label="Content Vibe"
                 {...register('brand_vibe')}
                 error={errors.brand_vibe?.message}
                 required
               >
                 <option value="">Select vibe</option>
-                <option value="luxury">Luxury & Scarce</option>
-                <option value="accessible">Accessible & Friendly</option>
-                <option value="edgy">Bold & Edgy</option>
-                <option value="minimal">Calm & Minimal</option>
+                <option value="luxury">Premium & Exclusive (luxury flex)</option>
+                <option value="accessible">Relatable & Real (everyday wins)</option>
+                <option value="edgy">Bold & Provocative (hot takes)</option>
+                <option value="minimal">Calm & Aesthetic (ASMR vibes)</option>
               </Select>
             </div>
 
@@ -360,7 +363,7 @@ export function IntakeForm({ onSubmit, isLoading = false }: IntakeFormProps) {
             disabled={isLoading}
             className="px-8 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
           >
-            {isLoading ? 'Creating Your Kit...' : 'Create My Launch Kit'}
+            {isLoading ? 'Generating Viral Ideas...' : 'Generate My Viral Content Ideas'}
           </Button>
         </div>
       </form>

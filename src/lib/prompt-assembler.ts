@@ -127,26 +127,31 @@ Make it specific, actionable, and tailored to the audience and outcome preferenc
   generateContentStrategyPrompt(): string {
     const { businessIdea, audienceDetail, tonePreference, contentStrategy, challenges } = this.context;
     
-    return `Create a content strategy for: "${businessIdea}"
+    return `You are a viral content strategist. Your job is to take this business niche and turn it into explosive, viral content concepts.
 
-CONTEXT:
-- Content Focus: ${contentStrategy}
-- Target Audience: ${audienceDetail}
-- Tone: ${tonePreference}
-- Key Challenges: ${challenges.join(', ')}
+BUSINESS: "${businessIdea}"
+TARGET AUDIENCE: ${audienceDetail}
+TONE: ${tonePreference}
+CONTENT FOCUS: ${contentStrategy}
+KEY CHALLENGES TO ADDRESS: ${challenges.join(', ')}
 
-REQUIREMENTS:
-Generate a comprehensive content strategy including:
-1. Primary content channels (3-4 platforms)
-2. Posting cadence for each channel
-3. Content tone and voice guidelines
-4. 7 hook formulas that work for this audience
-5. 30-day content themes (7 themes)
-6. Content pillars and topics
-7. Engagement strategies
-8. Growth tactics specific to chosen channels
+Do NOT give me generic marketing ideas — reframe everything into short, clickable TikTok/YouTube-style hooks that would stop someone mid-scroll. Every hook must:
+1. Include at least a tiny hint of benefit, transformation, or result to make it relevant to the viewer
+2. Include a curiosity gap or suspense element that makes the viewer want to click, watch, or learn more (e.g., "but which one impressed them the most?", "you won't believe what happened next", "see the transformation")
+3. Whenever possible, push ideas to extreme scale, audacious experiments, jaw-dropping or record-breaking events — giveaways, shocking transformations, or massive social experiments (think MrBeast, Simon Squibb, viral TikTok challenges)
+4. Be repeatable or remixable so the concept can generate multiple pieces of content for the niche
+5. Always phrase in natural TikTok/YouTube headline style — short, bold, curiosity-driven, and scroll-stopping
 
-Make it platform-specific and audience-focused. Address the key challenges through content.`;
+GENERATE:
+1. Primary content channels (3-4 platforms) - prioritize viral platforms like TikTok, Instagram Reels, YouTube Shorts
+2. Posting cadence for maximum viral growth
+3. Content tone (scroll-stopping, curiosity-driven)
+4. 7 VIRAL hook formulas - each must be TikTok/YouTube style with curiosity gap and benefit hint
+5. 30-day viral content themes (4 weekly themes) - each theme should be bold, attention-grabbing, and repeatable
+6. Viral growth tactics - focus on hooks, pattern interrupts, and scroll-stopping content
+7. Engagement strategies that encourage shares, saves, and follows
+
+Your goal: every idea should combine curiosity, spectacle, and benefit. Hooks must feel like they could go viral on TikTok or YouTube, and should be as attention-grabbing as the best content from MrBeast, Simon Squibb, or top viral creators. No filler. No generic advice.`;
   }
 
   // Generate website content prompt

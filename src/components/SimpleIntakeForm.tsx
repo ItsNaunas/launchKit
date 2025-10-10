@@ -26,10 +26,10 @@ export function SimpleIntakeForm({ onSubmit, isLoading = false }: SimpleIntakeFo
     <div className="max-w-2xl mx-auto p-6 bg-white rounded-lg shadow-lg">
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-gray-900 mb-2">
-          Tell Us About Your Business Idea
+          Let&apos;s Turn Your Idea Into Viral Content
         </h1>
         <p className="text-gray-600">
-          We&apos;ll create a personalized launch strategy just for you.
+          Get scroll-stopping, TikTok/YouTube-style content ideas that could actually go viral.
         </p>
       </div>
 
@@ -39,30 +39,39 @@ export function SimpleIntakeForm({ onSubmit, isLoading = false }: SimpleIntakeFo
           <Input
             label="What&apos;s your business idea?"
             {...register('business_idea')}
-            placeholder="e.g., Local dog walking service for busy professionals"
+            placeholder="e.g., Personal finance coaching for Gen Z creators"
             error={errors.business_idea?.message}
             required
           />
+          <p className="text-xs text-gray-500 mt-1">
+            Be specific - what makes it different or interesting?
+          </p>
         </div>
         
         <div>
           <Textarea
-            label="Who is your target audience?"
+            label="Who would stop scrolling to watch content about this?"
             {...register('target_audience')}
-            placeholder="Describe your ideal customers - their age, profession, pain points, goals..."
+            placeholder="e.g., 18-28 year old TikTok creators making their first $1k/month who are terrible with money and want to build wealth without giving up their lifestyle"
             error={errors.target_audience?.message}
             required
           />
+          <p className="text-xs text-gray-500 mt-1">
+            Think about who would save or share viral content about this topic
+          </p>
         </div>
 
         <div>
           <Textarea
-            label="What&apos;s your biggest challenge right now?"
+            label="What transformation or jaw-dropping result can you show?"
             {...register('main_challenge')}
-            placeholder="What&apos;s holding you back from launching? (e.g., finding customers, pricing, time, skills...)"
+            placeholder="e.g., Turning $0 into $10k in 90 days, helping someone go from 0 to 100k followers, dramatic before/after transformations..."
             error={errors.main_challenge?.message}
             required
           />
+          <p className="text-xs text-gray-500 mt-1">
+            Viral content shows extreme results, experiments, or transformations - what&apos;s yours?
+          </p>
         </div>
 
         {/* Submit Button */}
