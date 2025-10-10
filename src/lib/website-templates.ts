@@ -1,5 +1,46 @@
-// Website template library with built-in templates
-// Can also load templates from GitHub
+// Website template library with PROFESSIONAL built-in templates
+// Premium quality templates with extensive customization
+
+import { generatePremiumModernLanding, DEFAULT_CUSTOMIZATION as PRO_DEFAULT } from './website-templates-pro';
+
+export interface TemplateCustomization {
+  // Typography
+  fontFamily: 'modern' | 'classic' | 'bold' | 'elegant';
+  fontSize: 'compact' | 'normal' | 'large';
+  
+  // Layout
+  headerStyle: 'minimal' | 'centered' | 'split' | 'overlay';
+  spacing: 'tight' | 'normal' | 'relaxed';
+  containerWidth: 'narrow' | 'normal' | 'wide' | 'full';
+  
+  // Visual Effects
+  animations: boolean;
+  shadows: 'none' | 'soft' | 'strong';
+  borderRadius: 'none' | 'small' | 'medium' | 'large';
+  
+  // Components
+  showNav: boolean;
+  showStats: boolean;
+  showTestimonials: boolean;
+  showPricing: boolean;
+  showFAQ: boolean;
+}
+
+export const DEFAULT_CUSTOMIZATION: TemplateCustomization = {
+  fontFamily: 'modern',
+  fontSize: 'normal',
+  headerStyle: 'centered',
+  spacing: 'normal',
+  containerWidth: 'normal',
+  animations: true,
+  shadows: 'soft',
+  borderRadius: 'medium',
+  showNav: true,
+  showStats: true,
+  showTestimonials: true,
+  showPricing: false,
+  showFAQ: false,
+};
 
 export interface TemplateConfig {
   id: string;
@@ -17,6 +58,7 @@ export interface TemplateConfig {
     text: string;
   };
   sections: string[]; // Available section types
+  customization?: TemplateCustomization; // NEW: Customization options
 }
 
 export const BUILT_IN_TEMPLATES: TemplateConfig[] = [
@@ -169,8 +211,17 @@ export function generateTemplateHTML(
   }
 }
 
-// Template generators
+// Template generators - Now using PROFESSIONAL templates
 function generateModernLandingHTML(
+  content: any,
+  colors: TemplateConfig['defaultColors']
+): string {
+  // Use the premium professional template with all customizations
+  return generatePremiumModernLanding(content, colors, PRO_DEFAULT);
+}
+
+// Keep old simple version as fallback
+function generateModernLandingHTMLOld(
   content: any,
   colors: TemplateConfig['defaultColors']
 ): string {

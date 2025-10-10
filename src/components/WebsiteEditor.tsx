@@ -277,16 +277,104 @@ export function WebsiteEditor({
 
                 <div>
                   <h3 className="text-sm font-semibold text-gray-900 mb-3">Typography</h3>
-                  <p className="text-sm text-gray-500">
-                    Click on any text in the preview to edit it directly
+                  <div className="space-y-3">
+                    <div>
+                      <label className="block text-sm text-gray-700 mb-1">Font Style</label>
+                      <select className="w-full px-3 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500">
+                        <option value="modern">Modern (Sans-serif)</option>
+                        <option value="classic">Classic (Serif)</option>
+                        <option value="bold">Bold (Inter)</option>
+                        <option value="elegant">Elegant (Playfair)</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block text-sm text-gray-700 mb-1">Font Size</label>
+                      <select className="w-full px-3 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500">
+                        <option value="compact">Compact</option>
+                        <option value="normal">Normal</option>
+                        <option value="large">Large</option>
+                      </select>
+                    </div>
+                  </div>
+                  <p className="text-xs text-gray-500 mt-2">
+                    ✨ Click on any text in preview to edit directly
                   </p>
                 </div>
 
                 <div>
+                  <h3 className="text-sm font-semibold text-gray-900 mb-3">Layout</h3>
+                  <div className="space-y-3">
+                    <div>
+                      <label className="block text-sm text-gray-700 mb-1">Container Width</label>
+                      <select className="w-full px-3 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500">
+                        <option value="narrow">Narrow (960px)</option>
+                        <option value="normal">Normal (1200px)</option>
+                        <option value="wide">Wide (1400px)</option>
+                        <option value="full">Full Width</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block text-sm text-gray-700 mb-1">Spacing</label>
+                      <select className="w-full px-3 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500">
+                        <option value="tight">Tight</option>
+                        <option value="normal">Normal</option>
+                        <option value="relaxed">Relaxed</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block text-sm text-gray-700 mb-1">Border Radius</label>
+                      <select className="w-full px-3 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500">
+                        <option value="none">None (Square)</option>
+                        <option value="small">Small (4px)</option>
+                        <option value="medium">Medium (12px)</option>
+                        <option value="large">Large (20px)</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <h3 className="text-sm font-semibold text-gray-900 mb-3">Visual Effects</h3>
+                  <div className="space-y-3">
+                    <div>
+                      <label className="block text-sm text-gray-700 mb-1">Shadows</label>
+                      <select className="w-full px-3 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500">
+                        <option value="none">None (Flat)</option>
+                        <option value="soft">Soft Shadows</option>
+                        <option value="strong">Strong Shadows</option>
+                      </select>
+                    </div>
+                    <label className="flex items-center gap-2 cursor-pointer">
+                      <input type="checkbox" defaultChecked className="w-4 h-4" />
+                      <span className="text-sm text-gray-700">Enable Animations</span>
+                    </label>
+                  </div>
+                </div>
+
+                <div>
                   <h3 className="text-sm font-semibold text-gray-900 mb-3">Sections</h3>
-                  <p className="text-sm text-gray-500">
-                    Section management coming soon
-                  </p>
+                  <div className="space-y-2">
+                    <label className="flex items-center gap-2 cursor-pointer">
+                      <input type="checkbox" defaultChecked className="w-4 h-4" />
+                      <span className="text-sm text-gray-700">Show Navigation</span>
+                    </label>
+                    <label className="flex items-center gap-2 cursor-pointer">
+                      <input type="checkbox" defaultChecked className="w-4 h-4" />
+                      <span className="text-sm text-gray-700">Show Stats Section</span>
+                    </label>
+                    <label className="flex items-center gap-2 cursor-pointer">
+                      <input type="checkbox" defaultChecked className="w-4 h-4" />
+                      <span className="text-sm text-gray-700">Show Testimonials</span>
+                    </label>
+                    <label className="flex items-center gap-2 cursor-pointer">
+                      <input type="checkbox" className="w-4 h-4" />
+                      <span className="text-sm text-gray-700">Show Pricing Table</span>
+                    </label>
+                    <label className="flex items-center gap-2 cursor-pointer">
+                      <input type="checkbox" className="w-4 h-4" />
+                      <span className="text-sm text-gray-700">Show FAQ Section</span>
+                    </label>
+                  </div>
                 </div>
               </div>
             )}
