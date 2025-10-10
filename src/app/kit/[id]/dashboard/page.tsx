@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/Button';
-import { Download, RefreshCw, FileText, Users, Calendar, TrendingUp } from 'lucide-react';
+import { Download, RefreshCw, FileText, Users, Calendar, TrendingUp, Globe } from 'lucide-react';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 
@@ -212,6 +212,30 @@ export default function KitDashboardPage({ params }: { params: Promise<{ id: str
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Website Builder Card */}
+        <div className="mb-8 bg-gradient-to-r from-purple-600 to-indigo-600 rounded-lg shadow-lg p-8 text-white">
+          <div className="flex items-center justify-between">
+            <div className="flex-1">
+              <div className="flex items-center gap-3 mb-2">
+                <Globe className="h-8 w-8" />
+                <h2 className="text-2xl font-bold">Build Your Website</h2>
+              </div>
+              <p className="text-purple-100 mb-4">
+                Create a professional website with AI-powered content from your launch kit
+              </p>
+              <Button
+                variant="secondary"
+                size="lg"
+                onClick={() => window.location.href = `/kit/${kitId}/website`}
+                className="bg-white text-purple-600 hover:bg-gray-100"
+              >
+                <Globe className="h-5 w-5 mr-2" />
+                Create Website
+              </Button>
+            </div>
+          </div>
+        </div>
+
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           
           {/* Business Case Section */}
