@@ -185,7 +185,7 @@ Contact LaunchKit AI support for assistance.
         <h4 className="text-sm font-medium text-gray-700">One-Click Deploy</h4>
         
         <Button
-          variant="default"
+          variant="primary"
           className="w-full justify-start bg-teal-600 hover:bg-teal-700"
           onClick={() => handleDeploy('netlify')}
           disabled={deploying}

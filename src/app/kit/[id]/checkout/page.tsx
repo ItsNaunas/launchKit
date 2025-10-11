@@ -334,11 +334,11 @@ export default function CheckoutPage({ params }: { params: Promise<{ id: string 
             <div className="border-t border-white/10 pt-4">
               <div className="flex justify-between text-xl font-semibold text-white">
                 <span>Total Due Today</span>
-                <span>£{selectedPlan === 'oneoff' ? '37.00' : subscriptionDailyRate.toFixed(2)}</span>
+                <span>£{selectedPlan === 'oneoff' ? '37.00' : '1.00'}</span>
               </div>
               {selectedPlan === 'subscription' && (
                 <p className="text-xs text-silver-500 mt-2 text-right">
-                  Then £{subscriptionDailyRate}/day for 36 more days
+                  Then £1/day for 36 more days
                 </p>
               )}
               {includeHosting && selectedPlan === 'oneoff' && (
@@ -360,7 +360,7 @@ export default function CheckoutPage({ params }: { params: Promise<{ id: string 
             ) : (
               <>
                 <ShoppingCart className="h-5 w-5 mr-2" />
-                Complete Purchase - £{selectedPlan === 'oneoff' ? '37.00' : subscriptionDailyRate.toFixed(2)}
+                Complete Purchase - £{selectedPlan === 'oneoff' ? '37.00' : '1.00'}
               </>
             )}
           </Button>

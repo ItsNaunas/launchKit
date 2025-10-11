@@ -114,7 +114,7 @@ export async function POST(
         .single();
 
       if (error) throw error;
-      websiteData = data;
+      websiteData = data as any;
     } else {
       // Create new website
       const { data, error } = await (supabase
@@ -132,7 +132,7 @@ export async function POST(
         .single();
 
       if (error) throw error;
-      websiteData = data;
+      websiteData = data as any;
     }
 
     return NextResponse.json({

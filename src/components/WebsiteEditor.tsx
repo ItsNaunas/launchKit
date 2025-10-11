@@ -262,14 +262,14 @@ export function WebsiteEditor({
             {/* View Mode */}
             <div className="flex items-center gap-1 border-l pl-4">
               <Button
-                variant={viewMode === 'desktop' ? 'default' : 'outline'}
+                variant={viewMode === 'desktop' ? 'primary' : 'outline'}
                 size="sm"
                 onClick={() => setViewMode('desktop')}
               >
                 <Monitor className="h-4 w-4" />
               </Button>
               <Button
-                variant={viewMode === 'mobile' ? 'default' : 'outline'}
+                variant={viewMode === 'mobile' ? 'primary' : 'outline'}
                 size="sm"
                 onClick={() => setViewMode('mobile')}
               >

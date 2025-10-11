@@ -66,7 +66,7 @@ export async function POST(request: NextRequest) {
               p_type: 'purchase',
               p_description: `Purchased ${creditsAmount} credits`,
               p_reference_id: null,
-            });
+            } as any);
             
             if (creditsError) {
               console.error('Failed to add credits:', creditsError);
@@ -126,7 +126,7 @@ export async function POST(request: NextRequest) {
                     recurring: {
                       interval: 'month',
                     },
-                  },
+                  } as any,
                 }],
                 billing_cycle_anchor: twoMonthsFromNow,
                 proration_behavior: 'none',

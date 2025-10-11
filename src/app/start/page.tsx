@@ -1,10 +1,10 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import ConversationalIntake from '@/components/ConversationalIntake';
 
-export default function StartPage() {
+function StartPageContent() {
   const [showIntake, setShowIntake] = useState(false);
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -46,7 +46,7 @@ export default function StartPage() {
   };
 
   if (showIntake) {
-    const initialIdea = searchParams.get('idea');
+    const initialIdea = searchParams.get('idea') || undefined;
     return (
       <div className="min-h-screen bg-gradient-to-br from-black via-dark to-black">
         <div className="container mx-auto px-4 py-16">
@@ -133,5 +133,17 @@ export default function StartPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function StartPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-gradient-to-br from-black via-dark to-black flex items-center justify-center">
+        <div className="text-white">Loading...</div>
+      </div>
+    }>
+      <StartPageContent />
+    </Suspense>
   );
 }

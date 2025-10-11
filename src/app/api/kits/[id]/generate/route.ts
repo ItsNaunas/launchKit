@@ -224,8 +224,9 @@ Do not include any text outside the JSON.`
     }
 
     // Calculate new regen count
-    const newRegenCount = regenerate && existingOutput 
-      ? (existingOutput.regen_count || 0) + 1 
+    const existingOutputTyped = existingOutput as any;
+    const newRegenCount = regenerate && existingOutputTyped 
+      ? (existingOutputTyped.regen_count || 0) + 1 
       : 0;
 
     // Calculate remaining regenerations
@@ -245,10 +246,11 @@ Do not include any text outside the JSON.`
     let savedOutput;
     if (existingOutput) {
       // Update existing
+      const existingOutputTyped2 = existingOutput as any;
       const { data, error: updateError } = await supabaseAdmin
         .from('outputs')
         .update(outputData as never)
-        .eq('id', existingOutput.id)
+        .eq('id', existingOutputTyped2.id)
         .select()
         .single();
       
@@ -278,12 +280,13 @@ Do not include any text outside the JSON.`
       savedOutput = data;
     }
 
+    const savedOutputTyped = savedOutput as any;
     return NextResponse.json({
       success: true,
       content: aiContent,
       regen_count: newRegenCount,
       regens_remaining: regensRemaining,
-      id: savedOutput?.id,
+      id: savedOutputTyped?.id,
       prompt: prompt, // Include prompt for debugging
     });
 

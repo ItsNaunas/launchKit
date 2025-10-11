@@ -138,7 +138,7 @@ export function WebsiteTab({
               {!isComplete && websites.length > 0 && (
                 <Button
                   onClick={onMarkComplete}
-                  variant="default"
+                  variant="primary"
                   size="sm"
                   className="bg-green-600 hover:bg-green-700"
                 >

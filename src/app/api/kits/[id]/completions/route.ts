@@ -72,7 +72,8 @@ export async function POST(
       .eq('tab_key', tabKey)
       .single();
 
-    if (existing) {
+    const existingRecord = existing as any;
+    if (existingRecord) {
       // Update existing record
       const { error } = await (supabase
         .from('tab_completions') as any)
