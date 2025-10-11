@@ -82,8 +82,8 @@ export async function POST(request: NextRequest) {
     }
 
     // Create the new dashboard (kit)
-    const { data: newKit, error: kitError } = await supabaseAdmin
-      .from('kits')
+    const { data: newKit, error: kitError } = await (supabaseAdmin
+      .from('kits') as any)
       .insert({
         user_id: userId,
         title,
@@ -91,7 +91,7 @@ export async function POST(request: NextRequest) {
         category: category || 'service',
         has_access: true, // Grant immediate access since they paid with credits
         checkout_completed_at: new Date().toISOString(),
-      } as any)
+      })
       .select()
       .single();
 

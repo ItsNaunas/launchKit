@@ -98,8 +98,8 @@ export async function POST(
 
     if (existingWebsite) {
       // Update existing website
-      const { data, error } = await supabase
-        .from('websites')
+      const { data, error } = await (supabase
+        .from('websites') as any)
         .update({
           html_content: htmlContent,
           css_content: cssContent,
@@ -107,7 +107,7 @@ export async function POST(
           sections: sections,
           version: supabase.sql`version + 1`,
           updated_at: new Date().toISOString(),
-        } as any)
+        })
         .eq('id', existingWebsite.id)
         .select()
         .single();
@@ -116,8 +116,8 @@ export async function POST(
       websiteData = data;
     } else {
       // Create new website
-      const { data, error } = await supabase
-        .from('websites')
+      const { data, error } = await (supabase
+        .from('websites') as any)
         .insert({
           kit_id: kitId,
           template_id: templateId,
@@ -126,7 +126,7 @@ export async function POST(
           css_content: cssContent,
           config: customColors || template.defaultColors,
           sections: sections,
-        } as any)
+        })
         .select()
         .single();
 

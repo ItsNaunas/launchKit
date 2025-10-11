@@ -71,14 +71,14 @@ export async function POST(request: NextRequest) {
       // If we have an initial business idea, skip the first question
       if (initialBusinessIdea) {
         // Store the business idea as the first step
-        const { error: upsertError } = await supabaseAdmin
-          .from('intake_conversations')
+        const { error: upsertError } = await (supabaseAdmin
+          .from('intake_conversations') as any)
           .upsert({
             conversation_id: currentConversationId,
             gathered_data: { businessIdea: initialBusinessIdea },
             completed_steps: ['businessIdea'],
             is_complete: false,
-          } as any, { onConflict: 'conversation_id' });
+          }, { onConflict: 'conversation_id' });
 
         if (upsertError) {
           console.error('Error storing initial business idea:', upsertError);
@@ -156,14 +156,14 @@ export async function POST(request: NextRequest) {
     }
 
     // Store updated conversation data in database
-    const { error: upsertError } = await supabaseAdmin
-      .from('intake_conversations')
+    const { error: upsertError } = await (supabaseAdmin
+      .from('intake_conversations') as any)
       .upsert({
         conversation_id: currentConversationId,
         gathered_data: updatedGatheredData,
         completed_steps: updatedCompletedSteps,
         is_complete: currentStepIndex + 1 >= conversationFlow.length,
-      } as any, { onConflict: 'conversation_id' });
+      }, { onConflict: 'conversation_id' });
 
     if (upsertError) {
       console.error('Error storing conversation:', upsertError);

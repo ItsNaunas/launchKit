@@ -74,14 +74,14 @@ export async function POST(
 
     if (existing) {
       // Update existing record
-      const { error } = await supabase
-        .from('tab_completions')
+      const { error } = await (supabase
+        .from('tab_completions') as any)
         .update({
           is_complete: isComplete,
           chosen_output_id: outputId || null,
           completed_at: isComplete ? new Date().toISOString() : null,
           updated_at: new Date().toISOString(),
-        } as any)
+        })
         .eq('kit_id', kitId)
         .eq('tab_key', tabKey);
 
@@ -94,15 +94,15 @@ export async function POST(
       }
     } else {
       // Create new record
-      const { error } = await supabase
-        .from('tab_completions')
+      const { error } = await (supabase
+        .from('tab_completions') as any)
         .insert({
           kit_id: kitId,
           tab_key: tabKey,
           is_complete: isComplete,
           chosen_output_id: outputId || null,
           completed_at: isComplete ? new Date().toISOString() : null,
-        } as any);
+        });
 
       if (error) {
         console.error('Error creating completion:', error);

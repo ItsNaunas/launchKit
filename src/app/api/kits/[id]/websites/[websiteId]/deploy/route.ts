@@ -96,13 +96,13 @@ async function deployToNetlify(website: any) {
     await deployResponse.json();
 
     // Update website with deployment info
-    await supabase
-      .from('websites')
+    await (supabase
+      .from('websites') as any)
       .update({
         deployed_url: site.url,
         deploy_provider: 'netlify',
         is_published: true,
-      } as any)
+      })
       .eq('id', website.id);
 
     return NextResponse.json({
