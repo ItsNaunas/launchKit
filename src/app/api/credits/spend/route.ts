@@ -21,7 +21,7 @@ export async function POST(request: NextRequest) {
       p_amount: amount,
       p_description: description,
       p_reference_id: referenceId || null,
-    });
+    } as any);
 
     if (error) {
       console.error('Error spending credits:', error);
@@ -44,7 +44,7 @@ export async function POST(request: NextRequest) {
       .from('credits')
       .select('balance')
       .eq('user_id', userId)
-      .maybeSingle();
+      .maybeSingle() as { data: { balance: number } | null; error: any };
 
     return NextResponse.json({
       success: true,

@@ -31,7 +31,8 @@ export async function GET(
       website: false,
     };
 
-    completions?.forEach((completion) => {
+    const completionsArray = (completions || []) as any[];
+    completionsArray.forEach((completion) => {
       if (completion.tab_key && completion.tab_key in completionsMap) {
         completionsMap[completion.tab_key as keyof typeof completionsMap] = completion.is_complete;
       }
@@ -124,7 +125,8 @@ export async function POST(
       website: false,
     };
 
-    completions?.forEach((completion) => {
+    const updatedCompletionsArray = (completions || []) as any[];
+    updatedCompletionsArray.forEach((completion) => {
       if (completion.tab_key && completion.tab_key in completionsMap) {
         completionsMap[completion.tab_key as keyof typeof completionsMap] = completion.is_complete;
       }

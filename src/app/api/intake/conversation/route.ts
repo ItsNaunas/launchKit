@@ -78,7 +78,7 @@ export async function POST(request: NextRequest) {
             gathered_data: { businessIdea: initialBusinessIdea },
             completed_steps: ['businessIdea'],
             is_complete: false,
-          }, { onConflict: 'conversation_id' });
+          } as any, { onConflict: 'conversation_id' });
 
         if (upsertError) {
           console.error('Error storing initial business idea:', upsertError);
@@ -163,7 +163,7 @@ export async function POST(request: NextRequest) {
         gathered_data: updatedGatheredData,
         completed_steps: updatedCompletedSteps,
         is_complete: currentStepIndex + 1 >= conversationFlow.length,
-      }, { onConflict: 'conversation_id' });
+      } as any, { onConflict: 'conversation_id' });
 
     if (upsertError) {
       console.error('Error storing conversation:', upsertError);

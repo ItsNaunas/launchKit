@@ -21,7 +21,7 @@ export async function GET(request: NextRequest) {
       .from('credits')
       .select('balance')
       .eq('user_id', userId)
-      .maybeSingle();
+      .maybeSingle() as { data: { balance: number } | null; error: any };
 
     if (error) {
       console.error('Error fetching credits:', error);

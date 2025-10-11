@@ -65,7 +65,7 @@ export async function POST(request: NextRequest) {
       .from('credits')
       .select('balance')
       .eq('user_id', userId)
-      .maybeSingle();
+      .maybeSingle() as { data: { balance: number } | null; error: any };
 
     const currentBalance = userCredits?.balance ?? 0;
 
@@ -91,11 +91,11 @@ export async function POST(request: NextRequest) {
         category: category || 'service',
         has_access: true, // Grant immediate access since they paid with credits
         checkout_completed_at: new Date().toISOString(),
-      })
+      } as any)
       .select()
       .single();
 
-    if (kitError) {
+    if (kitError || !newKit) {
       console.error('Error creating dashboard:', kitError);
       return NextResponse.json(
         { error: 'Failed to create dashboard' },
@@ -103,20 +103,23 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Type assertion for newKit
+    const kit = newKit as any;
+
     // Spend credits
     const { data: spendSuccess, error: spendError } = await supabaseAdmin.rpc('spend_credits', {
       p_user_id: userId,
       p_amount: DASHBOARD_COST,
       p_description: `Created new dashboard: ${title}`,
-      p_reference_id: newKit.id,
-    });
+      p_reference_id: kit.id,
+    } as any);
 
     if (spendError || !spendSuccess) {
       // Rollback: delete the kit
       await supabaseAdmin
         .from('kits')
         .delete()
-        .eq('id', newKit.id);
+        .eq('id', kit.id);
 
       console.error('Error spending credits:', spendError);
       return NextResponse.json(
@@ -130,11 +133,11 @@ export async function POST(request: NextRequest) {
       .from('credits')
       .select('balance')
       .eq('user_id', userId)
-      .maybeSingle();
+      .maybeSingle() as { data: { balance: number } | null; error: any };
 
     return NextResponse.json({
       success: true,
-      dashboard: newKit,
+      dashboard: kit,
       creditsSpent: DASHBOARD_COST,
       newBalance: updatedCredits?.balance ?? 0,
     });
