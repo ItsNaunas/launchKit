@@ -81,7 +81,7 @@ export async function POST(
           chosen_output_id: outputId || null,
           completed_at: isComplete ? new Date().toISOString() : null,
           updated_at: new Date().toISOString(),
-        })
+        } as any)
         .eq('kit_id', kitId)
         .eq('tab_key', tabKey);
 
@@ -102,7 +102,7 @@ export async function POST(
           is_complete: isComplete,
           chosen_output_id: outputId || null,
           completed_at: isComplete ? new Date().toISOString() : null,
-        });
+        } as any);
 
       if (error) {
         console.error('Error creating completion:', error);

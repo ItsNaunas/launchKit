@@ -102,7 +102,7 @@ async function deployToNetlify(website: any) {
         deployed_url: site.url,
         deploy_provider: 'netlify',
         is_published: true,
-      })
+      } as any)
       .eq('id', website.id);
 
     return NextResponse.json({
