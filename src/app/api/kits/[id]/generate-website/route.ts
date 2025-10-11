@@ -89,7 +89,7 @@ export async function POST(
     // Save website to database
     const { data: existingWebsite } = await supabase
       .from('websites')
-      .select('id')
+      .select('id, version')
       .eq('kit_id', kitId)
       .eq('template_id', templateId)
       .single();
@@ -98,6 +98,7 @@ export async function POST(
 
     if (existingWebsite) {
       // Update existing website
+      const existing = existingWebsite as any;
       const { data, error } = await (supabase
         .from('websites') as any)
         .update({
@@ -105,10 +106,10 @@ export async function POST(
           css_content: cssContent,
           config: customColors || template.defaultColors,
           sections: sections,
-          version: (existingWebsite.version || 0) + 1,
+          version: (existing.version || 0) + 1,
           updated_at: new Date().toISOString(),
         })
-        .eq('id', existingWebsite.id)
+        .eq('id', existing.id)
         .select()
         .single();
 
