@@ -177,6 +177,7 @@ export default function TeaserPage({ params }: { params: Promise<{ id: string }>
               </div>
             </div>
           </div>
+        </div>
 
         {/* CTA Section */}
         <div className="text-center bg-gradient-to-br from-charcoal-800/40 to-charcoal-900/20 border border-white/10 rounded-3xl p-12 backdrop-blur-sm">
