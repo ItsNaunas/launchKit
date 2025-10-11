@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/Button';
 import { useAuth } from '@/contexts/AuthContext';
-import { Sparkles, Target, Zap, Download, LogOut, ChevronDown, Globe, FileText, TrendingUp, ArrowRight, Check, Star, Users, Clock, Shield, Play, ChevronRight } from 'lucide-react';
+import { Sparkles, Target, Zap, Download, LogOut, ChevronDown, TrendingUp, ArrowRight, Check, Star, Clock, Shield, Play, ChevronRight } from 'lucide-react';
 import Pricing from '@/components/Pricing';
 import { VercelV0Chat } from '@/components/VercelV0Chat';
 import { WavyBackground } from '@/components/ui/wavy-background';
@@ -87,29 +87,13 @@ export default function HomePage() {
         </div>
       </div>
 
-      {/* Hero Section - CRO Optimized */}
+      {/* Hero Section - Simplified */}
       <section className="relative min-h-screen overflow-hidden bg-black">
         {/* Content */}
         <div className="relative z-10 min-h-screen flex items-center justify-center pt-24 pb-32">
           <div className="max-w-5xl mx-auto px-6 lg:px-8 text-center">
             
-            {/* Trust Strip */}
-            <div className="flex items-center justify-center gap-6 mb-8 text-sm text-gray-400">
-              <div className="flex items-center gap-2">
-                <Check className="h-4 w-4 text-mint-500" />
-                <span>100% Free</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Clock className="h-4 w-4 text-mint-500" />
-                <span>Ready in 60 seconds</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Shield className="h-4 w-4 text-mint-500" />
-                <span>No credit card required</span>
-              </div>
-            </div>
-
-            {/* Main Headline - ≤12 words, clear product + benefit */}
+            {/* Main Headline */}
             <div className="relative mb-6 overflow-hidden">
               <div className="absolute inset-0 z-0">
                 <WavyBackground
@@ -131,94 +115,73 @@ export default function HomePage() {
               </h1>
             </div>
             
-            {/* Subheadline - ≤20 words, expands value */}
-            <p className="text-xl md:text-2xl text-gray-300 mb-12 max-w-3xl mx-auto font-light leading-relaxed">
+            {/* Subheadline */}
+            <p className="text-xl md:text-2xl text-gray-300 mb-16 max-w-3xl mx-auto font-light leading-relaxed">
               AI-powered business case, content strategy, and landing page—tailored to your idea. Free forever.
             </p>
 
-            {/* Primary CTA - Action-first, "free" emphasized */}
-            <div className="mb-6">
-              <Link href="/start">
-                <Button 
-                  size="lg" 
-                  className="px-12 py-7 text-lg bg-gradient-to-r from-mint-500 to-mint-600 text-black hover:from-mint-600 hover:to-mint-700 shadow-2xl shadow-mint-500/30 font-semibold tracking-tight transform hover:scale-105 transition-all duration-300"
-                >
-                  Get My Free Launch Kit
-                  <ArrowRight className="ml-3 h-6 w-6" />
-                </Button>
-              </Link>
-            </div>
-
-            {/* CTA Microcopy */}
-            <p className="text-sm text-gray-500 mb-8">
-              No credit card • Takes under 60 seconds • Cancel anytime
-            </p>
-
-            {/* Social Proof */}
-            <div className="flex items-center justify-center gap-8 mb-16">
-              <div className="flex items-center gap-2">
-                <div className="flex -space-x-2">
-                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-mint-400 to-mint-600 border-2 border-black"></div>
-                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 border-2 border-black"></div>
-                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-purple-400 to-purple-600 border-2 border-black"></div>
-                </div>
-                <span className="text-sm text-gray-400">
-                  <strong className="text-white">500+</strong> founders launched
-                </span>
-              </div>
-              <div className="flex items-center gap-1">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="h-4 w-4 fill-mint-500 text-mint-500" />
-                ))}
-                <span className="text-sm text-gray-400 ml-2">
-                  4.9/5 rating
-                </span>
-              </div>
-            </div>
-
-            {/* Interactive Chat */}
+            {/* Interactive Chat - Primary CTA */}
             <div className="mb-16">
               <VercelV0Chat />
             </div>
 
-            {/* Three Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto pb-32">
-              {/* Card 1: Business Case */}
-              <div className="relative bg-gradient-to-br from-dark/40 to-black/20 border border-mint-600/20 rounded-3xl p-10 backdrop-blur-sm hover:border-mint-500/40 transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-mint-500/10 group cursor-pointer">
-                <div className="relative">
-                  <div className="w-14 h-14 bg-mint-500/10 rounded-2xl flex items-center justify-center mb-8 group-hover:bg-mint-500/20 transition-colors duration-300">
-                    <TrendingUp className="h-7 w-7 text-mint-400 group-hover:text-mint-300 transition-colors duration-300" />
+            {/* Social Proof - Agency Testimonials */}
+            <div className="max-w-4xl mx-auto">
+              <p className="text-sm text-gray-400 mb-8 uppercase tracking-wider">Trusted by entrepreneurs and agencies</p>
+              
+              <div className="grid md:grid-cols-2 gap-8 mb-12">
+                {/* Agency Testimonial 1 */}
+                <div className="bg-charcoal-900/40 border border-mint-500/20 rounded-2xl p-8 text-left">
+                  <div className="flex mb-4">
+                    {[...Array(5)].map((_, i) => (
+                      <Star key={i} className="h-4 w-4 fill-mint-500 text-mint-500" />
+                    ))}
                   </div>
-                  <h3 className="text-xl font-semibold text-white mb-4 tracking-tight">Business Case</h3>
-                  <p className="text-silver-500 leading-relaxed text-sm font-light">
-                    Market positioning, pricing strategy, and competitive analysis tailored to your idea.
+                  <p className="text-gray-300 mb-6 leading-relaxed text-sm">
+                    &quot;Working with this team transformed our client acquisition. Their strategic approach and execution helped us scale from 5 to 25 clients in 6 months.&quot;
                   </p>
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-mint-400 to-mint-600"></div>
+                    <div>
+                      <p className="text-white font-semibold text-sm">Digital Agency Client</p>
+                      <p className="text-gray-500 text-xs">Marketing Agency</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Agency Testimonial 2 */}
+                <div className="bg-charcoal-900/40 border border-mint-500/20 rounded-2xl p-8 text-left">
+                  <div className="flex mb-4">
+                    {[...Array(5)].map((_, i) => (
+                      <Star key={i} className="h-4 w-4 fill-mint-500 text-mint-500" />
+                    ))}
+                  </div>
+                  <p className="text-gray-300 mb-6 leading-relaxed text-sm">
+                    &quot;The content strategies they develop actually convert. We&apos;ve seen a 3x increase in engagement and our clients are getting real results.&quot;
+                  </p>
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-400 to-blue-600"></div>
+                    <div>
+                      <p className="text-white font-semibold text-sm">Social Media Agency</p>
+                      <p className="text-gray-500 text-xs">Content Marketing</p>
+                    </div>
+                  </div>
                 </div>
               </div>
 
-              {/* Card 2: Content Strategy */}
-              <div className="relative bg-gradient-to-br from-charcoal-800/40 to-charcoal-900/20 border border-white/5 rounded-3xl p-10 backdrop-blur-sm md:mt-8">
-                <div className="relative">
-                  <div className="w-14 h-14 bg-silver-400/10 rounded-2xl flex items-center justify-center mb-8">
-                    <FileText className="h-7 w-7 text-silver-300" />
-                  </div>
-                  <h3 className="text-xl font-semibold text-white mb-4 tracking-tight">Content Strategy</h3>
-                  <p className="text-silver-500 leading-relaxed text-sm font-light">
-                    30-day content calendar with viral hooks and channel-specific optimization.
-                  </p>
+              {/* Trust Indicators */}
+              <div className="flex flex-wrap items-center justify-center gap-8 text-sm text-gray-400 pt-8 border-t border-white/5">
+                <div className="flex items-center gap-2">
+                  <Shield className="h-4 w-4 text-mint-500" />
+                  <span>100% Free to Start</span>
                 </div>
-              </div>
-
-              {/* Card 3: Website */}
-              <div className="relative bg-gradient-to-br from-charcoal-800/40 to-charcoal-900/20 border border-white/5 rounded-3xl p-10 backdrop-blur-sm">
-                <div className="relative">
-                  <div className="w-14 h-14 bg-white/10 rounded-2xl flex items-center justify-center mb-8">
-                    <Globe className="h-7 w-7 text-white" />
-                  </div>
-                  <h3 className="text-xl font-semibold text-white mb-4 tracking-tight">Website</h3>
-                  <p className="text-silver-500 leading-relaxed text-sm font-light">
-                    Professional landing pages designed to convert visitors into customers.
-                  </p>
+                <div className="flex items-center gap-2">
+                  <Clock className="h-4 w-4 text-mint-500" />
+                  <span>Results in 60 Seconds</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Check className="h-4 w-4 text-mint-500" />
+                  <span>No Credit Card Required</span>
                 </div>
               </div>
             </div>
@@ -226,7 +189,7 @@ export default function HomePage() {
           
           {/* Scroll Indicator */}
           <div className="absolute bottom-16 left-1/2 -translate-x-1/2">
-            <ChevronDown className="h-6 w-6 text-silver-700" />
+            <ChevronDown className="h-6 w-6 text-silver-700 animate-bounce" />
           </div>
         </div>
       </section>
@@ -351,63 +314,56 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Testimonials & Social Proof */}
+      {/* What You Get */}
       <section className="relative py-32 bg-gradient-to-b from-black via-charcoal-950 to-black">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="text-center mb-20">
             <h2 className="text-4xl md:text-5xl font-semibold text-white mb-6">
-              Trusted by Founders Everywhere
+              Built by Experts Who&apos;ve Done It
             </h2>
-            <div className="flex items-center justify-center gap-2 text-gray-400">
-              <div className="flex">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="h-5 w-5 fill-mint-500 text-mint-500" />
+            <p className="text-xl text-gray-400 max-w-2xl mx-auto">
+              Combining years of agency experience in digital marketing and content strategy
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-12 max-w-5xl mx-auto">
+            {/* Value Prop 1 */}
+            <div className="bg-charcoal-900/40 border border-mint-500/20 rounded-2xl p-10">
+              <div className="w-14 h-14 bg-mint-500/10 rounded-2xl flex items-center justify-center mb-6">
+                <Target className="h-7 w-7 text-mint-400" />
+              </div>
+              <h3 className="text-2xl font-semibold text-white mb-4">Strategic Marketing Expertise</h3>
+              <p className="text-gray-400 leading-relaxed mb-4">
+                Our team has helped agencies scale from 5 to 25+ clients through proven positioning, messaging, and acquisition strategies.
+              </p>
+              <ul className="space-y-2">
+                {['Market positioning frameworks', 'Competitive analysis', 'Pricing strategy', 'Go-to-market plans'].map((item, idx) => (
+                  <li key={idx} className="flex items-center gap-2 text-gray-300 text-sm">
+                    <Check className="h-4 w-4 text-mint-500 flex-shrink-0" />
+                    <span>{item}</span>
+                  </li>
                 ))}
-              </div>
-              <span className="font-semibold">4.9/5</span>
-              <span>from 500+ reviews</span>
+              </ul>
             </div>
-          </div>
 
-          <div className="grid md:grid-cols-3 gap-8 mb-16">
-            {[
-              { quote: "This saved me 3 months of planning. Got my business case and content strategy in minutes. Actually launched because of this.", name: "Sarah Chen", role: "SaaS Founder", result: "$10K MRR in 3 months" },
-              { quote: "I had the idea but no clue where to start. LaunchKit gave me a clear roadmap and the confidence to execute. Already got my first 50 customers.", name: "Marcus Rivera", role: "E-commerce Startup", result: "50 customers in 6 weeks" },
-              { quote: "The content calendar alone is worth 10x what I paid. The AI actually understands my niche and generates hooks that work.", name: "Emily Watson", role: "Content Creator", result: "100K followers gained" }
-            ].map((testimonial, idx) => (
-              <div key={idx} className="bg-charcoal-900/40 border border-mint-500/20 rounded-2xl p-8 hover:border-mint-500/40 transition-all duration-300">
-                <div className="flex mb-4">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="h-4 w-4 fill-mint-500 text-mint-500" />
-                  ))}
-                </div>
-                <p className="text-gray-300 mb-6 leading-relaxed">&quot;{testimonial.quote}&quot;</p>
-                <div className="flex items-start justify-between">
-                  <div>
-                    <p className="text-white font-semibold">{testimonial.name}</p>
-                    <p className="text-gray-500 text-sm">{testimonial.role}</p>
-                  </div>
-                  <div className="text-right">
-                    <p className="text-mint-400 font-semibold text-sm">{testimonial.result}</p>
-                  </div>
-                </div>
+            {/* Value Prop 2 */}
+            <div className="bg-charcoal-900/40 border border-mint-500/20 rounded-2xl p-10">
+              <div className="w-14 h-14 bg-mint-500/10 rounded-2xl flex items-center justify-center mb-6">
+                <Zap className="h-7 w-7 text-mint-400" />
               </div>
-            ))}
-          </div>
-
-          {/* Usage Stats */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-            {[
-              { num: "500+", label: "Founders Launched" },
-              { num: "5K+", label: "Kits Generated" },
-              { num: "50K+", label: "Content Pieces Created" },
-              { num: "4.9/5", label: "Average Rating" }
-            ].map((stat, idx) => (
-              <div key={idx} className="p-6 bg-charcoal-900/30 border border-white/5 rounded-xl">
-                <p className="text-4xl font-bold text-mint-400 mb-2">{stat.num}</p>
-                <p className="text-gray-400 text-sm">{stat.label}</p>
-              </div>
-            ))}
+              <h3 className="text-2xl font-semibold text-white mb-4">Content That Converts</h3>
+              <p className="text-gray-400 leading-relaxed mb-4">
+                Backed by a social media marketing agency that&apos;s driven 3x engagement increases and real ROI for clients across industries.
+              </p>
+              <ul className="space-y-2">
+                {['Viral content frameworks', 'Platform-specific optimization', 'Engagement strategies', 'Content calendars'].map((item, idx) => (
+                  <li key={idx} className="flex items-center gap-2 text-gray-300 text-sm">
+                    <Check className="h-4 w-4 text-mint-500 flex-shrink-0" />
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
         </div>
       </section>
@@ -457,7 +413,7 @@ export default function HomePage() {
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
             </Link>
-            <p className="text-sm text-gray-500 mt-4">Join 500+ founders who&apos;ve already launched</p>
+            <p className="text-sm text-gray-500 mt-4">Start your launch journey in 60 seconds</p>
           </div>
         </div>
       </section>
@@ -517,16 +473,16 @@ export default function HomePage() {
             {/* Trust Signals */}
             <div className="mt-10 pt-8 border-t border-white/10 flex flex-wrap items-center justify-center gap-8 text-sm text-gray-400">
               <div className="flex items-center gap-2">
-                <Users className="h-4 w-4 text-mint-500" />
-                <span>500+ Founders Trust Us</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Star className="h-4 w-4 text-mint-500 fill-mint-500" />
-                <span>4.9/5 Average Rating</span>
+                <Check className="h-4 w-4 text-mint-500" />
+                <span>Instant Access</span>
               </div>
               <div className="flex items-center gap-2">
                 <Shield className="h-4 w-4 text-mint-500" />
-                <span>GDPR Compliant</span>
+                <span>Secure & Private</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Sparkles className="h-4 w-4 text-mint-500" />
+                <span>AI-Powered</span>
               </div>
             </div>
           </div>
