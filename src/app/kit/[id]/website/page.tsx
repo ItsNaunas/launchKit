@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/Button';
+import { KitNavigation } from '@/components/KitNavigation';
 import { ALL_TEMPLATES, type TemplateConfig } from '@/lib/website-templates';
 import { Globe, ArrowRight, Check } from 'lucide-react';
 
@@ -67,6 +68,9 @@ export default function WebsiteTemplatePage({ params }: { params: Promise<{ id: 
 
   return (
     <div className="min-h-screen bg-gray-50">
+      {/* Navigation */}
+      <KitNavigation kitId={kitId} currentPage="website" />
+      
       {/* Header */}
       <div className="bg-white border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">

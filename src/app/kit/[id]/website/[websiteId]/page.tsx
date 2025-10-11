@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { WebsiteEditor } from '@/components/WebsiteEditor';
+import { KitNavigation } from '@/components/KitNavigation';
 import { useRouter } from 'next/navigation';
 
 export default function WebsiteEditorPage({ 
@@ -69,15 +70,20 @@ export default function WebsiteEditorPage({
   }
 
   return (
-    <WebsiteEditor
-      websiteId={websiteId}
-      kitId={kitId}
-      initialHtml={website.html_content}
-      initialConfig={website.config}
-      onSave={(html, config) => {
-        console.log('Website saved:', { html, config });
-      }}
-    />
+    <div className="h-screen flex flex-col">
+      <KitNavigation kitId={kitId} currentPage="editor" />
+      <div className="flex-1 overflow-hidden">
+        <WebsiteEditor
+          websiteId={websiteId}
+          kitId={kitId}
+          initialHtml={website.html_content}
+          initialConfig={website.config}
+          onSave={(html, config) => {
+            console.log('Website saved:', { html, config });
+          }}
+        />
+      </div>
+    </div>
   );
 }
 

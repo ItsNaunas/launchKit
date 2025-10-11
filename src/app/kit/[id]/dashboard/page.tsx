@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/Button';
 import { Download, RefreshCw, FileText, Users, Calendar, TrendingUp, Globe } from 'lucide-react';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
+import { KitNavigation } from '@/components/KitNavigation';
 
 import { type KitData, type BusinessCaseContent, type ContentStrategyContent, type OutputData } from '@/lib/shared-types';
 
@@ -195,6 +196,9 @@ export default function KitDashboardPage({ params }: { params: Promise<{ id: str
 
   return (
     <div className="min-h-screen bg-gray-50">
+      {/* Navigation */}
+      <KitNavigation kitId={kitId} currentPage="dashboard" kitTitle={kit?.title} />
+      
       {/* Header */}
       <div className="bg-white shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
