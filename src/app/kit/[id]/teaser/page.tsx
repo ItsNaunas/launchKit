@@ -1,55 +1,61 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useParams, useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/Button';
-import { ArrowRight, FileText, Calendar, Globe, Lock } from 'lucide-react';
-import { type KitData } from '@/lib/shared-types';
 
-export default function TeaserPage({ params }: { params: Promise<{ id: string }> }) {
+interface KitData {
+  id: string;
+  businessIdea: string;
+  targetAudience: string;
+  problemSolution: string;
+  revenueModel: string;
+  competitiveAdvantage: string;
+  timeline: string;
+  biggestChallenge: string;
+  successGoals: string;
+}
+
+export default function TeaserPage() {
+  const params = useParams();
+  const router = useRouter();
   const [kit, setKit] = useState<KitData | null>(null);
-  const [kitId, setKitId] = useState<string>('');
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const resolveParams = async () => {
-      const resolvedParams = await params;
-      setKitId(resolvedParams.id);
-    };
-    
-    resolveParams();
-  }, [params]);
+    if (params.id) {
+      fetchKit(params.id as string);
+    }
+  }, [params.id]);
 
-  useEffect(() => {
-    if (!kitId) return;
-    
-    const fetchKit = async () => {
-      try {
-        const response = await fetch(`/api/kits/${kitId}`);
-        if (response.ok) {
-          const kitData = await response.json();
-          setKit(kitData);
-        }
-      } catch (error) {
-        console.error('Error fetching kit:', error);
-      } finally {
-        setIsLoading(false);
+  const fetchKit = async (kitId: string) => {
+    try {
+      const response = await fetch(`/api/kits/${kitId}`);
+      if (response.ok) {
+        const kitData = await response.json();
+        setKit(kitData);
       }
-    };
+    } catch (error) {
+      console.error('Error fetching kit:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
-    fetchKit();
-  }, [kitId]);
+  const handleCheckout = () => {
+    router.push(`/kit/${params.id}/checkout`);
+  };
 
-  const handleGenerateAnalysis = () => {
-    // Redirect to preview page where AI generation will happen
-    window.location.href = `/kit/${kitId}/preview`;
+  const handleViewDashboard = () => {
+    router.push(`/kit/${params.id}/tabs`);
   };
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-black flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gold-500 mx-auto"></div>
-          <p className="mt-2 text-silver-400 font-light">Loading your kit...</p>
+          <div className="w-16 h-16 border-4 border-mint-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-gray-300">Loading your business kit...</p>
         </div>
       </div>
     );
@@ -57,149 +63,197 @@ export default function TeaserPage({ params }: { params: Promise<{ id: string }>
 
   if (!kit) {
     return (
-      <div className="min-h-screen bg-black flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-2xl font-semibold text-white">Kit not found</h1>
-          <p className="text-silver-400 mt-2 font-light">The kit you&apos;re looking for doesn&apos;t exist.</p>
+          <h1 className="text-2xl font-bold text-white mb-4">Kit not found</h1>
+          <p className="text-gray-300 mb-8">The business kit you're looking for doesn't exist.</p>
+          <Button onClick={() => router.push('/start')} className="bg-gradient-to-r from-mint-500 to-mint-600 hover:from-mint-600 hover:to-mint-700 text-white">
+            Create New Kit
+          </Button>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-black relative overflow-hidden">
-      {/* Cinematic Background Effects */}
-      <div className="fixed inset-0 pointer-events-none">
-        {/* Subtle gradient overlays */}
-        <div className="absolute inset-0 bg-gradient-to-b from-charcoal-900/30 via-black to-black"></div>
-        
-        {/* Soft animated orbs - subtle and elegant */}
-        <div className="absolute top-1/4 left-1/4 w-[600px] h-[600px] bg-gold-500/5 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-silver-400/3 rounded-full blur-3xl animate-pulse delay-1000"></div>
-        
-        {/* Noise texture overlay - very subtle */}
-        <div className="absolute inset-0 opacity-[0.02] bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iMzAwIj48ZmlsdGVyIGlkPSJhIiB4PSIwIiB5PSIwIj48ZmVUdXJidWxlbmNlIGJhc2VGcmVxdWVuY3k9Ii43NSIgc3RpdGNoVGlsZXM9InN0aXRjaCIgdHlwZT0iZnJhY3RhbE5vaXNlIi8+PGZlQ29sb3JNYXRyaXggdHlwZT0ic2F0dXJhdGUiIHZhbHVlcz0iMCIvPjwvZmlsdGVyPjxwYXRoIGQ9Ik0wIDBoMzAwdjMwMEgweiIgZmlsdGVyPSJ1cmwoI2EpIiBvcGFjaXR5PSIuMDUiLz48L3N2Zz4=')]"></div>
-      </div>
-      {/* Header */}
-      <div className="relative z-10 bg-gradient-to-br from-charcoal-800/40 to-charcoal-900/20 border-b border-white/10 backdrop-blur-sm">
-        <div className="max-w-4xl mx-auto px-6 lg:px-8 py-8">
+    <div className="min-h-screen bg-gradient-to-br from-black via-dark to-black">
+      <div className="container mx-auto px-4 py-16">
+        <div className="max-w-4xl mx-auto">
+          {/* Success Header */}
+          <div className="text-center mb-12">
+            <div className="w-20 h-20 bg-gradient-to-r from-mint-500 to-mint-600 rounded-full flex items-center justify-center mx-auto mb-6">
+              <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              </svg>
+            </div>
+            <h1 className="text-4xl font-bold text-white mb-4">
+              Your Business Kit is Ready!
+            </h1>
+            <p className="text-xl text-gray-300 mb-2">
+              I've analyzed your business idea: <span className="text-mint-500 font-semibold">"{kit.businessIdea}"</span>
+            </p>
+            <p className="text-gray-400">
+              Here's what I've prepared for you...
+            </p>
+          </div>
+
+          {/* Business Summary */}
+          <div className="bg-gradient-to-br from-dark to-black rounded-2xl p-8 mb-8 border border-mint-600/20">
+            <h2 className="text-2xl font-semibold text-white mb-6">Your Business Summary</h2>
+            <div className="grid md:grid-cols-2 gap-6">
+              <div>
+                <h3 className="text-lg font-medium text-mint-500 mb-2">Target Audience</h3>
+                <p className="text-gray-300 mb-4">{kit.targetAudience}</p>
+                
+                <h3 className="text-lg font-medium text-mint-600 mb-2">Problem You Solve</h3>
+                <p className="text-gray-300">{kit.problemSolution}</p>
+              </div>
+              <div>
+                <h3 className="text-lg font-medium text-mint-400 mb-2">Revenue Model</h3>
+                <p className="text-gray-300 mb-4">{kit.revenueModel}</p>
+                
+                <h3 className="text-lg font-medium text-mint-300 mb-2">Timeline</h3>
+                <p className="text-gray-300">{kit.timeline}</p>
+              </div>
+            </div>
+          </div>
+
+          {/* What's Included */}
+          <div className="mb-12">
+            <h2 className="text-3xl font-bold text-white text-center mb-8">What's Included in Your Kit</h2>
+            
+            <div className="grid md:grid-cols-3 gap-6">
+              {/* Business Case Preview */}
+              <div className="bg-dark rounded-xl p-6 border border-mint-600/20 relative overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-br from-mint-500/10 to-mint-600/10"></div>
+                <div className="relative z-10">
+                  <div className="w-12 h-12 bg-mint-500/20 rounded-full flex items-center justify-center mb-4">
+                    <svg className="w-6 h-6 text-mint-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                    </svg>
+                  </div>
+                  <h3 className="text-xl font-semibold text-white mb-3">Business Case</h3>
+                  <p className="text-gray-300 text-sm mb-4">
+                    Market positioning, pricing strategy, and competitive analysis tailored to your idea.
+                  </p>
+                  <div className="absolute inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center">
+                    <div className="text-center">
+                      <div className="w-12 h-12 bg-gray-700 rounded-full flex items-center justify-center mx-auto mb-2">
+                        <svg className="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                        </svg>
+                      </div>
+                      <p className="text-gray-400 text-sm">Unlock to see full analysis</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Content Strategy Preview */}
+              <div className="bg-gray-800 rounded-xl p-6 border border-gray-700 relative overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-br from-green-500/10 to-teal-600/10"></div>
+                <div className="relative z-10">
+                  <div className="w-12 h-12 bg-green-500/20 rounded-full flex items-center justify-center mb-4">
+                    <svg className="w-6 h-6 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                  </div>
+                  <h3 className="text-xl font-semibold text-white mb-3">Content Strategy</h3>
+                  <p className="text-gray-300 text-sm mb-4">
+                    30-day content calendar with viral hooks and channel-specific optimization.
+                  </p>
+                  <div className="absolute inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center">
+                    <div className="text-center">
+                      <div className="w-12 h-12 bg-gray-700 rounded-full flex items-center justify-center mx-auto mb-2">
+                        <svg className="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                        </svg>
+                      </div>
+                      <p className="text-gray-400 text-sm">Unlock to see full strategy</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Website Preview */}
+              <div className="bg-dark rounded-xl p-6 border border-mint-600/20 relative overflow-hidden hover:border-mint-500/40 transition-all duration-300">
+                <div className="absolute inset-0 bg-gradient-to-br from-mint-500/10 to-mint-600/10"></div>
+                <div className="relative z-10">
+                  <div className="w-12 h-12 bg-mint-500/20 rounded-full flex items-center justify-center mb-4">
+                    <svg className="w-6 h-6 text-mint-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9v-9m0-9v9" />
+                    </svg>
+                  </div>
+                  <h3 className="text-xl font-semibold text-white mb-3">Website Template</h3>
+                  <p className="text-gray-300 text-sm mb-4">
+                    Custom landing page optimized for conversions and your brand.
+                  </p>
+                  <div className="absolute inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center">
+                    <div className="text-center">
+                      <div className="w-12 h-12 bg-gray-700 rounded-full flex items-center justify-center mx-auto mb-2">
+                        <svg className="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                        </svg>
+                      </div>
+                      <p className="text-gray-400 text-sm">Unlock to see full template</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* CTA Section */}
           <div className="text-center">
-            <h1 className="text-3xl font-semibold text-white mb-2 tracking-tight">{kit.title}</h1>
-            <p className="text-silver-400 font-light">{kit.one_liner}</p>
-          </div>
-        </div>
-      </div>
-
-      <div className="relative z-10 max-w-4xl mx-auto px-6 lg:px-8 py-12">
-        <div className="text-center mb-12">
-          <h2 className="text-4xl font-semibold text-white mb-4 tracking-tight">
-            Your Personalized Launch Kit
-          </h2>
-          <p className="text-xl text-silver-400 font-light">
-            Get AI-powered insights tailored specifically for your business idea
-          </p>
-        </div>
-
-        {/* Blurred Placeholder Components */}
-        <div className="space-y-8 mb-12">
-          
-          {/* Business Case Placeholder */}
-          <div className="relative bg-gradient-to-br from-charcoal-800/40 to-charcoal-900/20 border border-white/10 rounded-3xl overflow-hidden backdrop-blur-sm">
-            <div className="p-8">
-              <div className="flex items-center gap-3 mb-6">
-                <FileText className="h-7 w-7 text-gold-400" />
-                <h3 className="text-xl font-semibold text-white">Business Case & Strategy</h3>
-                <Lock className="h-5 w-5 text-silver-500" />
+            <div className="bg-gradient-to-r from-mint-500 to-mint-600 rounded-2xl p-8 mb-8">
+              <h3 className="text-3xl font-bold text-white mb-4">Unlock Your Complete Business Kit</h3>
+              <p className="text-white/90 mb-6 text-lg">
+                Get instant access to your personalized roadmap and start building your business today
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                <Button 
+                  onClick={handleCheckout}
+                  size="lg"
+                  className="bg-white text-gray-900 hover:bg-gray-100 font-semibold px-8 py-4 text-lg"
+                >
+                  Unlock Now - £37
+                </Button>
+                <Button 
+                  onClick={handleViewDashboard}
+                  variant="outline"
+                  size="lg"
+                  className="border-white/30 text-white hover:bg-white/10 px-8 py-4 text-lg"
+                >
+                  View Dashboard
+                </Button>
               </div>
-              
-              <div className="space-y-4">
-                <div className="h-4 bg-silver-400/20 rounded w-3/4 blur-sm"></div>
-                <div className="h-4 bg-silver-400/20 rounded w-1/2 blur-sm"></div>
-                <div className="h-4 bg-silver-400/20 rounded w-2/3 blur-sm"></div>
-                <div className="h-4 bg-silver-400/20 rounded w-1/3 blur-sm"></div>
+              <p className="text-blue-200 text-sm mt-6">
+                No subscriptions • Instant access • Money-back guarantee
+              </p>
+            </div>
+
+            {/* Trust Signals */}
+            <div className="flex flex-wrap justify-center gap-8 text-gray-400 text-sm">
+              <div className="flex items-center gap-2">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                </svg>
+                Secure Payment
               </div>
-              
-              <div className="absolute inset-0 bg-gradient-to-t from-charcoal-900/80 via-transparent to-transparent pointer-events-none"></div>
-              <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2">
-                <span className="bg-gold-500 text-black px-6 py-2 rounded-full text-sm font-medium">
-                  Unlock Your Kit to View
-                </span>
+              <div className="flex items-center gap-2">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                Instant Access
+              </div>
+              <div className="flex items-center gap-2">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                </svg>
+                Money-back Guarantee
               </div>
             </div>
           </div>
-
-          {/* Content Strategy Placeholder */}
-          <div className="relative bg-gradient-to-br from-charcoal-800/40 to-charcoal-900/20 border border-white/10 rounded-3xl overflow-hidden backdrop-blur-sm">
-            <div className="p-8">
-              <div className="flex items-center gap-3 mb-6">
-                <Calendar className="h-7 w-7 text-silver-300" />
-                <h3 className="text-xl font-semibold text-white">Content Strategy</h3>
-                <Lock className="h-5 w-5 text-silver-500" />
-              </div>
-
-              <div className="space-y-4">
-                <div className="h-4 bg-silver-400/20 rounded w-4/5 blur-sm"></div>
-                <div className="h-4 bg-silver-400/20 rounded w-3/5 blur-sm"></div>
-                <div className="h-4 bg-silver-400/20 rounded w-2/3 blur-sm"></div>
-                <div className="h-4 bg-silver-400/20 rounded w-1/2 blur-sm"></div>
-              </div>
-
-              <div className="absolute inset-0 bg-gradient-to-t from-charcoal-900/80 via-transparent to-transparent pointer-events-none"></div>
-              <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2">
-                <span className="bg-silver-400 text-black px-6 py-2 rounded-full text-sm font-medium">
-                  Unlock Your Kit to View
-                </span>
-              </div>
-            </div>
-          </div>
-
-          {/* Website Preview Placeholder */}
-          <div className="relative bg-gradient-to-br from-charcoal-800/40 to-charcoal-900/20 border border-white/10 rounded-3xl overflow-hidden backdrop-blur-sm">
-            <div className="p-8">
-              <div className="flex items-center gap-3 mb-6">
-                <Globe className="h-7 w-7 text-white" />
-                <h3 className="text-xl font-semibold text-white">Website Preview</h3>
-                <Lock className="h-5 w-5 text-silver-500" />
-              </div>
-              
-              <div className="space-y-4">
-                <div className="h-4 bg-silver-400/20 rounded w-5/6 blur-sm"></div>
-                <div className="h-4 bg-silver-400/20 rounded w-2/3 blur-sm"></div>
-                <div className="h-4 bg-silver-400/20 rounded w-3/4 blur-sm"></div>
-                <div className="h-4 bg-silver-400/20 rounded w-1/2 blur-sm"></div>
-              </div>
-              
-              <div className="absolute inset-0 bg-gradient-to-t from-charcoal-900/80 via-transparent to-transparent pointer-events-none"></div>
-              <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2">
-                <span className="bg-white text-black px-6 py-2 rounded-full text-sm font-medium">
-                  Unlock Your Kit to View
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* CTA Section */}
-        <div className="text-center bg-gradient-to-br from-charcoal-800/40 to-charcoal-900/20 border border-white/10 rounded-3xl p-12 backdrop-blur-sm">
-          <h3 className="text-3xl font-semibold text-white mb-4 tracking-tight">
-            Ready to Unlock Your Kit?
-          </h3>
-          <p className="text-silver-400 mb-8 font-light">
-            Click below to generate your personalized business case, content strategy, and website copy.
-          </p>
-
-          <Button
-            onClick={handleGenerateAnalysis}
-            size="lg"
-            className="px-12 py-6 text-lg bg-white hover:bg-silver-100 text-black transition-all duration-300 font-medium"
-          >
-            Unlock My Kit
-            <ArrowRight className="h-5 w-5 ml-2" />
-          </Button>
-          
-          <p className="text-sm text-silver-500 mt-6 font-light">
-            Free during beta • AI-powered insights • Takes 30 seconds
-          </p>
         </div>
       </div>
     </div>

@@ -95,7 +95,7 @@ export function AuthForm({ mode, onSuccess, onSwitchMode }: AuthFormProps) {
               placeholder="your@email.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="pl-10 bg-charcoal-800/40 border-white/10 text-white placeholder-silver-500 focus:border-gold-500/40 focus:bg-charcoal-800/60"
+              className="pl-10 bg-charcoal-800/40 border-white/10 text-white placeholder-silver-500 focus:border-mint-500/40 focus:bg-charcoal-800/60"
               required
             />
           </div>
@@ -112,7 +112,7 @@ export function AuthForm({ mode, onSuccess, onSwitchMode }: AuthFormProps) {
               placeholder="••••••••"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="pl-10 bg-charcoal-800/40 border-white/10 text-white placeholder-silver-500 focus:border-gold-500/40 focus:bg-charcoal-800/60"
+              className="pl-10 bg-charcoal-800/40 border-white/10 text-white placeholder-silver-500 focus:border-mint-500/40 focus:bg-charcoal-800/60"
               required
             />
           </div>
@@ -130,7 +130,7 @@ export function AuthForm({ mode, onSuccess, onSwitchMode }: AuthFormProps) {
                 placeholder="••••••••"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
-                className="pl-10 bg-charcoal-800/40 border-white/10 text-white placeholder-silver-500 focus:border-gold-500/40 focus:bg-charcoal-800/60"
+                className="pl-10 bg-charcoal-800/40 border-white/10 text-white placeholder-silver-500 focus:border-mint-500/40 focus:bg-charcoal-800/60"
                 required
               />
             </div>

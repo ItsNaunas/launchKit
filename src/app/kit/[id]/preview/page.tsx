@@ -109,7 +109,7 @@ export default function KitPreviewPage({ params }: { params: Promise<{ id: strin
   }, [kitId]);
 
   const handleContinueToDashboard = () => {
-    window.location.href = `/kit/${kitId}/dashboard`;
+    window.location.href = `/kit/${kitId}/tabs`;
   };
 
   if (isLoading || isGenerating) {

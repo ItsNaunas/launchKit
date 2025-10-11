@@ -1,25 +1,75 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+@import url('https://api.fontshare.com/v2/css?f[]=archivo@400,600&f[]=clash-display@600&display=swap');
 @import "tailwindcss";
 
 :root {
   --background: #000000;
   --foreground: #ffffff;
-  --charcoal: #1a1a1a;
-  --silver: #a0a0a0;
-  --gold: #d4af37;
+  --dark: #222222;
+  --mint-50: #f0fdfa;
+  --mint-100: #ccfbf1;
+  --mint-200: #99f6e4;
+  --mint-300: #5eead4;
+  --mint-400: #2dd4bf;
+  --mint-500: #1DCD9F;
+  --mint-600: #169976;
+  --mint-700: #0f766e;
+  --mint-800: #115e59;
+  --mint-900: #134e4a;
   --accent: #f5f5f5;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Display', system-ui, sans-serif;
+  --color-black: #000000;
+  --color-dark: #222222;
+  
+  /* Mint color palette */
+  --color-mint-50: var(--mint-50);
+  --color-mint-100: var(--mint-100);
+  --color-mint-200: var(--mint-200);
+  --color-mint-300: var(--mint-300);
+  --color-mint-400: var(--mint-400);
+  --color-mint-500: var(--mint-500);
+  --color-mint-600: var(--mint-600);
+  --color-mint-700: var(--mint-700);
+  --color-mint-800: var(--mint-800);
+  --color-mint-900: var(--mint-900);
+  
+  /* Charcoal palette */
+  --color-charcoal-50: #f5f5f5;
+  --color-charcoal-100: #e5e5e5;
+  --color-charcoal-200: #d4d4d4;
+  --color-charcoal-300: #a3a3a3;
+  --color-charcoal-400: #737373;
+  --color-charcoal-500: #525252;
+  --color-charcoal-600: #404040;
+  --color-charcoal-700: #2a2a2a;
+  --color-charcoal-800: #1a1a1a;
+  --color-charcoal-900: #0f0f0f;
+  --color-charcoal-950: #050505;
+  
+  /* Silver palette */
+  --color-silver-50: #fafafa;
+  --color-silver-100: #f4f4f5;
+  --color-silver-200: #e4e4e7;
+  --color-silver-300: #d4d4d8;
+  --color-silver-400: #a1a1aa;
+  --color-silver-500: #a0a0a0;
+  --color-silver-600: #71717a;
+  --color-silver-700: #52525b;
+  --color-silver-800: #3f3f46;
+  --color-silver-900: #27272a;
+  
+  --font-sans: 'Archivo', sans-serif;
+  --font-clash: 'Clash Display', sans-serif;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Display', system-ui, sans-serif;
+  font-family: 'Archivo', sans-serif;
+  font-weight: 400;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   letter-spacing: -0.011em;

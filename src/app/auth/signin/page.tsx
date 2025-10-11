@@ -24,7 +24,7 @@ export default function SignInPage() {
         <div className="absolute inset-0 bg-gradient-to-b from-charcoal-900/30 via-black to-black"></div>
         
         {/* Soft animated orbs - subtle and elegant */}
-        <div className="absolute top-1/4 left-1/4 w-[600px] h-[600px] bg-gold-500/5 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute top-1/4 left-1/4 w-[600px] h-[600px] bg-mint-500/5 rounded-full blur-3xl animate-pulse"></div>
         <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-silver-400/3 rounded-full blur-3xl animate-pulse delay-1000"></div>
         
         {/* Noise texture overlay - very subtle */}
@@ -34,7 +34,7 @@ export default function SignInPage() {
       <div className="relative z-10 min-h-screen flex flex-col justify-center py-12 sm:px-6 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-md">
           <div className="flex items-center justify-center gap-2.5 mb-8">
-            <Sparkles className="h-7 w-7 text-gold-500" />
+            <Sparkles className="h-7 w-7 text-mint-500" />
             <h1 className="text-2xl font-semibold text-white tracking-tight">LaunchKit AI</h1>
           </div>
         </div>

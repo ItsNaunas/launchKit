@@ -44,7 +44,7 @@ export function SimpleIntakeForm({ onSubmit, isLoading = false, defaultValues }:
             placeholder="e.g., Personal finance coaching for Gen Z creators"
             error={errors.business_idea?.message}
             required
-            className="bg-charcoal-800/40 border-white/10 text-white placeholder-silver-500 focus:border-gold-500/40 focus:bg-charcoal-800/60"
+            className="bg-charcoal-800/40 border-white/10 text-white placeholder-silver-500 focus:border-mint-500/40 focus:bg-charcoal-800/60"
           />
           <p className="text-sm text-silver-500 mt-2 font-light">
             Be specific - what makes it different or interesting?
@@ -58,7 +58,7 @@ export function SimpleIntakeForm({ onSubmit, isLoading = false, defaultValues }:
             placeholder="e.g., 18-28 year old TikTok creators making their first $1k/month who are terrible with money and want to build wealth without giving up their lifestyle"
             error={errors.target_audience?.message}
             required
-            className="bg-charcoal-800/40 border-white/10 text-white placeholder-silver-500 focus:border-gold-500/40 focus:bg-charcoal-800/60"
+            className="bg-charcoal-800/40 border-white/10 text-white placeholder-silver-500 focus:border-mint-500/40 focus:bg-charcoal-800/60"
           />
           <p className="text-sm text-silver-500 mt-2 font-light">
             Think about who would save or share viral content about this topic
@@ -72,7 +72,7 @@ export function SimpleIntakeForm({ onSubmit, isLoading = false, defaultValues }:
             placeholder="e.g., Turning $0 into $10k in 90 days, helping someone go from 0 to 100k followers, dramatic before/after transformations..."
             error={errors.main_challenge?.message}
             required
-            className="bg-charcoal-800/40 border-white/10 text-white placeholder-silver-500 focus:border-gold-500/40 focus:bg-charcoal-800/60"
+            className="bg-charcoal-800/40 border-white/10 text-white placeholder-silver-500 focus:border-mint-500/40 focus:bg-charcoal-800/60"
           />
           <p className="text-sm text-silver-500 mt-2 font-light">
             Viral content shows extreme results, experiments, or transformations - what&apos;s yours?

@@ -49,26 +49,27 @@ export default function PaywallPage({ params }: { params: Promise<{ id: string }
   const handlePayment = async () => {
     setIsLoading(true);
     try {
-      const response = await fetch('/api/checkout', {
-        method: 'POST',
+      // BYPASS PAYMENT - Go directly to dashboard for development
+      console.log('Payment bypassed - going directly to dashboard');
+      
+      // Update kit to have access (bypass payment)
+      await fetch(`/api/kits/${kitId}`, {
+        method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          kitId,
-          planType: selectedPlan,
+          has_access: true,
+          checkout_completed_at: new Date().toISOString()
         }),
       });
-
-      if (!response.ok) {
-        throw new Error('Failed to create checkout session');
-      }
-
-      const { url } = await response.json();
-      window.location.href = url;
+      
+      // Redirect to dashboard
+      window.location.href = `/kit/${kitId}/tabs`;
     } catch (error) {
-      console.error('Payment error:', error);
-      alert('Something went wrong. Please try again.');
+      console.error('Error:', error);
+      // Still redirect even if API call fails
+      window.location.href = `/kit/${kitId}/tabs`;
     } finally {
       setIsLoading(false);
     }
@@ -78,7 +79,7 @@ export default function PaywallPage({ params }: { params: Promise<{ id: string }
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-orange-600 mx-auto"></div>
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-mint-600 mx-auto"></div>
           <p className="mt-2 text-gray-600">Loading...</p>
         </div>
       </div>
@@ -111,12 +112,12 @@ export default function PaywallPage({ params }: { params: Promise<{ id: string }
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Scarcity Message */}
         <div className="text-center mb-8">
-          <div className="bg-orange-50 border border-orange-200 rounded-lg p-6 mb-6">
+          <div className="bg-mint-50 border border-mint-200 rounded-lg p-6 mb-6">
             <div className="flex items-center justify-center gap-2 mb-2">
-              <Clock className="h-5 w-5 text-orange-600" />
-              <span className="text-lg font-semibold text-orange-800">Limited Daily Capacity</span>
+              <Clock className="h-5 w-5 text-mint-600" />
+              <span className="text-lg font-semibold text-mint-800">Limited Daily Capacity</span>
             </div>
-            <p className="text-orange-700">
+            <p className="text-mint-700">
               We process <strong>50 Starter Kits per day</strong> to ensure quality and personalization.
               <span className="block mt-2">
                 <strong>{50 - dailyCount} slots remaining</strong> for today.
@@ -137,8 +138,8 @@ export default function PaywallPage({ params }: { params: Promise<{ id: string }
           <h3 className="text-xl font-semibold text-gray-900 mb-4">What You&apos;ll Receive</h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="text-center">
-              <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center mx-auto mb-3">
-                <Check className="h-6 w-6 text-orange-600" />
+              <div className="w-12 h-12 bg-mint-100 rounded-lg flex items-center justify-center mx-auto mb-3">
+                <Check className="h-6 w-6 text-mint-600" />
               </div>
               <h4 className="font-semibold text-gray-900 mb-2">Business Case PDF</h4>
               <p className="text-sm text-gray-600">
@@ -155,8 +156,8 @@ export default function PaywallPage({ params }: { params: Promise<{ id: string }
               </p>
             </div>
             <div className="text-center">
-              <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mx-auto mb-3">
-                <Star className="h-6 w-6 text-purple-600" />
+              <div className="w-12 h-12 bg-mint-100 rounded-lg flex items-center justify-center mx-auto mb-3">
+                <Star className="h-6 w-6 text-mint-600" />
               </div>
               <h4 className="font-semibold text-gray-900 mb-2">Live Website</h4>
               <p className="text-sm text-gray-600">
@@ -172,7 +173,7 @@ export default function PaywallPage({ params }: { params: Promise<{ id: string }
           <div 
             className={`border-2 rounded-lg p-6 cursor-pointer transition-colors ${
               selectedPlan === 'oneoff' 
-                ? 'border-orange-500 bg-orange-50' 
+                ? 'border-mint-500 bg-mint-50' 
                 : 'border-gray-200 hover:border-gray-300'
             }`}
             onClick={() => setSelectedPlan('oneoff')}
@@ -206,7 +207,7 @@ export default function PaywallPage({ params }: { params: Promise<{ id: string }
           <div 
             className={`border-2 rounded-lg p-6 cursor-pointer transition-colors ${
               selectedPlan === 'subscription' 
-                ? 'border-orange-500 bg-orange-50' 
+                ? 'border-mint-500 bg-mint-50' 
                 : 'border-gray-200 hover:border-gray-300'
             }`}
             onClick={() => setSelectedPlan('subscription')}
@@ -246,7 +247,7 @@ export default function PaywallPage({ params }: { params: Promise<{ id: string }
               <p className="text-sm text-gray-600">30-day refund if not satisfied</p>
             </div>
             <div>
-              <Users className="h-8 w-8 text-orange-600 mx-auto mb-2" />
+              <Users className="h-8 w-8 text-mint-600 mx-auto mb-2" />
               <h4 className="font-semibold text-gray-900 mb-1">500+ Kits Delivered</h4>
               <p className="text-sm text-gray-600">Join successful entrepreneurs</p>
             </div>
@@ -273,13 +274,13 @@ export default function PaywallPage({ params }: { params: Promise<{ id: string }
               </>
             ) : (
               <>
-                {selectedPlan === 'oneoff' ? 'Pay £37 Now' : 'Start £1/day Plan'}
+                {selectedPlan === 'oneoff' ? 'Get Kit (Bypass Payment)' : 'Get Kit (Bypass Payment)'}
               </>
             )}
           </Button>
           
           <p className="text-xs text-gray-500 mt-3">
-            Secure payment powered by Stripe • SSL encrypted
+            Payment bypassed for development • SSL encrypted
           </p>
         </div>
       </div>

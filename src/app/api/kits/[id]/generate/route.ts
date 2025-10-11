@@ -11,7 +11,8 @@ export async function POST(
   try {
     const resolvedParams = await params;
     const { id } = kitIdSchema.parse(resolvedParams);
-    const { type } = generateContentSchema.parse(await request.json());
+    const body = await request.json();
+    const { type, regenerate = false } = body;
 
     // Get kit data with profiling information
     const { data: kit, error: kitError } = await supabaseAdmin
@@ -25,6 +26,37 @@ export async function POST(
         { error: 'Kit not found' },
         { status: 404 }
       );
+    }
+
+    // Check checkout status
+    const hasCheckoutAccess = (kit as any).has_access || (kit as any).checkout_completed_at;
+
+    // Check existing output and regeneration limits
+    const { data: existingOutput } = await supabaseAdmin
+      .from('outputs')
+      .select('*')
+      .eq('kit_id', id)
+      .eq('type', type)
+      .single();
+
+    // Regeneration logic based on spec:
+    // - Business Case: 1 pre-checkout, unlimited post
+    // - Content Strategy: 1 pre-checkout, unlimited post
+    // - Website: unlimited (but doesn't use this route)
+    if (regenerate && existingOutput && !hasCheckoutAccess) {
+      const currentRegens = existingOutput.regen_count || 0;
+      const maxRegens = 1; // 1 regeneration allowed pre-checkout
+      
+      if (currentRegens >= maxRegens) {
+        return NextResponse.json(
+          { 
+            error: 'Regeneration limit reached',
+            message: `You've used all ${maxRegens} regeneration${maxRegens > 1 ? 's' : ''} for this section. Unlock unlimited regenerations for £37.`,
+            regens_remaining: 0
+          },
+          { status: 403 }
+        );
+      }
     }
 
     // Create prompt assembler with kit data converted to expected format
@@ -190,27 +222,67 @@ Do not include any text outside the JSON.`
       aiContent = generateMockContent(type);
     }
 
-    // Save the generated content
-    const { error: saveError } = await supabaseAdmin
-      .from('outputs')
-      .upsert({
-        kit_id: id,
-        type: type,
-        content: JSON.stringify(aiContent),
-        regen_count: 0,
-      } as never);
+    // Calculate new regen count
+    const newRegenCount = regenerate && existingOutput 
+      ? (existingOutput.regen_count || 0) + 1 
+      : 0;
 
-    if (saveError) {
-      console.error('Error saving generated content:', saveError);
-      return NextResponse.json(
-        { error: 'Failed to save generated content' },
-        { status: 500 }
-      );
+    // Calculate remaining regenerations
+    const maxRegensPreCheckout = 1;
+    const regensRemaining = hasCheckoutAccess 
+      ? 999 // Unlimited after checkout (display as "unlimited")
+      : Math.max(0, maxRegensPreCheckout - newRegenCount);
+
+    // Save the generated content
+    const outputData = {
+      kit_id: id,
+      type: type,
+      content: JSON.stringify(aiContent),
+      regen_count: newRegenCount,
+    };
+
+    let savedOutput;
+    if (existingOutput) {
+      // Update existing
+      const { data, error: updateError } = await supabaseAdmin
+        .from('outputs')
+        .update(outputData as never)
+        .eq('id', existingOutput.id)
+        .select()
+        .single();
+      
+      if (updateError) {
+        console.error('Error updating output:', updateError);
+        return NextResponse.json(
+          { error: 'Failed to update generated content' },
+          { status: 500 }
+        );
+      }
+      savedOutput = data;
+    } else {
+      // Create new
+      const { data, error: insertError } = await supabaseAdmin
+        .from('outputs')
+        .insert(outputData as never)
+        .select()
+        .single();
+      
+      if (insertError) {
+        console.error('Error inserting output:', insertError);
+        return NextResponse.json(
+          { error: 'Failed to save generated content' },
+          { status: 500 }
+        );
+      }
+      savedOutput = data;
     }
 
     return NextResponse.json({
       success: true,
       content: aiContent,
+      regen_count: newRegenCount,
+      regens_remaining: regensRemaining,
+      id: savedOutput?.id,
       prompt: prompt, // Include prompt for debugging
     });
 

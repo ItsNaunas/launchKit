@@ -208,8 +208,8 @@ function TemplateCard({
         <div className="absolute top-3 right-3">
           <span className={`px-2 py-1 text-xs rounded-full ${
             template.source === 'built-in'
-              ? 'bg-blue-100 text-blue-800'
-              : 'bg-purple-100 text-purple-800'
+              ? 'bg-mint-100 text-mint-800'
+              : 'bg-mint-100 text-mint-800'
           }`}>
             {template.source === 'built-in' ? 'Built-in' : 'GitHub'}
           </span>

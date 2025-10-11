@@ -29,13 +29,14 @@ const stripe = new Proxy({} as Stripe, {
 const CheckoutSchema = z.object({
   kitId: z.string().uuid(),
   planType: z.enum(['oneoff', 'subscription']),
+  includeHosting: z.boolean().optional().default(false),
   userId: z.string().uuid().optional(), // Will be required when auth is implemented
 });
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { kitId, planType, userId } = CheckoutSchema.parse(body);
+    const { kitId, planType, includeHosting, userId } = CheckoutSchema.parse(body);
 
     // Verify kit exists
     const { data: kit, error: kitError } = await supabase
@@ -69,6 +70,7 @@ export async function POST(request: NextRequest) {
       metadata: {
         kit_id: kitId,
         plan_type: planType,
+        include_hosting: includeHosting ? 'true' : 'false',
       },
       success_url: `${process.env.NEXT_PUBLIC_APP_URL}/kit/${kitId}/preview?success=true`,
       cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/kit/${kitId}/preview?cancelled=true`,
@@ -77,6 +79,8 @@ export async function POST(request: NextRequest) {
 
     if (planType === 'oneoff') {
       // One-time payment
+      // If hosting is included, we need to create a subscription for hosting separately
+      // For now, we'll just charge for the kit and set up hosting subscription in webhook
       sessionConfig.mode = 'payment';
       sessionConfig.line_items = [
         {
@@ -91,6 +95,9 @@ export async function POST(request: NextRequest) {
           quantity: 1,
         },
       ];
+      
+      // Note: Hosting subscription will be set up in the webhook after successful payment
+      // This gives us the first 2 months free by starting the subscription later
     } else {
       // Subscription payment (£1/day for 37 days)
       sessionConfig.mode = 'subscription';

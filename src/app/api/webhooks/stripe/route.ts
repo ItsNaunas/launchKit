@@ -53,6 +53,30 @@ export async function POST(request: NextRequest) {
       case 'checkout.session.completed':
         const session = event.data.object as Stripe.Checkout.Session;
         
+        // Check if this is a credit purchase
+        if (session.metadata?.purchase_type === 'credits') {
+          const userId = session.metadata.user_id;
+          const creditsAmount = parseInt(session.metadata.credits_amount || '0');
+          
+          if (userId && creditsAmount > 0) {
+            // Add credits to user account
+            const { error: creditsError } = await supabaseAdmin.rpc('add_credits', {
+              p_user_id: userId,
+              p_amount: creditsAmount,
+              p_type: 'purchase',
+              p_description: `Purchased ${creditsAmount} credits`,
+              p_reference_id: null,
+            });
+            
+            if (creditsError) {
+              console.error('Failed to add credits:', creditsError);
+            } else {
+              console.log(`Added ${creditsAmount} credits to user ${userId}`);
+            }
+          }
+          break;
+        }
+        
         // Update order status
         const { error: orderError } = await supabaseAdmin
           .from('orders')
@@ -71,11 +95,61 @@ export async function POST(request: NextRequest) {
         if (kitId) {
           const { error: kitError } = await supabaseAdmin
             .from('kits')
-            .update({ has_access: true } as never)
+            .update({ 
+              has_access: true,
+              checkout_completed_at: new Date().toISOString()
+            } as never)
             .eq('id', kitId);
 
           if (kitError) {
             console.error('Failed to grant kit access:', kitError);
+          }
+          
+          // If hosting was included, set up the hosting subscription (starts in 2 months)
+          const includeHosting = session.metadata?.include_hosting === 'true';
+          if (includeHosting && session.customer) {
+            try {
+              // Calculate start date (2 months from now for free period)
+              const twoMonthsFromNow = Math.floor(Date.now() / 1000) + (60 * 24 * 60 * 60); // 60 days in seconds
+              
+              // Create hosting subscription
+              const hostingSubscription = await stripe.subscriptions.create({
+                customer: session.customer as string,
+                items: [{
+                  price_data: {
+                    currency: 'gbp',
+                    product_data: {
+                      name: 'Website Hosting',
+                      description: 'Professional website hosting with CDN, SSL, and automatic backups',
+                    },
+                    unit_amount: 300, // £3.00 in pence
+                    recurring: {
+                      interval: 'month',
+                    },
+                  },
+                }],
+                billing_cycle_anchor: twoMonthsFromNow,
+                proration_behavior: 'none',
+                metadata: {
+                  kit_id: kitId,
+                  type: 'hosting',
+                },
+              });
+              
+              // Update kit with hosting info
+              await supabaseAdmin
+                .from('kits')
+                .update({ 
+                  hosting_enabled: true,
+                  hosting_subscription_id: hostingSubscription.id
+                } as never)
+                .eq('id', kitId);
+                
+              console.log('Hosting subscription created:', hostingSubscription.id);
+            } catch (hostingError) {
+              console.error('Error creating hosting subscription:', hostingError);
+              // Don't fail the whole checkout if hosting fails
+            }
           }
         }
         

@@ -8,6 +8,23 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        // New dark mode palette
+        black: '#000000',
+        dark: '#222222',
+        mint: {
+          50: '#f0fdfa',
+          100: '#ccfbf1',
+          200: '#99f6e4',
+          300: '#5eead4',
+          400: '#2dd4bf',
+          500: '#1DCD9F', // Main mint color
+          600: '#169976', // Darker mint
+          700: '#0f766e',
+          800: '#115e59',
+          900: '#134e4a',
+          950: '#042f2e',
+        },
+        // Keep some existing colors for compatibility
         charcoal: {
           50: '#f5f5f5',
           100: '#e5e5e5',
@@ -33,21 +50,10 @@ module.exports = {
           800: '#3f3f46',
           900: '#27272a',
         },
-        gold: {
-          50: '#fdfaf3',
-          100: '#fbf4e6',
-          200: '#f7e9cc',
-          300: '#f3ddb3',
-          400: '#e8c776',
-          500: '#d4af37',
-          600: '#bf9d31',
-          700: '#9f8329',
-          800: '#7f6921',
-          900: '#68561b',
-        },
       },
       fontFamily: {
-        sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'SF Pro Display', 'system-ui', 'sans-serif'],
+        sans: ['Archivo', 'sans-serif'],
+        clash: ['Clash Display', 'sans-serif'],
       },
       animation: {
         'fade-in': 'fadeIn 0.8s ease-out',
@@ -66,8 +72,8 @@ module.exports = {
           '100%': { transform: 'translateY(0)', opacity: '1' },
         },
         glow: {
-          '0%': { boxShadow: '0 0 20px rgba(249, 115, 22, 0.3)' },
-          '100%': { boxShadow: '0 0 40px rgba(249, 115, 22, 0.6)' },
+          '0%': { boxShadow: '0 0 20px rgba(29, 205, 159, 0.3)' },
+          '100%': { boxShadow: '0 0 40px rgba(29, 205, 159, 0.6)' },
         },
         float: {
           '0%, 100%': { transform: 'translateY(0px)' },
