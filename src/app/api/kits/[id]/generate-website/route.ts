@@ -105,7 +105,7 @@ export async function POST(
           css_content: cssContent,
           config: customColors || template.defaultColors,
           sections: sections,
-          version: supabase.sql`version + 1`,
+          version: (existingWebsite.version || 0) + 1,
           updated_at: new Date().toISOString(),
         })
         .eq('id', existingWebsite.id)
