@@ -100,6 +100,7 @@ export default function ConversationalIntake({ onComplete, initialBusinessIdea }
     if (!initialBusinessIdea) {
       startConversation();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const startConversation = async () => {
@@ -214,7 +215,7 @@ export default function ConversationalIntake({ onComplete, initialBusinessIdea }
               </svg>
             </div>
             <h2 className="text-3xl font-bold text-white mb-2">Your Business Kit is Ready!</h2>
-            <p className="text-gray-300 text-lg">I've gathered all the details I need to create your personalized roadmap</p>
+            <p className="text-gray-300 text-lg">I&apos;ve gathered all the details I need to create your personalized roadmap</p>
           </div>
 
           <div className="grid md:grid-cols-3 gap-6 mb-8">

@@ -118,7 +118,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Initialize conversation data if it doesn't exist
-    let conversationData = existingConversation || {
+    const conversationData = existingConversation || {
       conversation_id: currentConversationId,
       gathered_data: {},
       completed_steps: [],

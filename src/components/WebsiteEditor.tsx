@@ -5,11 +5,8 @@ import { Button } from '@/components/ui/Button';
 import { DeploymentPanel } from '@/components/DeploymentPanel';
 import { 
   Download, 
-  Eye, 
   Code, 
   Palette, 
-  Type, 
-  Layout,
   Save,
   Undo,
   Redo,
@@ -97,6 +94,7 @@ export function WebsiteEditor({
         }
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [html, activeTab]);
 
   // Apply customizations when they change
@@ -104,6 +102,7 @@ export function WebsiteEditor({
     if (iframeRef.current?.contentDocument) {
       applyCustomizations(iframeRef.current.contentDocument);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [customization]);
 
   // Function to apply customizations to the iframe document
@@ -215,7 +214,7 @@ export function WebsiteEditor({
       }
       
       alert('Website saved successfully!');
-    } catch (error) {
+    } catch (_error) {
       alert('Failed to save website');
     } finally {
       setIsSaving(false);

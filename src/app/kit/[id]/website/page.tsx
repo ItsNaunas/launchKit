@@ -81,7 +81,7 @@ export default function WebsiteTemplatePage({ params }: { params: Promise<{ id: 
                 Choose Your Website Template
               </h1>
               <p className="text-gray-600 mt-2">
-                Select a template and we'll populate it with your business content using AI
+                Select a template and we&apos;ll populate it with your business content using AI
               </p>
             </div>
             {selectedTemplate && (

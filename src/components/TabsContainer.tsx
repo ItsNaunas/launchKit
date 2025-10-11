@@ -1,6 +1,5 @@
 'use client';
 
-import { useState } from 'react';
 import { CheckCircle, Circle } from 'lucide-react';
 
 export type TabKey = 'business_case' | 'content_strategy' | 'website';

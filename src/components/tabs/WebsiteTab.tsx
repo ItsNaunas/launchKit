@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Button } from '@/components/ui/Button';
 import { Globe, CheckCircle, ExternalLink, Plus } from 'lucide-react';
 
@@ -21,17 +21,12 @@ interface WebsiteTabProps {
 export function WebsiteTab({
   kitId,
   isComplete,
-  hasCheckoutAccess,
   onMarkComplete,
 }: WebsiteTabProps) {
   const [websites, setWebsites] = useState<Website[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    fetchWebsites();
-  }, [kitId]);
-
-  const fetchWebsites = async () => {
+  const fetchWebsites = useCallback(async () => {
     try {
       const response = await fetch(`/api/kits/${kitId}/websites`);
       if (response.ok) {
@@ -43,7 +38,11 @@ export function WebsiteTab({
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [kitId]);
+
+  useEffect(() => {
+    fetchWebsites();
+  }, [fetchWebsites]);
 
   const handleCreateWebsite = () => {
     window.location.href = `/kit/${kitId}/website`;

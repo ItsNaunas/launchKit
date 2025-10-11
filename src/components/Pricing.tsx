@@ -6,7 +6,7 @@ import { Switch } from '@/components/ui/switch';
 import { useMediaQuery } from '@/hooks/use-media-query';
 import { cn } from '@/lib/utils';
 import { motion } from 'framer-motion';
-import { Check, Star, Zap } from 'lucide-react';
+import { Check, Zap } from 'lucide-react';
 import Link from 'next/link';
 import { useState, useRef } from 'react';
 import confetti from 'canvas-confetti';

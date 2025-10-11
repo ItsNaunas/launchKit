@@ -267,7 +267,7 @@ export default function KitTabsPage({ params }: { params: Promise<{ id: string }
   const handleCheckout = () => {
     if (!allComplete) {
       // Find first incomplete tab
-      const firstIncomplete = (Object.entries(completions).find(([_, complete]) => !complete)?.[0] || 'business_case') as TabKey;
+      const firstIncomplete = (Object.entries(completions).find(([, complete]) => !complete)?.[0] || 'business_case') as TabKey;
       setActiveTab(firstIncomplete);
       // Show friendly message
       const remaining = 3 - completedCount;
@@ -294,7 +294,7 @@ export default function KitTabsPage({ params }: { params: Promise<{ id: string }
       <div className="min-h-screen bg-black flex items-center justify-center">
         <div className="text-center">
           <h1 className="text-2xl font-bold text-white">Kit not found</h1>
-          <p className="text-silver-400 mt-2">The kit you're looking for doesn't exist.</p>
+          <p className="text-silver-400 mt-2">The kit you&apos;re looking for doesn&apos;t exist.</p>
         </div>
       </div>
     );

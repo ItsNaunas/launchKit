@@ -85,7 +85,7 @@ function adjustBrightness(color: string, percent: number): string {
 /**
  * Adjust color hue (simplified)
  */
-function adjustHue(color: string, degrees: number): string {
+function adjustHue(color: string, _degrees: number): string {
   // Simplified - just return a complementary color for now
   return color; // In production, use HSL conversion
 }

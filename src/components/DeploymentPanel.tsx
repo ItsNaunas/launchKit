@@ -15,7 +15,6 @@ export function DeploymentPanel({
   kitId,
   websiteId,
   currentUrl,
-  isPublished = false,
 }: DeploymentPanelProps) {
   const [deploying, setDeploying] = useState(false);
   const [deploymentUrl, setDeploymentUrl] = useState(currentUrl);
@@ -75,13 +74,13 @@ export function DeploymentPanel({
       const data = await response.json();
 
       // Create index.html
-      const indexHTML = `<!DOCTYPE html>${data.html}`;
+      const _indexHTML = `<!DOCTYPE html>${data.html}`;
       
       // Create styles.css if there's custom CSS
-      const stylesCSS = data.css || '/* No custom styles */';
+      const _stylesCSS = data.css || '/* No custom styles */';
 
       // Create a README
-      const readme = `# Your LaunchKit Website
+      const _readme = `# Your LaunchKit Website
 
 ## Files
 - index.html - Main website file
@@ -110,7 +109,7 @@ Contact LaunchKit AI support for assistance.
 `;
 
       // Create config.json
-      const configJSON = JSON.stringify(data.config, null, 2);
+      const _configJSON = JSON.stringify(data.config, null, 2);
 
       // Create a zip-like package (simplified - just show files to download)
       alert('Package export coming soon! For now, use "Export HTML" to get your website file.');

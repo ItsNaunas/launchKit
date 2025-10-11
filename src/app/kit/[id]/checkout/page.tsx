@@ -1,12 +1,10 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/Button';
 import { Sparkles, ShoppingCart, Check, Info, Globe } from 'lucide-react';
 
 export default function CheckoutPage({ params }: { params: Promise<{ id: string }> }) {
-  const router = useRouter();
   const [kitId, setKitId] = useState<string>('');
   const [kit, setKit] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -87,15 +85,16 @@ export default function CheckoutPage({ params }: { params: Promise<{ id: string 
       <div className="min-h-screen bg-black flex items-center justify-center">
         <div className="text-center">
           <h1 className="text-2xl font-bold text-white">Kit not found</h1>
-          <p className="text-silver-400 mt-2">The kit you're looking for doesn't exist.</p>
+          <p className="text-silver-400 mt-2">The kit you&apos;re looking for doesn&apos;t exist.</p>
         </div>
       </div>
     );
   }
 
-  const oneoffTotal = includeHosting ? 37 + 3 * 2 : 37; // £37 + £6 for 2 months hosting
-  const subscriptionDailyRate = 1;
-  const subscriptionTotal = 37;
+  // Pricing calculations (currently unused as payment is bypassed)
+  // const oneoffTotal = includeHosting ? 37 + 3 * 2 : 37; // £37 + £6 for 2 months hosting
+  // const subscriptionDailyRate = 1;
+  // const subscriptionTotal = 37;
 
   return (
     <div className="min-h-screen bg-black">
@@ -386,7 +385,7 @@ export default function CheckoutPage({ params }: { params: Promise<{ id: string 
         {/* Money-back guarantee */}
         <div className="text-center">
           <p className="text-sm text-silver-400">
-            🛡️ 7-day money-back guarantee • If you're not satisfied, we'll refund you in full
+            🛡️ 7-day money-back guarantee • If you&apos;re not satisfied, we&apos;ll refund you in full
           </p>
         </div>
       </div>

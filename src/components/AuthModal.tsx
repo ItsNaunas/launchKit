@@ -153,7 +153,7 @@ export function AuthModal({ isOpen, onClose, onSuccess, mode: initialMode = 'sig
             {mode === 'signup' ? (
               <>Already have an account? <span className="font-semibold">Sign in</span></>
             ) : (
-              <>Don't have an account? <span className="font-semibold">Sign up</span></>
+              <>Don&apos;t have an account? <span className="font-semibold">Sign up</span></>
             )}
           </button>
         </div>

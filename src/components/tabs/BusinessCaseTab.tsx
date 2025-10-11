@@ -24,7 +24,6 @@ export function BusinessCaseTab({
   kitId,
   output,
   isComplete,
-  isLoading,
   hasCheckoutAccess,
   onGenerate,
   onMarkComplete,
@@ -314,7 +313,7 @@ function BusinessCaseDisplay({ content }: { content: BusinessCaseContent }) {
         </h3>
         <ul className="space-y-2">
           {content.taglines?.map((tagline: string, index: number) => (
-            <li key={index} className="text-silver-300 italic">"{tagline}"</li>
+            <li key={index} className="text-silver-300 italic">&quot;{tagline}&quot;</li>
           ))}
         </ul>
       </div>

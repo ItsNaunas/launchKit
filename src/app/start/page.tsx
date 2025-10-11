@@ -80,10 +80,10 @@ export default function StartPage() {
         <div className="max-w-2xl mx-auto text-center">
           <div className="bg-gradient-to-br from-dark to-black rounded-2xl p-8 border border-mint-600/20 mb-8 hover:border-mint-500/40 transition-all duration-300">
             <h2 className="text-2xl font-semibold text-white mb-4">
-              Let's create your business roadmap
+              Let&apos;s create your business roadmap
             </h2>
             <p className="text-gray-300 mb-6">
-              I'll ask you a few questions about your business idea to create a personalized plan just for you.
+              I&apos;ll ask you a few questions about your business idea to create a personalized plan just for you.
             </p>
             <button
               onClick={() => setShowIntake(true)}

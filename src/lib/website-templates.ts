@@ -221,6 +221,7 @@ function generateModernLandingHTML(
 }
 
 // Keep old simple version as fallback
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function generateModernLandingHTMLOld(
   content: any,
   colors: TemplateConfig['defaultColors']

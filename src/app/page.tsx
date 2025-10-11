@@ -1,8 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/Button';
 import { useAuth } from '@/contexts/AuthContext';
 import { Sparkles, Target, Zap, Download, LogOut, ChevronDown, Globe, FileText, TrendingUp, ArrowRight } from 'lucide-react';
@@ -12,8 +10,6 @@ import { WavyBackground } from '@/components/ui/wavy-background';
 
 export default function HomePage() {
   const { user, signOut } = useAuth();
-  const router = useRouter();
-  const [businessIdea, setBusinessIdea] = useState('');
 
   return (
     <div className="min-h-screen bg-black relative overflow-hidden">
@@ -232,7 +228,7 @@ export default function HomePage() {
           <Link href="/start">
             <Button 
               size="lg" 
-              className="px-10 py-7 text-lg bg-white hover:bg-silver-100 text-black shadow-2xl shadow-white/10 font-medium tracking-tight"
+              className="px-10 py-7 text-lg bg-mint-500 hover:bg-mint-600 text-black shadow-2xl shadow-mint-500/20 font-medium tracking-tight"
             >
               Create My Launch Kit Now
               <ArrowRight className="ml-2 h-5 w-5" />

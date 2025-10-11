@@ -93,7 +93,7 @@ async function deployToNetlify(website: any) {
       throw new Error('Failed to deploy to Netlify');
     }
 
-    const deployment = await deployResponse.json();
+    await deployResponse.json();
 
     // Update website with deployment info
     await supabase
@@ -120,7 +120,7 @@ async function deployToNetlify(website: any) {
   }
 }
 
-async function deployToVercel(website: any) {
+async function deployToVercel(_website: any) {
   // Vercel deployment would be similar but using Vercel's API
   // For now, return a message about manual deployment
   

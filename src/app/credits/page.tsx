@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/Button';
 import { useAuth } from '@/contexts/AuthContext';
@@ -13,15 +13,7 @@ export default function CreditsPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [isPurchasing, setIsPurchasing] = useState(false);
 
-  useEffect(() => {
-    if (user) {
-      fetchBalance();
-    } else {
-      setIsLoading(false);
-    }
-  }, [user]);
-
-  const fetchBalance = async () => {
+  const fetchBalance = useCallback(async () => {
     if (!user) return;
     
     try {
@@ -35,7 +27,15 @@ export default function CreditsPage() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [user]);
+
+  useEffect(() => {
+    if (user) {
+      fetchBalance();
+    } else {
+      setIsLoading(false);
+    }
+  }, [user, fetchBalance]);
 
   const handlePurchase = async (packageType: '500' | '1000') => {
     if (!user) {
@@ -253,7 +253,7 @@ export default function CreditsPage() {
             <div>
               <h4 className="text-white font-semibold mb-2">Do credits expire?</h4>
               <p className="text-silver-400 text-sm">
-                No! Your credits never expire. Purchase them once and use them whenever you're ready.
+                No! Your credits never expire. Purchase them once and use them whenever you&apos;re ready.
               </p>
             </div>
 
@@ -261,14 +261,14 @@ export default function CreditsPage() {
               <h4 className="text-white font-semibold mb-2">Can I refund unused credits?</h4>
               <p className="text-silver-400 text-sm">
                 Credits are non-refundable, but you can use them at any time to create new dashboards. 
-                They never expire, so there's no rush.
+                They never expire, so there&apos;s no rush.
               </p>
             </div>
 
             <div>
               <h4 className="text-white font-semibold mb-2">Why are dashboards locked to one idea?</h4>
               <p className="text-silver-400 text-sm">
-                Focus over idea-hopping! We've found that entrepreneurs succeed when they commit to one 
+                Focus over idea-hopping! We&apos;ve found that entrepreneurs succeed when they commit to one 
                 idea and execute it fully. Each dashboard is locked to keep you focused on launching.
               </p>
             </div>

@@ -66,7 +66,7 @@ export default function TeaserPage() {
       <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 flex items-center justify-center">
         <div className="text-center">
           <h1 className="text-2xl font-bold text-white mb-4">Kit not found</h1>
-          <p className="text-gray-300 mb-8">The business kit you're looking for doesn't exist.</p>
+          <p className="text-gray-300 mb-8">The business kit you&apos;re looking for doesn&apos;t exist.</p>
           <Button onClick={() => router.push('/start')} className="bg-gradient-to-r from-mint-500 to-mint-600 hover:from-mint-600 hover:to-mint-700 text-white">
             Create New Kit
           </Button>
@@ -90,10 +90,10 @@ export default function TeaserPage() {
               Your Business Kit is Ready!
             </h1>
             <p className="text-xl text-gray-300 mb-2">
-              I've analyzed your business idea: <span className="text-mint-500 font-semibold">"{kit.businessIdea}"</span>
+              I&apos;ve analyzed your business idea: <span className="text-mint-500 font-semibold">&quot;{kit.businessIdea}&quot;</span>
             </p>
             <p className="text-gray-400">
-              Here's what I've prepared for you...
+              Here&apos;s what I&apos;ve prepared for you...
             </p>
           </div>
 
@@ -120,7 +120,7 @@ export default function TeaserPage() {
 
           {/* What's Included */}
           <div className="mb-12">
-            <h2 className="text-3xl font-bold text-white text-center mb-8">What's Included in Your Kit</h2>
+            <h2 className="text-3xl font-bold text-white text-center mb-8">What&apos;s Included in Your Kit</h2>
             
             <div className="grid md:grid-cols-3 gap-6">
               {/* Business Case Preview */}

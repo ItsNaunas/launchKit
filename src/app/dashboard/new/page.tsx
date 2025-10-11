@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
@@ -23,15 +23,7 @@ export default function NewDashboardPage() {
     category: 'service' as const,
   });
 
-  useEffect(() => {
-    if (user) {
-      fetchCredits();
-    } else {
-      router.push('/auth/signin');
-    }
-  }, [user, router]);
-
-  const fetchCredits = async () => {
+  const fetchCredits = useCallback(async () => {
     if (!user) return;
 
     try {
@@ -49,7 +41,15 @@ export default function NewDashboardPage() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [user]);
+
+  useEffect(() => {
+    if (user) {
+      fetchCredits();
+    } else {
+      router.push('/auth/signin');
+    }
+  }, [user, router, fetchCredits]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -275,7 +275,7 @@ export default function NewDashboardPage() {
         {/* Info */}
         <div className="mt-8 bg-charcoal-900/50 border border-white/10 rounded-xl p-6">
           <h4 className="text-sm font-semibold text-white mb-2">
-            💡 What you'll get:
+            💡 What you&apos;ll get:
           </h4>
           <ul className="space-y-2 text-sm text-silver-400">
             <li className="flex items-start gap-2">

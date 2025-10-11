@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase';
 import { PromptAssembler } from '@/lib/prompt-assembler';
-import { kitIdSchema, generateContentSchema } from '@/lib/validation';
+import { kitIdSchema } from '@/lib/validation';
 import OpenAI from 'openai';
 
 export async function POST(

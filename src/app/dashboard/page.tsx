@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/Button';
 import { useAuth } from '@/contexts/AuthContext';
@@ -22,15 +22,7 @@ export default function DashboardsPage() {
   const [credits, setCredits] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    if (user) {
-      fetchData();
-    } else {
-      router.push('/auth/signin');
-    }
-  }, [user, router]);
-
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     if (!user) return;
 
     try {
@@ -52,7 +44,15 @@ export default function DashboardsPage() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [user]);
+
+  useEffect(() => {
+    if (user) {
+      fetchData();
+    } else {
+      router.push('/auth/signin');
+    }
+  }, [user, router, fetchData]);
 
   const handleCreateNew = () => {
     if (credits < 750) {
@@ -230,9 +230,9 @@ export default function DashboardsPage() {
           </h3>
           <p className="text-silver-400 text-sm leading-relaxed">
             Each dashboard is locked to its business idea to keep you focused on execution. 
-            We've found that entrepreneurs succeed when they commit to one idea and execute 
+            We&apos;ve found that entrepreneurs succeed when they commit to one idea and execute 
             it fully, rather than constantly switching between ideas. Create multiple dashboards 
-            only when you're ready to seriously pursue a new venture.
+            only when you&apos;re ready to seriously pursue a new venture.
           </p>
         </div>
       </div>

@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { Button } from '@/components/ui/Button';
-import { Download, RefreshCw, Calendar, Users, CheckCircle } from 'lucide-react';
+import { Download, RefreshCw, Calendar, CheckCircle } from 'lucide-react';
 import { type ContentStrategyContent } from '@/lib/shared-types';
 
 interface ContentStrategyTabProps {
@@ -24,7 +24,6 @@ export function ContentStrategyTab({
   kitId,
   output,
   isComplete,
-  isLoading,
   hasCheckoutAccess,
   onGenerate,
   onMarkComplete,
