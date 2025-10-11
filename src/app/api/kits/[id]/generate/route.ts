@@ -44,7 +44,8 @@ export async function POST(
     // - Content Strategy: 1 pre-checkout, unlimited post
     // - Website: unlimited (but doesn't use this route)
     if (regenerate && existingOutput && !hasCheckoutAccess) {
-      const currentRegens = existingOutput.regen_count || 0;
+      const output = existingOutput as any;
+      const currentRegens = output.regen_count || 0;
       const maxRegens = 1; // 1 regeneration allowed pre-checkout
       
       if (currentRegens >= maxRegens) {
