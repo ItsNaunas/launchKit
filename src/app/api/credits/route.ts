@@ -21,9 +21,9 @@ export async function GET(request: NextRequest) {
       .from('credits')
       .select('balance')
       .eq('user_id', userId)
-      .single();
+      .maybeSingle();
 
-    if (error && error.code !== 'PGRST116') { // PGRST116 = no rows found
+    if (error) {
       console.error('Error fetching credits:', error);
       return NextResponse.json(
         { error: 'Failed to fetch credits' },
