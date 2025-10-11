@@ -44,7 +44,7 @@ export async function POST(request: NextRequest) {
       .from('credits')
       .select('balance')
       .eq('user_id', userId)
-      .single();
+      .maybeSingle();
 
     return NextResponse.json({
       success: true,
