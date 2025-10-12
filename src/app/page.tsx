@@ -74,40 +74,31 @@ export default function HomePage() {
 
           {/* Micro Stats Strip */}
           <div className="max-w-4xl mx-auto">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+            <div className="flex flex-wrap justify-center gap-6 mb-12">
               {/* Stat 1 */}
-              <div className="text-center group">
-                <div className="relative">
-                  <div className="absolute inset-0 bg-mint-500/20 rounded-2xl blur-xl group-hover:bg-mint-500/30 transition-all duration-300"></div>
-                  <div className="relative bg-charcoal-900/40 border border-mint-500/20 rounded-2xl p-6 backdrop-blur-sm">
-                    <Zap className="h-8 w-8 text-mint-400 mx-auto mb-3" />
-                    <div className="text-3xl font-bold text-white mb-1">12K+</div>
-                    <div className="text-sm text-gray-400">AI plans generated</div>
-                  </div>
+              <div className="flex items-center gap-3 bg-charcoal-900/30 border border-mint-500/20 rounded-full px-6 py-3 backdrop-blur-sm hover:border-mint-500/40 transition-all duration-300">
+                <Zap className="h-5 w-5 text-mint-400" />
+                <div>
+                  <div className="text-xl font-bold text-white">12K+</div>
+                  <div className="text-xs text-gray-400">AI plans generated</div>
                 </div>
               </div>
 
               {/* Stat 2 */}
-              <div className="text-center group">
-                <div className="relative">
-                  <div className="absolute inset-0 bg-mint-500/20 rounded-2xl blur-xl group-hover:bg-mint-500/30 transition-all duration-300"></div>
-                  <div className="relative bg-charcoal-900/40 border border-mint-500/20 rounded-2xl p-6 backdrop-blur-sm">
-                    <Timer className="h-8 w-8 text-mint-400 mx-auto mb-3" />
-                    <div className="text-3xl font-bold text-white mb-1">&lt; 2 min</div>
-                    <div className="text-sm text-gray-400">average launch time</div>
-                  </div>
+              <div className="flex items-center gap-3 bg-charcoal-900/30 border border-mint-500/20 rounded-full px-6 py-3 backdrop-blur-sm hover:border-mint-500/40 transition-all duration-300">
+                <Timer className="h-5 w-5 text-mint-400" />
+                <div>
+                  <div className="text-xl font-bold text-white">&lt; 2 min</div>
+                  <div className="text-xs text-gray-400">average time</div>
                 </div>
               </div>
 
               {/* Stat 3 */}
-              <div className="text-center group">
-                <div className="relative">
-                  <div className="absolute inset-0 bg-mint-500/20 rounded-2xl blur-xl group-hover:bg-mint-500/30 transition-all duration-300"></div>
-                  <div className="relative bg-charcoal-900/40 border border-mint-500/20 rounded-2xl p-6 backdrop-blur-sm">
-                    <CheckCircle className="h-8 w-8 text-mint-400 mx-auto mb-3" />
-                    <div className="text-3xl font-bold text-white mb-1">97%</div>
-                    <div className="text-sm text-gray-400">completion rate</div>
-                  </div>
+              <div className="flex items-center gap-3 bg-charcoal-900/30 border border-mint-500/20 rounded-full px-6 py-3 backdrop-blur-sm hover:border-mint-500/40 transition-all duration-300">
+                <CheckCircle className="h-5 w-5 text-mint-400" />
+                <div>
+                  <div className="text-xl font-bold text-white">97%</div>
+                  <div className="text-xs text-gray-400">completion rate</div>
                 </div>
               </div>
             </div>
