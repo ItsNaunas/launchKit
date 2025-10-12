@@ -57,18 +57,19 @@ export default function HomePage() {
             .
           </h1>
           
-          {/* Subheadline */}
-          <div className="text-xl md:text-2xl text-white mb-16 max-w-3xl mx-auto space-y-4">
-            <p className="font-light leading-relaxed">
-              Built with the knowledge of founders, creators, and specialists who dominate.
-            </p>
-            <p className="font-light leading-relaxed">
-              The world&apos;s next rise of millionaires begins here.
-            </p>
-            <p className="font-semibold text-mint-400 text-2xl md:text-3xl">
-              Welcome to Project 67.
-            </p>
-          </div>
+           {/* Subheadline */}
+           <div className="text-lg md:text-xl text-gray-300 mb-16 max-w-4xl mx-auto">
+             <p className="mb-6 leading-relaxed">
+               The only AI system built by founders who&apos;ve actually scaled to 6-7 figures.
+             </p>
+             <p className="mb-8 leading-relaxed">
+               Stop wasting months on planning. Get your complete launch strategy in minutes.
+             </p>
+             <div className="inline-flex items-center gap-3 bg-mint-500/10 border border-mint-500/20 rounded-full px-6 py-3">
+               <Sparkles className="h-5 w-5 text-mint-400" />
+               <span className="font-semibold text-mint-400">Project 67 — Where Millionaires Are Born</span>
+             </div>
+           </div>
 
           {/* Interactive Chat - Primary CTA */}
           <div className="mb-16">
@@ -150,47 +151,6 @@ export default function HomePage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div className="text-center p-10 rounded-3xl bg-charcoal-900/30 border border-white/5">
-              <div className="w-14 h-14 bg-mint-500/10 rounded-2xl flex items-center justify-center mx-auto mb-6">
-                <Target className="h-7 w-7 text-mint-400" />
-              </div>
-              <h3 className="text-lg font-semibold text-white mb-3 tracking-tight">Business Case</h3>
-              <p className="text-silver-500 text-sm leading-relaxed font-light">
-                Market positioning, pricing strategy, and competitive analysis tailored to your idea.
-              </p>
-            </div>
-
-            <div className="text-center p-10 rounded-3xl bg-charcoal-900/30 border border-white/5">
-              <div className="w-14 h-14 bg-silver-400/10 rounded-2xl flex items-center justify-center mx-auto mb-6">
-                <Zap className="h-7 w-7 text-silver-300" />
-              </div>
-              <h3 className="text-lg font-semibold text-white mb-3 tracking-tight">Content Strategy</h3>
-              <p className="text-silver-500 text-sm leading-relaxed font-light">
-                30-day content calendar with viral hooks and channel-specific optimization.
-              </p>
-            </div>
-
-            <div className="text-center p-10 rounded-3xl bg-charcoal-900/30 border border-white/5">
-              <div className="w-14 h-14 bg-white/10 rounded-2xl flex items-center justify-center mx-auto mb-6">
-                <Download className="h-7 w-7 text-white" />
-              </div>
-              <h3 className="text-lg font-semibold text-white mb-3 tracking-tight">Ready-to-Use Assets</h3>
-              <p className="text-silver-500 text-sm leading-relaxed font-light">
-                Download PDFs, templates, and resources you can use immediately.
-              </p>
-            </div>
-
-            <div className="text-center p-10 rounded-3xl bg-charcoal-900/30 border border-white/5">
-              <div className="w-14 h-14 bg-mint-500/10 rounded-2xl flex items-center justify-center mx-auto mb-6">
-                <Sparkles className="h-7 w-7 text-mint-400" />
-              </div>
-              <h3 className="text-lg font-semibold text-white mb-3 tracking-tight">AI Refinement</h3>
-              <p className="text-silver-500 text-sm leading-relaxed font-light">
-                Regenerate any section up to 3 times to get exactly what you need.
-              </p>
-            </div>
-          </div>
         </div>
 
         {/* Background accent - very subtle */}
