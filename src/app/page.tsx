@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/Button';
-import { useAuth } from '@/contexts/AuthContext';
 import { Sparkles, Target, Zap, Download, TrendingUp, ArrowRight, Check, Star, Clock, Shield, Play, ChevronRight } from 'lucide-react';
 import Pricing from '@/components/Pricing';
 import { VercelV0Chat } from '@/components/VercelV0Chat';
@@ -12,18 +11,8 @@ import { CustomNavbar } from '@/components/CustomNavbar';
 import { motion } from 'framer-motion';
 
 export default function HomePage() {
-  const [showStickyCTA, setShowStickyCTA] = useState(false);
   const [activeStep, setActiveStep] = useState(0);
   const [openFAQ, setOpenFAQ] = useState<number | null>(null);
-
-  // Sticky CTA on scroll
-  useEffect(() => {
-    const handleScroll = () => {
-      setShowStickyCTA(window.scrollY > 800);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
 
   // Auto-rotate how it works steps
   useEffect(() => {
@@ -34,7 +23,7 @@ export default function HomePage() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-black relative overflow-hidden">
+    <div className="min-h-screen bg-black relative overflow-hidden pt-20">
 
       {/* Interactive Background */}
       <div className="fixed inset-0 pointer-events-none">
@@ -46,21 +35,6 @@ export default function HomePage() {
       {/* New Resizable Navbar */}
       <CustomNavbar />
 
-      {/* Sticky CTA Bar */}
-      <div className={`fixed top-0 left-0 right-0 z-50 bg-black/95 backdrop-blur-xl border-b border-mint-500/30 transform transition-transform duration-300 ${showStickyCTA ? 'translate-y-0' : '-translate-y-full'}`}>
-        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <Sparkles className="h-5 w-5 text-mint-500" />
-            <span className="text-sm text-white font-medium">Get Your Free Launch Kit in 60 Seconds</span>
-          </div>
-          <Link href="/start">
-            <Button size="sm" className="bg-gradient-to-r from-mint-500 to-mint-600 text-black hover:from-mint-600 hover:to-mint-700 transition-all duration-300 shadow-lg shadow-mint-500/25 font-semibold">
-              Start Free Now
-              <ArrowRight className="ml-2 h-4 w-4" />
-            </Button>
-          </Link>
-        </div>
-      </div>
 
       {/* Hero Section - Lamp Effect */}
       <LampContainer>
