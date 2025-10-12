@@ -58,11 +58,17 @@ export default function HomePage() {
           </h1>
           
           {/* Subheadline */}
-          <p className="text-xl md:text-2xl text-white mb-16 max-w-3xl mx-auto font-light leading-relaxed space-y-2">
-            <span className="block mb-3">Built with the knowledge of founders, creators, and specialists who dominate.</span>
-            <span className="block mb-3">The world&apos;s next rise of millionaires begins here.</span>
-            <span className="block font-semibold">Welcome to Project 67.</span>
-          </p>
+          <div className="text-xl md:text-2xl text-white mb-16 max-w-3xl mx-auto space-y-4">
+            <p className="font-light leading-relaxed">
+              Built with the knowledge of founders, creators, and specialists who dominate.
+            </p>
+            <p className="font-light leading-relaxed">
+              The world&apos;s next rise of millionaires begins here.
+            </p>
+            <p className="font-semibold text-mint-400 text-2xl md:text-3xl">
+              Welcome to Project 67.
+            </p>
+          </div>
 
           {/* Interactive Chat - Primary CTA */}
           <div className="mb-16">
