@@ -4,14 +4,14 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/Button';
 import { useAuth } from '@/contexts/AuthContext';
-import { Sparkles, Target, Zap, Download, LogOut, TrendingUp, ArrowRight, Check, Star, Clock, Shield, Play, ChevronRight } from 'lucide-react';
+import { Sparkles, Target, Zap, Download, TrendingUp, ArrowRight, Check, Star, Clock, Shield, Play, ChevronRight } from 'lucide-react';
 import Pricing from '@/components/Pricing';
 import { VercelV0Chat } from '@/components/VercelV0Chat';
 import { LampContainer } from '@/components/ui/lamp';
+import { CustomNavbar } from '@/components/CustomNavbar';
 import { motion } from 'framer-motion';
 
 export default function HomePage() {
-  const { user, signOut } = useAuth();
   const [showStickyCTA, setShowStickyCTA] = useState(false);
   const [activeStep, setActiveStep] = useState(0);
   const [openFAQ, setOpenFAQ] = useState<number | null>(null);
@@ -43,34 +43,8 @@ export default function HomePage() {
         <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-mint-600/5 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
       </div>
 
-      {/* Minimal Header - CRO Optimized */}
-      <header className="relative z-50 border-b border-white/5 bg-black/70 backdrop-blur-2xl">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8 py-5">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2.5">
-              <Sparkles className="h-6 w-6 text-mint-500" />
-              <h1 className="text-xl font-semibold text-white tracking-tight">LaunchKit AI</h1>
-            </div>
-            {user ? (
-              <div className="flex items-center gap-4">
-                <Link href="/dashboard">
-                  <Button variant="outline" size="sm" className="border-mint-600/30 text-gray-300 hover:text-mint-500 hover:bg-mint-600/10 transition-all duration-300">
-                    Dashboard
-                  </Button>
-                </Link>
-                <Button variant="outline" size="sm" onClick={signOut} className="border-mint-600/30 text-gray-300 hover:text-mint-500 hover:bg-mint-600/10 transition-all duration-300">
-                  <LogOut className="h-4 w-4 mr-1.5" />
-                  Sign Out
-                </Button>
-              </div>
-            ) : (
-              <Link href="/auth/signin" className="text-sm text-gray-400 hover:text-mint-500 transition-colors duration-300">
-                Sign In
-              </Link>
-            )}
-          </div>
-        </div>
-      </header>
+      {/* New Resizable Navbar */}
+      <CustomNavbar />
 
       {/* Sticky CTA Bar */}
       <div className={`fixed top-0 left-0 right-0 z-50 bg-black/95 backdrop-blur-xl border-b border-mint-500/30 transform transition-transform duration-300 ${showStickyCTA ? 'translate-y-0' : '-translate-y-full'}`}>
@@ -245,7 +219,7 @@ export default function HomePage() {
       </section>
 
       {/* How It Works - Interactive */}
-      <section className="relative py-32 bg-gradient-to-b from-black via-dark to-black">
+      <section id="how-it-works" className="relative py-32 bg-gradient-to-b from-black via-dark to-black">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="text-center mb-20">
             <h2 className="text-4xl md:text-5xl font-semibold text-white mb-6 tracking-tight">
