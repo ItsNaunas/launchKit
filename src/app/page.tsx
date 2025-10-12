@@ -49,17 +49,19 @@ export default function HomePage() {
           className="w-full max-w-5xl mx-auto px-6 text-center"
         >
           {/* Main Headline */}
-          <h1 className="text-5xl md:text-6xl lg:text-7xl font-clash font-semibold bg-gradient-to-br from-slate-300 to-slate-500 bg-clip-text text-transparent leading-[1.1] tracking-tight mb-6">
-            Get Your Complete{' '}
-            <span className="bg-gradient-to-r from-mint-400 via-mint-500 to-mint-600 bg-clip-text">
-              Launch Strategy
+          <h1 className="text-5xl md:text-6xl lg:text-7xl font-clash font-semibold text-white leading-[1.1] tracking-tight mb-6">
+            Everything you need to go from{' '}
+            <span className="bg-gradient-to-r from-mint-400 via-mint-500 to-mint-600 bg-clip-text text-transparent">
+              0 → 6/7 figures
             </span>
-            {' '}in Minutes
+            .
           </h1>
           
           {/* Subheadline */}
-          <p className="text-xl md:text-2xl text-gray-400 mb-16 max-w-3xl mx-auto font-light leading-relaxed">
-            AI-powered business case, content strategy, and landing page—tailored to your idea. Free forever.
+          <p className="text-xl md:text-2xl text-white mb-16 max-w-3xl mx-auto font-light leading-relaxed">
+            Built with the knowledge of founders, creators, and specialists who dominate.<br />
+            The world&apos;s next rise of millionaires begins here.<br />
+            <span className="font-semibold">Welcome to Project 67.</span>
           </p>
 
           {/* Interactive Chat - Primary CTA */}
