@@ -58,17 +58,13 @@ export default function HomePage() {
           </h1>
           
            {/* Subheadline */}
-           <div className="text-lg md:text-xl text-gray-300 mb-16 max-w-4xl mx-auto">
-             <p className="mb-6 leading-relaxed">
+           <div className="text-lg md:text-xl text-gray-300 mb-16 max-w-4xl mx-auto space-y-4">
+             <p className="leading-relaxed">
                The only AI system built by founders who&apos;ve actually scaled to 6-7 figures.
              </p>
-             <p className="mb-8 leading-relaxed">
+             <p className="leading-relaxed">
                Stop wasting months on planning. Get your complete launch strategy in minutes.
              </p>
-             <div className="inline-flex items-center gap-3 bg-mint-500/10 border border-mint-500/20 rounded-full px-6 py-3">
-               <Sparkles className="h-5 w-5 text-mint-400" />
-               <span className="font-semibold text-mint-400">Project 67 — Where Millionaires Are Born</span>
-             </div>
            </div>
 
           {/* Interactive Chat - Primary CTA */}
