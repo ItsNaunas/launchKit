@@ -8,7 +8,6 @@ import Pricing from '@/components/Pricing';
 import { VercelV0Chat } from '@/components/VercelV0Chat';
 // import { LampContainer } from '@/components/ui/lamp';
 import { CustomNavbar } from '@/components/CustomNavbar';
-import { motion } from 'framer-motion';
 import { WavyBackground } from '@/components/ui/wavy-background';
 
 export default function HomePage() {
@@ -39,7 +38,8 @@ export default function HomePage() {
 
       {/* Hero Section - Wavy Background */}
       <WavyBackground
-        containerClassName="pt-20"
+        containerClassName=""
+        className="max-w-5xl mx-auto px-6"
         colors={["#1dcd9f", "#10b981", "#059669", "#047857", "#065f46"]}
         waveWidth={60}
         backgroundFill="#000000"
@@ -47,16 +47,7 @@ export default function HomePage() {
         speed="fast"
         waveOpacity={0.3}
       >
-        <motion.div
-          initial={{ opacity: 0.5, y: 100 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{
-            delay: 0.3,
-            duration: 0.8,
-            ease: "easeInOut",
-          }}
-          className="w-full max-w-5xl mx-auto px-6 text-center"
-        >
+        <div className="w-full text-center">
           {/* Main Headline */}
           <h1 className="text-5xl md:text-6xl lg:text-7xl font-clash font-semibold text-white leading-[1.1] tracking-tight mb-6">
             Everything you need to go from{' '}
@@ -138,7 +129,7 @@ export default function HomePage() {
               </div>
             </div>
           </div>
-        </motion.div>
+        </div>
       </WavyBackground>
 
       {/* Features Section */}
