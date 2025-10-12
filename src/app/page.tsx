@@ -4,10 +4,11 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/Button';
 import { useAuth } from '@/contexts/AuthContext';
-import { Sparkles, Target, Zap, Download, LogOut, ChevronDown, TrendingUp, ArrowRight, Check, Star, Clock, Shield, Play, ChevronRight } from 'lucide-react';
+import { Sparkles, Target, Zap, Download, LogOut, TrendingUp, ArrowRight, Check, Star, Clock, Shield, Play, ChevronRight } from 'lucide-react';
 import Pricing from '@/components/Pricing';
 import { VercelV0Chat } from '@/components/VercelV0Chat';
-import { WavyBackground } from '@/components/ui/wavy-background';
+import { LampContainer } from '@/components/ui/lamp';
+import { motion } from 'framer-motion';
 
 export default function HomePage() {
   const { user, signOut } = useAuth();
@@ -87,112 +88,99 @@ export default function HomePage() {
         </div>
       </div>
 
-      {/* Hero Section - Simplified */}
-      <section className="relative min-h-screen overflow-hidden bg-black">
-        {/* Content */}
-        <div className="relative z-10 min-h-screen flex items-center justify-center pt-24 pb-32">
-          <div className="max-w-5xl mx-auto px-6 lg:px-8 text-center">
-            
-            {/* Main Headline */}
-            <div className="relative mb-6 overflow-hidden">
-              <div className="absolute inset-0 z-0">
-                <WavyBackground
-                  colors={["#1DCD9F", "#2dd4bf", "#5eead4", "#99f6e4", "#ccfbf1"]}
-                  waveOpacity={0.5}
-                  blur={30}
-                  speed="slow"
-                  backgroundFill="transparent"
-                  className="w-full h-full"
-                  containerClassName="w-full h-full"
-                />
-              </div>
-              <h1 className="text-5xl md:text-6xl lg:text-7xl font-clash font-semibold text-white leading-[1.1] tracking-tight relative z-10 mb-6">
-                Get Your Complete{' '}
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-mint-400 via-mint-500 to-mint-600">
-                  Launch Strategy
-                </span>
-                {' '}in Minutes
-              </h1>
-            </div>
-            
-            {/* Subheadline */}
-            <p className="text-xl md:text-2xl text-gray-300 mb-16 max-w-3xl mx-auto font-light leading-relaxed">
-              AI-powered business case, content strategy, and landing page—tailored to your idea. Free forever.
-            </p>
-
-            {/* Interactive Chat - Primary CTA */}
-            <div className="mb-16">
-              <VercelV0Chat />
-            </div>
-
-            {/* Social Proof - Agency Testimonials */}
-            <div className="max-w-4xl mx-auto">
-              <p className="text-sm text-gray-400 mb-8 uppercase tracking-wider">Trusted by entrepreneurs and agencies</p>
-              
-              <div className="grid md:grid-cols-2 gap-8 mb-12">
-                {/* Agency Testimonial 1 */}
-                <div className="bg-charcoal-900/40 border border-mint-500/20 rounded-2xl p-8 text-left">
-                  <div className="flex mb-4">
-                    {[...Array(5)].map((_, i) => (
-                      <Star key={i} className="h-4 w-4 fill-mint-500 text-mint-500" />
-                    ))}
-                  </div>
-                  <p className="text-gray-300 mb-6 leading-relaxed text-sm">
-                    &quot;Working with this team transformed our client acquisition. Their strategic approach and execution helped us scale from 5 to 25 clients in 6 months.&quot;
-                  </p>
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-mint-400 to-mint-600"></div>
-                    <div>
-                      <p className="text-white font-semibold text-sm">Digital Agency Client</p>
-                      <p className="text-gray-500 text-xs">Marketing Agency</p>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Agency Testimonial 2 */}
-                <div className="bg-charcoal-900/40 border border-mint-500/20 rounded-2xl p-8 text-left">
-                  <div className="flex mb-4">
-                    {[...Array(5)].map((_, i) => (
-                      <Star key={i} className="h-4 w-4 fill-mint-500 text-mint-500" />
-                    ))}
-                  </div>
-                  <p className="text-gray-300 mb-6 leading-relaxed text-sm">
-                    &quot;The content strategies they develop actually convert. We&apos;ve seen a 3x increase in engagement and our clients are getting real results.&quot;
-                  </p>
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-400 to-blue-600"></div>
-                    <div>
-                      <p className="text-white font-semibold text-sm">Social Media Agency</p>
-                      <p className="text-gray-500 text-xs">Content Marketing</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Trust Indicators */}
-              <div className="flex flex-wrap items-center justify-center gap-8 text-sm text-gray-400 pt-8 border-t border-white/5">
-                <div className="flex items-center gap-2">
-                  <Shield className="h-4 w-4 text-mint-500" />
-                  <span>100% Free to Start</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Clock className="h-4 w-4 text-mint-500" />
-                  <span>Results in 60 Seconds</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Check className="h-4 w-4 text-mint-500" />
-                  <span>No Credit Card Required</span>
-                </div>
-              </div>
-            </div>
-          </div>
+      {/* Hero Section - Lamp Effect */}
+      <LampContainer>
+        <motion.div
+          initial={{ opacity: 0.5, y: 100 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{
+            delay: 0.3,
+            duration: 0.8,
+            ease: "easeInOut",
+          }}
+          className="w-full max-w-5xl mx-auto px-6 text-center"
+        >
+          {/* Main Headline */}
+          <h1 className="text-5xl md:text-6xl lg:text-7xl font-clash font-semibold bg-gradient-to-br from-slate-300 to-slate-500 bg-clip-text text-transparent leading-[1.1] tracking-tight mb-6">
+            Get Your Complete{' '}
+            <span className="bg-gradient-to-r from-mint-400 via-mint-500 to-mint-600 bg-clip-text">
+              Launch Strategy
+            </span>
+            {' '}in Minutes
+          </h1>
           
-          {/* Scroll Indicator */}
-          <div className="absolute bottom-16 left-1/2 -translate-x-1/2">
-            <ChevronDown className="h-6 w-6 text-silver-700 animate-bounce" />
+          {/* Subheadline */}
+          <p className="text-xl md:text-2xl text-gray-400 mb-16 max-w-3xl mx-auto font-light leading-relaxed">
+            AI-powered business case, content strategy, and landing page—tailored to your idea. Free forever.
+          </p>
+
+          {/* Interactive Chat - Primary CTA */}
+          <div className="mb-16">
+            <VercelV0Chat />
           </div>
-        </div>
-      </section>
+
+          {/* Social Proof - Agency Testimonials */}
+          <div className="max-w-4xl mx-auto">
+            <p className="text-sm text-gray-400 mb-8 uppercase tracking-wider">Trusted by entrepreneurs and agencies</p>
+            
+            <div className="grid md:grid-cols-2 gap-8 mb-12">
+              {/* Agency Testimonial 1 */}
+              <div className="bg-charcoal-900/40 border border-mint-500/20 rounded-2xl p-8 text-left">
+                <div className="flex mb-4">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} className="h-4 w-4 fill-mint-500 text-mint-500" />
+                  ))}
+                </div>
+                <p className="text-gray-300 mb-6 leading-relaxed text-sm">
+                  &quot;Working with this team transformed our client acquisition. Their strategic approach and execution helped us scale from 5 to 25 clients in 6 months.&quot;
+                </p>
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-mint-400 to-mint-600"></div>
+                  <div>
+                    <p className="text-white font-semibold text-sm">Digital Agency Client</p>
+                    <p className="text-gray-500 text-xs">Marketing Agency</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Agency Testimonial 2 */}
+              <div className="bg-charcoal-900/40 border border-mint-500/20 rounded-2xl p-8 text-left">
+                <div className="flex mb-4">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} className="h-4 w-4 fill-mint-500 text-mint-500" />
+                  ))}
+                </div>
+                <p className="text-gray-300 mb-6 leading-relaxed text-sm">
+                  &quot;The content strategies they develop actually convert. We&apos;ve seen a 3x increase in engagement and our clients are getting real results.&quot;
+                </p>
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-400 to-blue-600"></div>
+                  <div>
+                    <p className="text-white font-semibold text-sm">Social Media Agency</p>
+                    <p className="text-gray-500 text-xs">Content Marketing</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Trust Indicators */}
+            <div className="flex flex-wrap items-center justify-center gap-8 text-sm text-gray-400 pt-8 border-t border-white/5">
+              <div className="flex items-center gap-2">
+                <Shield className="h-4 w-4 text-mint-500" />
+                <span>100% Free to Start</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Clock className="h-4 w-4 text-mint-500" />
+                <span>Results in 60 Seconds</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Check className="h-4 w-4 text-mint-500" />
+                <span>No Credit Card Required</span>
+              </div>
+            </div>
+          </div>
+        </motion.div>
+      </LampContainer>
 
       {/* Features Section */}
       <section id="features" className="relative py-40 bg-gradient-to-b from-black via-charcoal-950 to-black">
