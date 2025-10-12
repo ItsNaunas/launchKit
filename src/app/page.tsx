@@ -6,9 +6,10 @@ import { Button } from '@/components/ui/Button';
 import { Sparkles, Target, Zap, Download, TrendingUp, ArrowRight, Check, Star, Clock, Shield, Play, ChevronRight } from 'lucide-react';
 import Pricing from '@/components/Pricing';
 import { VercelV0Chat } from '@/components/VercelV0Chat';
-import { LampContainer } from '@/components/ui/lamp';
+// import { LampContainer } from '@/components/ui/lamp';
 import { CustomNavbar } from '@/components/CustomNavbar';
 import { motion } from 'framer-motion';
+import { WavyBackground } from '@/components/ui/wavy-background';
 
 export default function HomePage() {
   const [activeStep, setActiveStep] = useState(0);
@@ -36,8 +37,16 @@ export default function HomePage() {
       <CustomNavbar />
 
 
-      {/* Hero Section - Lamp Effect */}
-      <LampContainer>
+      {/* Hero Section - Wavy Background */}
+      <WavyBackground
+        containerClassName="pt-20"
+        colors={["#1dcd9f", "#10b981", "#059669", "#047857", "#065f46"]}
+        waveWidth={60}
+        backgroundFill="#000000"
+        blur={12}
+        speed="fast"
+        waveOpacity={0.3}
+      >
         <motion.div
           initial={{ opacity: 0.5, y: 100 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -130,7 +139,7 @@ export default function HomePage() {
             </div>
           </div>
         </motion.div>
-      </LampContainer>
+      </WavyBackground>
 
       {/* Features Section */}
       <section id="features" className="relative py-40 bg-gradient-to-b from-black via-charcoal-950 to-black">
