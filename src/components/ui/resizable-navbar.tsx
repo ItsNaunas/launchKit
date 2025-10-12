@@ -1,6 +1,6 @@
 "use client";
 import { cn } from "@/lib/utils";
-import { IconMenu2, IconX } from "@tabler/icons-react";
+import { Menu, X } from "lucide-react";
 import {
   motion,
   AnimatePresence,
@@ -224,9 +224,9 @@ export const MobileNavToggle = ({
   onClick: () => void;
 }) => {
   return isOpen ? (
-    <IconX className="text-mint-400 hover:text-mint-300 cursor-pointer transition-colors" onClick={onClick} />
+    <X className="text-mint-400 hover:text-mint-300 cursor-pointer transition-colors" onClick={onClick} />
   ) : (
-    <IconMenu2 className="text-mint-400 hover:text-mint-300 cursor-pointer transition-colors" onClick={onClick} />
+    <Menu className="text-mint-400 hover:text-mint-300 cursor-pointer transition-colors" onClick={onClick} />
   );
 };
 

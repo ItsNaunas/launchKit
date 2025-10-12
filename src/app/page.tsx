@@ -23,7 +23,7 @@ export default function HomePage() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-black relative overflow-hidden pt-20">
+    <div className="min-h-screen bg-black relative overflow-hidden">
 
       {/* Interactive Background */}
       <div className="fixed inset-0 pointer-events-none">
