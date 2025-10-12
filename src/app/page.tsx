@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/Button';
-import { Sparkles, Target, Zap, Download, TrendingUp, ArrowRight, Check, Star, Clock, Shield, Play, ChevronRight } from 'lucide-react';
+import { Sparkles, Target, Zap, Download, TrendingUp, ArrowRight, Check, Star, Clock, Shield, Play, ChevronRight, Timer, CheckCircle } from 'lucide-react';
 import Pricing from '@/components/Pricing';
 import { VercelV0Chat } from '@/components/VercelV0Chat';
 // import { LampContainer } from '@/components/ui/lamp';
@@ -72,63 +72,43 @@ export default function HomePage() {
             <VercelV0Chat />
           </div>
 
-          {/* Social Proof - Agency Testimonials */}
+          {/* Micro Stats Strip */}
           <div className="max-w-4xl mx-auto">
-            <p className="text-sm text-gray-400 mb-8 uppercase tracking-wider">Trusted by entrepreneurs and agencies</p>
-            
-            <div className="grid md:grid-cols-2 gap-8 mb-12">
-              {/* Agency Testimonial 1 */}
-              <div className="bg-charcoal-900/40 border border-mint-500/20 rounded-2xl p-8 text-left">
-                <div className="flex mb-4">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="h-4 w-4 fill-mint-500 text-mint-500" />
-                  ))}
-                </div>
-                <p className="text-gray-300 mb-6 leading-relaxed text-sm">
-                  &quot;Working with this team transformed our client acquisition. Their strategic approach and execution helped us scale from 5 to 25 clients in 6 months.&quot;
-                </p>
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-mint-400 to-mint-600"></div>
-                  <div>
-                    <p className="text-white font-semibold text-sm">Digital Agency Client</p>
-                    <p className="text-gray-500 text-xs">Marketing Agency</p>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+              {/* Stat 1 */}
+              <div className="text-center group">
+                <div className="relative">
+                  <div className="absolute inset-0 bg-mint-500/20 rounded-2xl blur-xl group-hover:bg-mint-500/30 transition-all duration-300"></div>
+                  <div className="relative bg-charcoal-900/40 border border-mint-500/20 rounded-2xl p-6 backdrop-blur-sm">
+                    <Zap className="h-8 w-8 text-mint-400 mx-auto mb-3" />
+                    <div className="text-3xl font-bold text-white mb-1">12K+</div>
+                    <div className="text-sm text-gray-400">AI plans generated</div>
                   </div>
                 </div>
               </div>
 
-              {/* Agency Testimonial 2 */}
-              <div className="bg-charcoal-900/40 border border-mint-500/20 rounded-2xl p-8 text-left">
-                <div className="flex mb-4">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="h-4 w-4 fill-mint-500 text-mint-500" />
-                  ))}
-                </div>
-                <p className="text-gray-300 mb-6 leading-relaxed text-sm">
-                  &quot;The content strategies they develop actually convert. We&apos;ve seen a 3x increase in engagement and our clients are getting real results.&quot;
-                </p>
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-400 to-blue-600"></div>
-                  <div>
-                    <p className="text-white font-semibold text-sm">Social Media Agency</p>
-                    <p className="text-gray-500 text-xs">Content Marketing</p>
+              {/* Stat 2 */}
+              <div className="text-center group">
+                <div className="relative">
+                  <div className="absolute inset-0 bg-mint-500/20 rounded-2xl blur-xl group-hover:bg-mint-500/30 transition-all duration-300"></div>
+                  <div className="relative bg-charcoal-900/40 border border-mint-500/20 rounded-2xl p-6 backdrop-blur-sm">
+                    <Timer className="h-8 w-8 text-mint-400 mx-auto mb-3" />
+                    <div className="text-3xl font-bold text-white mb-1">&lt; 2 min</div>
+                    <div className="text-sm text-gray-400">average launch time</div>
                   </div>
                 </div>
               </div>
-            </div>
 
-            {/* Trust Indicators */}
-            <div className="flex flex-wrap items-center justify-center gap-8 text-sm text-gray-400 pt-8 border-t border-white/5">
-              <div className="flex items-center gap-2">
-                <Shield className="h-4 w-4 text-mint-500" />
-                <span>100% Free to Start</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Clock className="h-4 w-4 text-mint-500" />
-                <span>Results in 60 Seconds</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Check className="h-4 w-4 text-mint-500" />
-                <span>No Credit Card Required</span>
+              {/* Stat 3 */}
+              <div className="text-center group">
+                <div className="relative">
+                  <div className="absolute inset-0 bg-mint-500/20 rounded-2xl blur-xl group-hover:bg-mint-500/30 transition-all duration-300"></div>
+                  <div className="relative bg-charcoal-900/40 border border-mint-500/20 rounded-2xl p-6 backdrop-blur-sm">
+                    <CheckCircle className="h-8 w-8 text-mint-400 mx-auto mb-3" />
+                    <div className="text-3xl font-bold text-white mb-1">97%</div>
+                    <div className="text-sm text-gray-400">completion rate</div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -265,6 +245,86 @@ export default function HomePage() {
               </ul>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* Testimonials Section */}
+      <section className="relative py-32 bg-gradient-to-b from-charcoal-950 via-black to-dark">
+        <div className="max-w-6xl mx-auto px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl md:text-5xl font-semibold text-white mb-6">
+              Trusted by Entrepreneurs and Agencies
+            </h2>
+            <p className="text-xl text-gray-400 max-w-2xl mx-auto">
+              Real results from founders who&apos;ve used our system to scale their businesses
+            </p>
+          </div>
+          
+          <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+            {/* Agency Testimonial 1 */}
+            <div className="bg-charcoal-900/40 border border-mint-500/20 rounded-2xl p-8 text-left hover:border-mint-500/40 transition-all duration-300">
+              <div className="flex mb-4">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} className="h-4 w-4 fill-mint-500 text-mint-500" />
+                ))}
+              </div>
+              <p className="text-gray-300 mb-6 leading-relaxed">
+                &quot;Working with this team transformed our client acquisition. Their strategic approach and execution helped us scale from 5 to 25 clients in 6 months.&quot;
+              </p>
+              <div className="flex items-center gap-3">
+                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-mint-400 to-mint-600 flex items-center justify-center">
+                  <span className="text-white font-semibold text-sm">DA</span>
+                </div>
+                <div>
+                  <p className="text-white font-semibold">Digital Agency Client</p>
+                  <p className="text-gray-500 text-sm">Marketing Agency</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Agency Testimonial 2 */}
+            <div className="bg-charcoal-900/40 border border-mint-500/20 rounded-2xl p-8 text-left hover:border-mint-500/40 transition-all duration-300">
+              <div className="flex mb-4">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} className="h-4 w-4 fill-mint-500 text-mint-500" />
+                ))}
+              </div>
+              <p className="text-gray-300 mb-6 leading-relaxed">
+                &quot;The content strategies they develop actually convert. We&apos;ve seen a 3x increase in engagement and our clients are getting real results.&quot;
+              </p>
+              <div className="flex items-center gap-3">
+                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center">
+                  <span className="text-white font-semibold text-sm">SM</span>
+                </div>
+                <div>
+                  <p className="text-white font-semibold">Social Media Agency</p>
+                  <p className="text-gray-500 text-sm">Content Marketing</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Trust Indicators */}
+          <div className="flex flex-wrap items-center justify-center gap-8 text-sm text-gray-400 pt-12 mt-12 border-t border-white/5">
+            <div className="flex items-center gap-2">
+              <Shield className="h-4 w-4 text-mint-500" />
+              <span>100% Free to Start</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Clock className="h-4 w-4 text-mint-500" />
+              <span>Results in 60 Seconds</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Check className="h-4 w-4 text-mint-500" />
+              <span>No Credit Card Required</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Background accent - very subtle */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full max-w-4xl opacity-[0.02] pointer-events-none">
+          <div className="absolute top-0 left-0 w-96 h-96 bg-mint-500 rounded-full blur-3xl"></div>
+          <div className="absolute bottom-0 right-0 w-96 h-96 bg-silver-400 rounded-full blur-3xl"></div>
         </div>
       </section>
 
