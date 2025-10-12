@@ -8,13 +8,11 @@ import { Sparkles, Target, Zap, Download, LogOut, ChevronDown, TrendingUp, Arrow
 import Pricing from '@/components/Pricing';
 import { VercelV0Chat } from '@/components/VercelV0Chat';
 import { WavyBackground } from '@/components/ui/wavy-background';
-import { Spotlight } from '@/components/ui/spotlight';
-import { BackgroundGrid, BackgroundBeams } from '@/components/ui/background-grid';
-import { HoverEffect } from '@/components/ui/card-hover';
 
 export default function HomePage() {
   const { user, signOut } = useAuth();
   const [showStickyCTA, setShowStickyCTA] = useState(false);
+  const [activeStep, setActiveStep] = useState(0);
   const [openFAQ, setOpenFAQ] = useState<number | null>(null);
 
   // Sticky CTA on scroll
@@ -24,6 +22,14 @@ export default function HomePage() {
     };
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // Auto-rotate how it works steps
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setActiveStep((prev) => (prev + 1) % 3);
+    }, 3000);
+    return () => clearInterval(interval);
   }, []);
 
   return (
@@ -83,11 +89,6 @@ export default function HomePage() {
 
       {/* Hero Section - Simplified */}
       <section className="relative min-h-screen overflow-hidden bg-black">
-        {/* Aceternity UI Effects */}
-        <Spotlight className="-top-40 left-0 md:left-60 md:-top-20" fill="#1DCD9F" />
-        <BackgroundBeams className="opacity-40" />
-        <BackgroundGrid containerClassName="opacity-30" />
-        
         {/* Content */}
         <div className="relative z-10 min-h-screen flex items-center justify-center pt-24 pb-32">
           <div className="max-w-5xl mx-auto px-6 lg:px-8 text-center">
@@ -193,13 +194,10 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Features Section - Enhanced with Aceternity UI */}
-      <section id="features" className="relative py-40 bg-gradient-to-b from-black via-charcoal-950 to-black overflow-hidden">
-        <BackgroundGrid containerClassName="opacity-20" />
-        <Spotlight className="top-10 right-0 md:right-60" fill="#99f6e4" />
-        
+      {/* Features Section */}
+      <section id="features" className="relative py-40 bg-gradient-to-b from-black via-charcoal-950 to-black">
         <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
-          <div className="text-center mb-16">
+          <div className="text-center mb-24">
             <h2 className="text-4xl md:text-5xl font-semibold text-white mb-6 tracking-tight">
               Everything You Need to Launch
             </h2>
@@ -208,39 +206,60 @@ export default function HomePage() {
             </p>
           </div>
 
-          <HoverEffect
-            items={[
-              {
-                title: "Business Case",
-                description: "Market positioning, pricing strategy, and competitive analysis tailored to your idea.",
-                icon: <Target className="h-8 w-8 text-mint-400" />
-              },
-              {
-                title: "Content Strategy",
-                description: "30-day content calendar with viral hooks and channel-specific optimization.",
-                icon: <Zap className="h-8 w-8 text-mint-400" />
-              },
-              {
-                title: "Ready-to-Use Assets",
-                description: "Download PDFs, templates, and resources you can use immediately.",
-                icon: <Download className="h-8 w-8 text-mint-400" />
-              },
-              {
-                title: "AI Refinement",
-                description: "Regenerate any section up to 3 times to get exactly what you need.",
-                icon: <Sparkles className="h-8 w-8 text-mint-400" />
-              }
-            ]}
-          />
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="text-center p-10 rounded-3xl bg-charcoal-900/30 border border-white/5">
+              <div className="w-14 h-14 bg-mint-500/10 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                <Target className="h-7 w-7 text-mint-400" />
+              </div>
+              <h3 className="text-lg font-semibold text-white mb-3 tracking-tight">Business Case</h3>
+              <p className="text-silver-500 text-sm leading-relaxed font-light">
+                Market positioning, pricing strategy, and competitive analysis tailored to your idea.
+              </p>
+            </div>
+
+            <div className="text-center p-10 rounded-3xl bg-charcoal-900/30 border border-white/5">
+              <div className="w-14 h-14 bg-silver-400/10 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                <Zap className="h-7 w-7 text-silver-300" />
+              </div>
+              <h3 className="text-lg font-semibold text-white mb-3 tracking-tight">Content Strategy</h3>
+              <p className="text-silver-500 text-sm leading-relaxed font-light">
+                30-day content calendar with viral hooks and channel-specific optimization.
+              </p>
+            </div>
+
+            <div className="text-center p-10 rounded-3xl bg-charcoal-900/30 border border-white/5">
+              <div className="w-14 h-14 bg-white/10 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                <Download className="h-7 w-7 text-white" />
+              </div>
+              <h3 className="text-lg font-semibold text-white mb-3 tracking-tight">Ready-to-Use Assets</h3>
+              <p className="text-silver-500 text-sm leading-relaxed font-light">
+                Download PDFs, templates, and resources you can use immediately.
+              </p>
+            </div>
+
+            <div className="text-center p-10 rounded-3xl bg-charcoal-900/30 border border-white/5">
+              <div className="w-14 h-14 bg-mint-500/10 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                <Sparkles className="h-7 w-7 text-mint-400" />
+              </div>
+              <h3 className="text-lg font-semibold text-white mb-3 tracking-tight">AI Refinement</h3>
+              <p className="text-silver-500 text-sm leading-relaxed font-light">
+                Regenerate any section up to 3 times to get exactly what you need.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Background accent - very subtle */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full max-w-4xl opacity-[0.02] pointer-events-none">
+          <div className="absolute top-0 left-0 w-96 h-96 bg-mint-500 rounded-full blur-3xl"></div>
+          <div className="absolute bottom-0 right-0 w-96 h-96 bg-silver-400 rounded-full blur-3xl"></div>
         </div>
       </section>
 
-      {/* How It Works - Interactive with Aceternity UI */}
-      <section className="relative py-32 bg-gradient-to-b from-black via-dark to-black overflow-hidden">
-        <BackgroundGrid containerClassName="opacity-20" />
-        
-        <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
-          <div className="text-center mb-12">
+      {/* How It Works - Interactive */}
+      <section className="relative py-32 bg-gradient-to-b from-black via-dark to-black">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+          <div className="text-center mb-20">
             <h2 className="text-4xl md:text-5xl font-semibold text-white mb-6 tracking-tight">
               From Idea to Launch in 3 Steps
             </h2>
@@ -249,30 +268,43 @@ export default function HomePage() {
             </p>
           </div>
 
-          <HoverEffect
-            className="max-w-6xl mx-auto"
-            items={[
-              {
-                title: "1. Share Your Idea",
-                description: "Tell us about your business in a simple conversation. No business plan required.",
-                icon: <Play className="h-10 w-10 text-mint-400" />
-              },
-              {
-                title: "2. AI Builds Your Kit",
-                description: "Our AI analyzes your idea and generates a complete launch strategy in 60 seconds.",
-                icon: <Sparkles className="h-10 w-10 text-mint-400" />
-              },
-              {
-                title: "3. Launch & Iterate",
-                description: "Get your business case, content plan, and website. Refine anything with 1-click.",
-                icon: <TrendingUp className="h-10 w-10 text-mint-400" />
-              }
-            ]}
-          />
+          <div className="grid md:grid-cols-3 gap-8 mb-16">
+            {[
+              { num: 1, title: "Share Your Idea", desc: "Tell us about your business in a simple conversation. No business plan required.", icon: Play },
+              { num: 2, title: "AI Builds Your Kit", desc: "Our AI analyzes your idea and generates a complete launch strategy in 60 seconds.", icon: Sparkles },
+              { num: 3, title: "Launch & Iterate", desc: "Get your business case, content plan, and website. Refine anything with 1-click.", icon: TrendingUp }
+            ].map((step, idx) => {
+              const Icon = step.icon;
+              return (
+                <div 
+                  key={idx}
+                  onClick={() => setActiveStep(idx)}
+                  className={`relative p-8 rounded-2xl border cursor-pointer transition-all duration-300 ${
+                    activeStep === idx 
+                      ? 'bg-mint-500/10 border-mint-500/50 scale-105 shadow-2xl shadow-mint-500/20' 
+                      : 'bg-charcoal-900/30 border-white/5 hover:border-mint-500/30'
+                  }`}
+                >
+                  <div className={`absolute -top-4 -left-4 w-12 h-12 rounded-full flex items-center justify-center font-bold text-lg transition-all duration-300 ${
+                    activeStep === idx 
+                      ? 'bg-gradient-to-br from-mint-500 to-mint-600 text-black' 
+                      : 'bg-charcoal-800 text-gray-400'
+                  }`}>
+                    {step.num}
+                  </div>
+                  <Icon className={`h-10 w-10 mb-4 transition-colors duration-300 ${
+                    activeStep === idx ? 'text-mint-400' : 'text-gray-500'
+                  }`} />
+                  <h3 className="text-xl font-semibold text-white mb-3">{step.title}</h3>
+                  <p className="text-gray-400 text-sm leading-relaxed">{step.desc}</p>
+                </div>
+              );
+            })}
+          </div>
 
-          <div className="text-center mt-16">
+          <div className="text-center">
             <Link href="/start">
-              <Button size="lg" className="bg-gradient-to-r from-mint-500 to-mint-600 text-black hover:from-mint-600 hover:to-mint-700 shadow-xl shadow-mint-500/25 font-semibold px-10 py-6 transform hover:scale-105 transition-all duration-300">
+              <Button size="lg" className="bg-gradient-to-r from-mint-500 to-mint-600 text-black hover:from-mint-600 hover:to-mint-700 shadow-xl shadow-mint-500/25 font-semibold px-10 py-6">
                 Start Building Now — Free
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
@@ -282,11 +314,9 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* What You Get - Enhanced with Aceternity UI */}
-      <section className="relative py-32 bg-gradient-to-b from-black via-charcoal-950 to-black overflow-hidden">
-        <Spotlight className="top-40 left-0 md:left-80" fill="#5eead4" />
-        
-        <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
+      {/* What You Get */}
+      <section className="relative py-32 bg-gradient-to-b from-black via-charcoal-950 to-black">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="text-center mb-20">
             <h2 className="text-4xl md:text-5xl font-semibold text-white mb-6">
               Built by Experts Who&apos;ve Done It
@@ -296,21 +326,45 @@ export default function HomePage() {
             </p>
           </div>
 
-          <HoverEffect
-            className="max-w-5xl mx-auto grid-cols-1 md:grid-cols-2"
-            items={[
-              {
-                title: "Strategic Marketing Expertise",
-                description: "Our team has helped agencies scale from 5 to 25+ clients through proven positioning, messaging, and acquisition strategies. We provide market positioning frameworks, competitive analysis, pricing strategy, and go-to-market plans.",
-                icon: <Target className="h-10 w-10 text-mint-400" />
-              },
-              {
-                title: "Content That Converts",
-                description: "Backed by a social media marketing agency that's driven 3x engagement increases and real ROI for clients across industries. Specializing in viral content frameworks, platform-specific optimization, engagement strategies, and content calendars.",
-                icon: <Zap className="h-10 w-10 text-mint-400" />
-              }
-            ]}
-          />
+          <div className="grid md:grid-cols-2 gap-12 max-w-5xl mx-auto">
+            {/* Value Prop 1 */}
+            <div className="bg-charcoal-900/40 border border-mint-500/20 rounded-2xl p-10">
+              <div className="w-14 h-14 bg-mint-500/10 rounded-2xl flex items-center justify-center mb-6">
+                <Target className="h-7 w-7 text-mint-400" />
+              </div>
+              <h3 className="text-2xl font-semibold text-white mb-4">Strategic Marketing Expertise</h3>
+              <p className="text-gray-400 leading-relaxed mb-4">
+                Our team has helped agencies scale from 5 to 25+ clients through proven positioning, messaging, and acquisition strategies.
+              </p>
+              <ul className="space-y-2">
+                {['Market positioning frameworks', 'Competitive analysis', 'Pricing strategy', 'Go-to-market plans'].map((item, idx) => (
+                  <li key={idx} className="flex items-center gap-2 text-gray-300 text-sm">
+                    <Check className="h-4 w-4 text-mint-500 flex-shrink-0" />
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Value Prop 2 */}
+            <div className="bg-charcoal-900/40 border border-mint-500/20 rounded-2xl p-10">
+              <div className="w-14 h-14 bg-mint-500/10 rounded-2xl flex items-center justify-center mb-6">
+                <Zap className="h-7 w-7 text-mint-400" />
+              </div>
+              <h3 className="text-2xl font-semibold text-white mb-4">Content That Converts</h3>
+              <p className="text-gray-400 leading-relaxed mb-4">
+                Backed by a social media marketing agency that&apos;s driven 3x engagement increases and real ROI for clients across industries.
+              </p>
+              <ul className="space-y-2">
+                {['Viral content frameworks', 'Platform-specific optimization', 'Engagement strategies', 'Content calendars'].map((item, idx) => (
+                  <li key={idx} className="flex items-center gap-2 text-gray-300 text-sm">
+                    <Check className="h-4 w-4 text-mint-500 flex-shrink-0" />
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
         </div>
       </section>
 
