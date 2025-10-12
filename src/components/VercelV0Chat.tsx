@@ -6,13 +6,8 @@ import { Textarea } from '@/components/ui/Textarea';
 import { cn } from '@/lib/utils';
 import { useAutoResizeTextarea } from '@/hooks/use-auto-resize-textarea';
 import {
-  TrendingUp,
-  FileText,
-  Globe,
   ArrowUpIcon,
-  Sparkles,
 } from 'lucide-react';
-import { Button } from '@/components/ui/Button';
 
 export function VercelV0Chat() {
   const router = useRouter();
@@ -98,47 +93,10 @@ export function VercelV0Chat() {
           No credit card required • Results in minutes • No subscriptions, no hidden fees
         </p>
 
-        <div className="mt-8">
-          <div className="flex flex-col flex-wrap items-start gap-3 sm:flex-row sm:items-center sm:justify-center">
-            <ActionButton
-              icon={<TrendingUp className="h-4 w-4" />}
-              label="Business Case"
-            />
-            <ActionButton
-              icon={<FileText className="h-4 w-4" />}
-              label="Content Strategy"
-            />
-            <ActionButton
-              icon={<Globe className="h-4 w-4" />}
-              label="Landing Page"
-            />
-            <ActionButton
-              icon={<Sparkles className="h-4 w-4" />}
-              label="Full Launch Kit"
-            />
-          </div>
-        </div>
       </div>
     </div>
   );
 }
 
-interface ActionButtonProps {
-  icon: React.ReactNode;
-  label: string;
-}
-
-function ActionButton({ icon, label }: ActionButtonProps) {
-  return (
-    <Button
-      type="button"
-      variant="secondary"
-      className="flex w-full flex-shrink-0 items-center gap-2 whitespace-nowrap rounded-full border border-mint-600/20 bg-dark/20 px-4 py-2 text-xs text-gray-400 transition-all duration-300 hover:border-mint-500/40 hover:bg-dark/40 hover:text-mint-400 sm:w-auto"
-    >
-      {icon}
-      <span>{label}</span>
-    </Button>
-  );
-}
 
 export default VercelV0Chat;
